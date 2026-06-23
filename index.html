@@ -121,12 +121,14 @@
 
 <script>
 const CATS = {
+  primeiro:"Primeiro contato",
   atendimento:"Atendimento",
   documentos:"Documentos & Guias",
   agendamento:"Agendamento",
   especialidades:"Especialidades",
   reativacao:"Reativação",
   cartao:"Cartão & Vendas",
+  admin:"Administrativo",
   sensivel:"Sensível"
 };
 
@@ -560,6 +562,74 @@ A empresa oferece aos funcionários *50% de desconto* em atendimentos de saúde 
 
  {cat:"cartao",title:"B2B — argumento de valor",kw:"empresa argumento afastamento produtividade clima",body:
 `Saúde mental é hoje uma das principais causas de afastamento no trabalho. Oferecer acesso facilitado a cuidado, com 50% de desconto, é um investimento que retorna em presença, engajamento e clima organizacional — por um custo mensal muito acessível por colaborador. 💙`},
+
+ // ---------- PRIMEIRO CONTATO ----------
+ {cat:"primeiro",title:"Acolhimento inicial — entender a necessidade",kw:"primeiro contato acolhimento entender necessidade triagem perguntas",body:
+`Olá! 😊 Para eu te ajudar da melhor forma, posso te fazer algumas perguntinhas rápidas?
+
+• O atendimento é para você ou para outra pessoa (por exemplo, uma criança)?
+• Você já tem alguma indicação ou encaminhamento, ou é uma primeira busca?
+• Pretende usar plano de saúde ou atendimento particular?
+
+Com essas informações eu já te direciono para o profissional certo. 💙`},
+
+ {cat:"primeiro",title:"Triagem — o que capturar (uso interno)",kw:"triagem checklist dados capturar interno primeiro contato",body:
+`CHECKLIST DO PRIMEIRO CONTATO (uso interno)
+
+☐ Nome completo do paciente
+☐ Idade / data de nascimento (adulto ou criança)
+☐ Telefone de contato
+☐ Responsável (se for criança)
+☐ Queixa / motivo ou encaminhamento
+☐ Plano de saúde ou particular
+☐ Há urgência emocional? (se sim, ver categoria Sensível)
+☐ Como conheceu a clínica`},
+
+ {cat:"primeiro",title:"Triagem — direcionar a especialidade (uso interno)",kw:"triagem direcionar especialidade rota encaminhar interno",body:
+`GUIA RÁPIDO DE DIRECIONAMENTO (uso interno)
+
+• Criança com suspeita de atraso / TEA → Terapia ABA, Terapia Infantil, Fono, TO
+• Dificuldade escolar / aprendizagem → Psicopedagogia + Avaliação Neuropsicológica
+• Suspeita de TDAH / diagnóstico → Avaliação Neuropsicológica + Psiquiatria
+• Ansiedade, depressão, humor → Psiquiatria e/ou Psicologia
+• Fala / linguagem → Fonoaudiologia
+• Coordenação / motricidade → Psicomotricidade / Terapia Ocupacional
+
+Na dúvida, agende uma avaliação inicial e a equipe redireciona.`},
+
+ // ---------- ADMINISTRATIVO ----------
+ {cat:"admin",title:"Dados da clínica (uso interno)",kw:"cnpj razao social dados clinica nota guia endereco interno",body:
+`DADOS PARA GUIAS E NOTAS (uso interno)
+
+Razão social: EQUILIBRIUM MED CENTER LTDA
+CNPJ: 34.032.586/0001-98
+Endereço: Avenida Cesário Alvim, 2001 — Bairro Aparecida, Uberlândia/MG`},
+
+ {cat:"admin",title:"Convênios atendidos (referência)",kw:"convenios planos referencia lista admin unimed hapvida gndi",body:
+`CONVÊNIOS ATENDIDOS
+
+Unimed Uberlândia · Unimed Intercâmbio · GNDI · Hapvida · Usisaúde · GEAP Saúde · Vitallis · NDI`},
+
+ {cat:"admin",title:"Formas de pagamento",kw:"pagamento pix debito credito boleto formas admin",body:
+`FORMAS DE PAGAMENTO
+
+Atendimento particular e cartão Equilibrium Mais Saúde.
+Pagamento: PIX, cartão de débito, cartão de crédito e boleto.
+[Confirmar com o financeiro as bandeiras e o parcelamento.]`},
+
+ {cat:"admin",title:"Horário de funcionamento",kw:"horario funcionamento aberto expediente admin",body:
+`HORÁRIO DE FUNCIONAMENTO
+
+Segunda a sexta: [08h às 18h]
+Sábado: [08h às 12h]
+[Confirmar / ajustar os horários reais da clínica.]`},
+
+ {cat:"admin",title:"Prazos internos",kw:"prazo autorizacao laudo entrega admin referencia",body:
+`PRAZOS DE REFERÊNCIA
+
+Autorização de convênio: [a confirmar]
+Entrega de laudo / relatório: [a confirmar]
+[Defina os prazos reais para padronizar a resposta ao paciente.]`},
 
  // ---------- SENSÍVEL ----------
  {cat:"sensivel",title:"Acolhimento em urgência emocional",kw:"crise urgencia emocional cvv 188 emergencia samu sofrimento",sensivel:true,body:
