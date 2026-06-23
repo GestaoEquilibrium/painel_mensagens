@@ -1,3 +1,6 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Painel de Mensagens · Equilibrium Med Center</title>
@@ -35,6 +38,11 @@
   .field.search{flex:2}
   .field.search input{padding-left:40px}
   .field.search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);opacity:.45}
+  .idxbtn{border:1px solid var(--line);background:var(--card);color:var(--forest);border-radius:12px;
+    padding:0 18px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;
+    transition:all .14s;white-space:nowrap}
+  .idxbtn:hover{border-color:var(--teal)}
+  .idxbtn.on{background:var(--forest);border-color:var(--forest);color:#fff}
 
   /* chips */
   .chips{display:flex;gap:8px;flex-wrap:wrap;padding:0 0 18px}
@@ -44,6 +52,9 @@
   .chip.on{background:var(--forest);border-color:var(--forest);color:#fff}
   .chip .n{opacity:.6;font-variant-numeric:tabular-nums;margin-left:5px}
   .chip.on .n{opacity:.8}
+  .chip .pf{font-size:10.5px;font-weight:700;letter-spacing:.04em;opacity:.55;margin-left:6px;
+    font-family:"SFMono-Regular",Menlo,Consolas,monospace}
+  .chip.on .pf{opacity:.85}
 
   /* grid */
   main{padding:22px 0 60px}
@@ -51,7 +62,10 @@
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px}
   .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
     box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:hidden}
-  .card-h{padding:15px 16px 0;display:flex;align-items:flex-start;gap:10px}
+  .card-h{padding:15px 16px 0;display:flex;align-items:center;gap:9px}
+  .code{font-size:12px;font-weight:700;letter-spacing:.04em;color:#fff;background:var(--forest);
+    border-radius:7px;padding:4px 9px;font-family:"SFMono-Regular",Menlo,Consolas,monospace;
+    font-variant-numeric:tabular-nums;white-space:nowrap}
   .tag{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--teal);
     background:var(--mist);border-radius:6px;padding:3px 8px;white-space:nowrap;font-weight:600}
   .card h3{margin:11px 16px 0;font-size:15.5px;line-height:1.3}
@@ -65,6 +79,7 @@
   .copy:active{transform:scale(.985)}
   .copy.done{background:var(--teal)}
   .card.sensivel{border-color:#d9b48f;box-shadow:0 8px 24px rgba(184,116,58,.1)}
+  .card.sensivel .code{background:var(--warn)}
   .card.best{border-color:var(--forest);box-shadow:0 0 0 2px rgba(24,104,176,.16),var(--shadow)}
   .best-badge{margin-left:auto;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#fff;background:var(--forest);border-radius:6px;padding:3px 8px;white-space:nowrap}
   .card.sensivel .tag{color:var(--warn);background:var(--warnbg)}
@@ -74,6 +89,20 @@
   .empty{text-align:center;color:var(--soft);padding:70px 20px}
   .empty b{display:block;color:var(--ink);font-size:18px;margin-bottom:6px}
 
+  /* índice */
+  #indice{display:none}
+  .idx-intro{font-size:13px;color:var(--soft);margin:0 0 18px}
+  .idx-group{margin:0 0 22px;border:1px solid var(--line);border-radius:var(--radius);background:var(--card);overflow:hidden;box-shadow:var(--shadow)}
+  .idx-gh{display:flex;align-items:baseline;gap:10px;padding:13px 16px;background:var(--mist);border-bottom:1px solid var(--line)}
+  .idx-gh b{font-size:14.5px;color:var(--ink)}
+  .idx-gh .pftag{font-size:11px;font-weight:700;letter-spacing:.05em;color:var(--forest);font-family:"SFMono-Regular",Menlo,Consolas,monospace}
+  .idx-row{display:flex;align-items:center;gap:12px;padding:9px 16px;border-bottom:1px solid var(--line);cursor:pointer;transition:background .12s}
+  .idx-row:last-child{border-bottom:none}
+  .idx-row:hover{background:#f4f9fd}
+  .idx-row .c{font-size:12px;font-weight:700;color:var(--forest);font-family:"SFMono-Regular",Menlo,Consolas,monospace;font-variant-numeric:tabular-nums;white-space:nowrap;min-width:62px}
+  .idx-row .ti{font-size:13.5px;color:var(--ink)}
+  .idx-row.sens .c{color:var(--warn)}
+
   footer{border-top:1px solid var(--line);padding:20px 0;color:var(--soft);font-size:12px;text-align:center}
 
   @media (max-width:560px){
@@ -81,14 +110,20 @@
     .grid{grid-template-columns:1fr}
     .logo{height:34px}
   }
+  @media print{
+    header .controls,header .chips,.idxbtn,.role{display:none}
+    .idx-group{break-inside:avoid}
+  }
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
+</head>
+<body>
 
 <header>
   <div class="wrap">
     <div class="head-top">
       <div class="mark">
-        <img class="logo" alt="Equilibrium Med Center" src="data:image/png;base64,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">
+        <img class="logo" alt="Equilibrium Med Center" src="data:image/png;base64,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">
         <span class="sub">Painel de Mensagens</span>
       </div>
       <div class="role">Recepção</div>
@@ -96,13 +131,14 @@
     <div class="controls">
       <div class="field search">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#1d2b26" stroke-width="2"/><path d="m20 20-3-3" stroke="#1d2b26" stroke-width="2" stroke-linecap="round"/></svg>
-        <label>Buscar pela situação</label>
-        <input id="q" autocomplete="off" placeholder="ex.: guia, receita, agendar, valores, reativar…">
+        <label>Buscar por situação ou código</label>
+        <input id="q" autocomplete="off" placeholder="ex.: AGE-01, 02, guia, receita, agendar, valores…">
       </div>
       <div class="field">
         <label>Seu nome (preenche automático)</label>
         <input id="name" autocomplete="off" placeholder="Digite seu nome">
       </div>
+      <button class="idxbtn" id="idxbtn" type="button">📑 Índice</button>
     </div>
     <div class="chips" id="chips"></div>
   </div>
@@ -113,8 +149,9 @@
   <div class="grid" id="grid"></div>
   <div class="empty" id="empty" style="display:none">
     <b>Nenhuma mensagem encontrada</b>
-    Tente outra palavra — como “guia”, “lembrete”, “desistência” ou “cartão”.
+    Tente outra palavra — como “guia”, “lembrete”, “desistência” ou “cartão” — ou um código como “AGE-01”.
   </div>
+  <section id="indice"></section>
 </main>
 
 <footer class="wrap">Equilibrium Med Center · uso interno da equipe. Campos entre [colchetes] devem ser ajustados antes de enviar.</footer>
@@ -129,8 +166,25 @@ const CATS = {
   reativacao:"Reativação",
   cartao:"Cartão & Vendas",
   admin:"Administrativo",
+  profissionais:"Profissionais",
   sensivel:"Sensível"
 };
+
+// prefixo de código por categoria (AGE-01, ATD-03, etc.)
+const PREFIX = {
+  primeiro:"PRI",
+  atendimento:"ATD",
+  documentos:"DOC",
+  agendamento:"AGE",
+  especialidades:"ESP",
+  reativacao:"REA",
+  cartao:"CAR",
+  admin:"ADM",
+  profissionais:"PRO",
+  sensivel:"SEN"
+};
+const PREFIX_TO_CAT = {};
+Object.entries(PREFIX).forEach(([cat,pf])=>PREFIX_TO_CAT[pf.toLowerCase()]=cat);
 
 const MSGS = [
  // ---------- ATENDIMENTO ----------
@@ -631,6 +685,303 @@ Autorização de convênio: [a confirmar]
 Entrega de laudo / relatório: [a confirmar]
 [Defina os prazos reais para padronizar a resposta ao paciente.]`},
 
+ // ---------- PROFISSIONAIS ----------
+ {cat:"profissionais",title:"Aline — Fonoaudiologia",kw:"atende agenda equipe aline profissional fonoaudiologia",body:
+`Aline — Fonoaudiologia
+📍 Unidade 2 · 1º andar · Sala(s): S14
+📅 Dias: Seg-Ter-Qua-Qui-Sex
+🕐 Turnos: Manhã (P1), Tarde (P2), Fim de tarde (P3)
+⏰ Horários de início: 8h30, 13h, 16h
+(3 turnos/semana)`},
+
+ {cat:"profissionais",title:"Hugo — Fonoaudiologia",kw:"atende agenda equipe hugo profissional fonoaudiologia",body:
+`Hugo — Fonoaudiologia
+📍 Unidade 2 · 1º andar · Sala(s): S13
+📅 Dias: Seg-Ter-Qua-Qui-Sex
+🕐 Turnos: Manhã (P1), Tarde (P2), Fim de tarde (P3)
+⏰ Horários de início: 7h45, 13h, 16h
+(3 turnos/semana)`},
+
+ {cat:"profissionais",title:"Lara — Fonoaudiologia",kw:"atende lara agenda equipe profissional fonoaudiologia",body:
+`Lara — Fonoaudiologia
+📍 Unidade 2 · 1º andar · Sala(s): S15
+📅 Dias: Seg-Qua-Sex
+🕐 Turnos: Manhã (P1), Tarde (P2), Fim de tarde (P3)
+⏰ Horários de início: 7h45, 12h15, 13h45, 16h
+(4 turnos/semana)`},
+
+ {cat:"profissionais",title:"Sandra — Musicoterapia",kw:"atende agenda sandra equipe profissional musicoterapia",body:
+`Sandra — Musicoterapia
+📍 Unidade 2 · Térreo · Sala(s): S04
+📅 Dias: Ter
+🕐 Turnos: Tarde (P2), Fim de tarde (P3)
+⏰ Horários de início: 13h, 16h
+(2 turnos/semana)`},
+
+ {cat:"profissionais",title:"André — Médico",kw:"atende agenda equipe andre profissional medico",body:
+`André — Médico
+📍 Unidade 1 · 2º andar · Sala(s): S27
+📅 Dias: Sex
+🕐 Turnos: Tarde (P2), Fim de tarde (P3)
+⏰ Horários de início: 13h, 16h
+(2 turnos/semana)`},
+
+ {cat:"profissionais",title:"Bruno — Médico",kw:"bruno atende agenda equipe profissional medico",body:
+`Bruno — Médico
+📍 Unidade 1 · 3º andar · Sala(s): S35
+📅 Dias: Seg-Ter-Qua-Qui-Sex
+🕐 Turnos: Manhã (P1)
+⏰ Horários de início: 8h
+(1 turnos/semana)`},
+
+ {cat:"profissionais",title:"Luan — Médico",kw:"atende agenda luan equipe profissional medico",body:
+`Luan — Médico
+📍 Unidade 1 · 2º andar · Sala(s): S27
+📅 Dias: Seg-Ter-Qua-Qui
+🕐 Turnos: Manhã (P1), Tarde (P2), Fim de tarde (P3)
+⏰ Horários de início: 8h, 14h30, 16h
+(3 turnos/semana)`},
+
+ {cat:"profissionais",title:"Lucas — Médico",kw:"lucas atende agenda equipe profissional medico",body:
+`Lucas — Médico
+📍 Unidade 1 · 2º andar · Sala(s): S26
+📅 Dias: Qui
+🕐 Turnos: Tarde (P2), Fim de tarde (P3)
+⏰ Horários de início: 16h
+(2 turnos/semana)`},
+
+ {cat:"profissionais",title:"Marcus — Médico",kw:"atende agenda equipe marcus profissional medico",body:
+`Marcus — Médico
+📍 Unidade 1 · 2º andar · Sala(s): S25
+📅 Dias: Qui
+🕐 Turnos: Tarde (P2), Fim de tarde (P3)
+⏰ Horários de início: 13h, 16h
+(2 turnos/semana)`},
+
+ {cat:"profissionais",title:"Priscila — Médico",kw:"atende agenda priscila equipe profissional medico",body:
+`Priscila — Médico
+📍 Unidade 1 · 2º andar · Sala(s): S27
+📅 Dias: Ter
+🕐 Turnos: Manhã (P1)
+⏰ Horários de início: 7h
+(1 turnos/semana)`},
+
+ {cat:"profissionais",title:"Vitor — Médico",kw:"atende agenda equipe vitor profissional medico",body:
+`Vitor — Médico
+📍 Unidade 1 · 2º andar · Sala(s): S25
+📅 Dias: Ter-Sex
+🕐 Turnos: Manhã (P1)
+⏰ Horários de início: 7h, 8h
+(2 turnos/semana)`},
+
+ {cat:"profissionais",title:"Wellington — Médico",kw:"atende wellington agenda equipe profissional medico",body:
+`Wellington — Médico
+📍 Unidade 1 · 2º andar · Sala(s): S26
+📅 Dias: Seg-Qua-Sex
+🕐 Turnos: Manhã (P1), Tarde (P2), Fim de tarde (P3)
+⏰ Horários de início: 7h, 14h, 16h
+(3 turnos/semana)`},
+
+ {cat:"profissionais",title:"Emilly — Neuropsicologia",kw:"atende emilly agenda neuropsicologia equipe profissional",body:
+`Emilly — Neuropsicologia
+📍 Unidade 1 · 2º andar · Sala(s): S22
+📅 Dias: Seg-Ter-Qua-Qui-Sex
+🕐 Turnos: Manhã (P1), Tarde (P2), Fim de tarde (P3)
+⏰ Horários de início: 7h, 13h, 16h
+(3 turnos/semana)`},
+
+ {cat:"profissionais",title:"Karolina — Neuropsicologia",kw:"atende agenda neuropsicologia equipe karolina profissional",body:
+`Karolina — Neuropsicologia
+📍 Unidade 1 · 2º andar · Sala(s): S24
+📅 Dias: Seg-Ter-Qua-Qui-Sex
+🕐 Turnos: Manhã (P1), Tarde (P2), Fim de tarde (P3)
+⏰ Horários de início: 7h, 8h, 13h, 16h
+(4 turnos/semana)`},
+
+ {cat:"profissionais",title:"Mariana — Neuropsicologia",kw:"atende agenda neuropsicologia equipe mariana profissional",body:
+`Mariana — Neuropsicologia
+📍 Unidade 1 · 1º andar · Sala(s): S17
+📅 Dias: Seg-Ter-Qua-Qui-Sex
+🕐 Turnos: Manhã (P1)
+⏰ Horários de início: 7h
+(1 turnos/semana)`},
+
+ {cat:"profissionais",title:"Natália — Neuropsicologia",kw:"atende agenda neuropsicologia equipe profissional natalia",body:
+`Natália — Neuropsicologia
+📍 Unidade 1 · 3º andar · Sala(s): S36
+📅 Dias: Seg-Ter-Qua-Qui-Sex
+🕐 Turnos: Manhã (P1), Tarde (P2), Fim de tarde (P3)
+⏰ Horários de início: 8h, 11h, 12h, 16h
+(5 turnos/semana)`},
+
+ {cat:"profissionais",title:"Pâmela — Neuropsicologia",kw:"atende agenda neuropsicologia equipe pamela profissional",body:
+`Pâmela — Neuropsicologia
+📍 Unidade 1 · 2º andar · Sala(s): S21
+📅 Dias: Seg-Ter-Qua-Qui-Sex
+🕐 Turnos: Manhã (P1), Tarde (P2), Fim de tarde (P3)
+⏰ Horários de início: 7h, 8h, 13h, 16h
+(4 turnos/semana)`},
+
+ {cat:"profissionais",title:"Taís — Neuropsicologia",kw:"atende tais agenda neuropsicologia equipe profissional",body:
+`Taís — Neuropsicologia
+📍 Unidade 1 · 2º andar · Sala(s): S23
+📅 Dias: Seg-Ter-Qua-Qui-Sex
+🕐 Turnos: Manhã (P1), Tarde (P2)
+⏰ Horários de início: 7h, 13h
+(2 turnos/semana)`},
+
+ {cat:"profissionais",title:"Wessilon — Neuropsicologia",kw:"atende agenda neuropsicologia equipe wessilon profissional",body:
+`Wessilon — Neuropsicologia
+📍 Unidade 1 · 3º andar · Sala(s): S37
+📅 Dias: Seg-Ter-Qua-Qui-Sex
+🕐 Turnos: Manhã (P1), Tarde (P2), Fim de tarde (P3)
+⏰ Horários de início: 7h, 13h, 16h
+(3 turnos/semana)`},
+
+ {cat:"profissionais",title:"Francisca — Psicologia",kw:"atende francisca agenda equipe psicologia profissional",body:
+`Francisca — Psicologia
+📍 Unidade 1 · 3º andar · Sala(s): S32
+📅 Dias: Seg-Ter-Qua-Qui-Sex
+🕐 Turnos: Manhã (P1)
+⏰ Horários de início: 7h
+(1 turnos/semana)`},
+
+ {cat:"profissionais",title:"Gabriela — Psicologia",kw:"gabriela atende agenda equipe psicologia profissional",body:
+`Gabriela — Psicologia
+📍 Unidade 1 · 1º andar · Sala(s): S12
+📅 Dias: Seg-Ter-Qua-Qui-Sex
+🕐 Turnos: Manhã (P1), Tarde (P2), Fim de tarde (P3)
+⏰ Horários de início: 7h, 13h, 16h
+(3 turnos/semana)`},
+
+ {cat:"profissionais",title:"Jeniffer — Psicologia",kw:"atende agenda jeniffer equipe psicologia profissional",body:
+`Jeniffer — Psicologia
+📍 Unidade 1 · 1º andar · Sala(s): S13, S17
+📅 Dias: Qua-Sex
+🕐 Turnos: Manhã (P1), Tarde (P2), Fim de tarde (P3)
+⏰ Horários de início: 7h, 13h, 16h
+(3 turnos/semana)`},
+
+ {cat:"profissionais",title:"Jéssica — Psicologia",kw:"atende jessica agenda equipe psicologia profissional",body:
+`Jéssica — Psicologia
+📍 Unidade 1 · 3º andar · Sala(s): S33
+📅 Dias: Seg-Ter-Qua-Qui-Sex-Sáb
+🕐 Turnos: Manhã (P1), Tarde (P2), Fim de tarde (P3)
+⏰ Horários de início: 8h, 13h, 16h
+(3 turnos/semana)`},
+
+ {cat:"profissionais",title:"Kênia — Psicologia",kw:"atende agenda kenia equipe psicologia profissional",body:
+`Kênia — Psicologia
+📍 Unidade 1 · 3º andar · Sala(s): S32
+📅 Dias: Seg-Ter-Qua-Qui-Sex-Sáb
+🕐 Turnos: Manhã (P1), Tarde (P2), Fim de tarde (P3)
+⏰ Horários de início: 8h, 13h, 16h
+(3 turnos/semana)`},
+
+ {cat:"profissionais",title:"Laís — Psicologia",kw:"atende lais agenda equipe psicologia profissional",body:
+`Laís — Psicologia
+📍 Unidade 1 · 1º andar · Sala(s): S11
+📅 Dias: Seg-Ter-Qua-Qui-Sex
+🕐 Turnos: Manhã (P1), Tarde (P2), Fim de tarde (P3)
+⏰ Horários de início: 7h45, 13h, 16h
+(3 turnos/semana)`},
+
+ {cat:"profissionais",title:"Mara — Psicologia",kw:"atende agenda equipe psicologia mara profissional",body:
+`Mara — Psicologia
+📍 Unidade 1 · 1º andar · Sala(s): S16
+📅 Dias: Seg-Ter-Qua-Qui-Sex
+🕐 Turnos: Manhã (P1), Tarde (P2), Fim de tarde (P3)
+⏰ Horários de início: 8h, 13h, 16h
+(3 turnos/semana)`},
+
+ {cat:"profissionais",title:"Michelle — Psicologia",kw:"michelle atende agenda equipe psicologia profissional",body:
+`Michelle — Psicologia
+📍 Unidade 1 · 1º andar · Sala(s): S15
+📅 Dias: Seg-Ter-Qua-Qui-Sex-Sáb
+🕐 Turnos: Manhã (P1), Tarde (P2), Fim de tarde (P3)
+⏰ Horários de início: 8h, 13h, 16h
+(3 turnos/semana)`},
+
+ {cat:"profissionais",title:"Rosana — Psicologia",kw:"atende agenda equipe psicologia rosana profissional",body:
+`Rosana — Psicologia
+📍 Unidade 1 · 1º andar · Sala(s): S13
+📅 Dias: Seg-Ter-Qua-Qui
+🕐 Turnos: Manhã (P1), Tarde (P2), Fim de tarde (P3)
+⏰ Horários de início: 8h30, 13h, 16h
+(3 turnos/semana)`},
+
+ {cat:"profissionais",title:"Sílvia — Psicologia",kw:"atende agenda silvia equipe psicologia profissional",body:
+`Sílvia — Psicologia
+📍 Unidade 1 · 3º andar · Sala(s): S35
+📅 Dias: Seg-Ter-Qui
+🕐 Turnos: Tarde (P2), Fim de tarde (P3)
+⏰ Horários de início: 16h
+(2 turnos/semana)`},
+
+ {cat:"profissionais",title:"Vitória — Psicologia",kw:"atende agenda equipe vitoria psicologia profissional",body:
+`Vitória — Psicologia
+📍 Unidade 1 · 1º andar · Sala(s): S14
+📅 Dias: Seg-Ter-Qua-Qui
+🕐 Turnos: Manhã (P1), Tarde (P2), Fim de tarde (P3)
+⏰ Horários de início: 7h, 13h, 16h
+(3 turnos/semana)`},
+
+ {cat:"profissionais",title:"Yuri — Psicologia",kw:"yuri atende agenda equipe psicologia profissional",body:
+`Yuri — Psicologia
+📍 Unidade 1 · 1º andar · Sala(s): S15
+📅 Dias: Seg-Ter-Qua-Qui-Sex
+🕐 Turnos: Manhã (P1)
+⏰ Horários de início: 7h
+(1 turnos/semana)`},
+
+ {cat:"profissionais",title:"Mayumi — Psicologia Adolescência/Infantil",kw:"atende mayumi agenda equipe psicologia profissional adolescencia/infantil",body:
+`Mayumi — Psicologia Adolescência/Infantil
+📍 Unidade 2 · 1º andar · Sala(s): S16
+📅 Dias: Seg-Ter-Qua-Qui-Sex
+🕐 Turnos: Manhã (P1), Tarde (P2), Fim de tarde (P3)
+⏰ Horários de início: 7h, 7h45, 13h45, 16h
+(4 turnos/semana)`},
+
+ {cat:"profissionais",title:"Mona — Psicomotricidade",kw:"atende agenda equipe mona psicomotricidade profissional",body:
+`Mona — Psicomotricidade
+📍 Unidade 2 · Térreo · Sala(s): S01
+📅 Dias: Seg-Ter-Qua-Sex
+🕐 Turnos: Manhã (P1), Tarde (P2), Fim de tarde (P3)
+⏰ Horários de início: 7h, 7h45, 8h30, 13h, 13h45, 16h
+(6 turnos/semana)`},
+
+ {cat:"profissionais",title:"Ana Maria — Psicopedagogia",kw:"atende agenda maria equipe profissional psicopedagogia ana",body:
+`Ana Maria — Psicopedagogia
+📍 Unidade 2 · 1º andar · Sala(s): S11
+📅 Dias: Seg-Ter-Qua-Qui-Sex
+🕐 Turnos: Manhã (P1), Tarde (P2)
+⏰ Horários de início: 7h, 13h
+(2 turnos/semana)`},
+
+ {cat:"profissionais",title:"Daiane — Psicopedagogia",kw:"daiane atende agenda equipe psicopedagogia profissional",body:
+`Daiane — Psicopedagogia
+📍 Unidade 2 · 1º andar · Sala(s): S12
+📅 Dias: Seg-Ter-Qua-Qui-Sex
+🕐 Turnos: Manhã (P1)
+⏰ Horários de início: 7h
+(1 turnos/semana)`},
+
+ {cat:"profissionais",title:"Terapia ABA (8 salas) — Terapia ABA",kw:"terapia atende aba agenda equipe salas) (8 profissional",body:
+`Terapia ABA (8 salas) — Terapia ABA
+📍 Unidade 2 · 1º andar · Sala(s): SALAS 17 a 24
+📅 Dias: Seg-Ter-Qua-Qui-Sex
+🕐 Turnos: Manhã (P1), Tarde (P2), Fim de tarde (P3)
+⏰ Horários de início: 7h, 13h, 16h
+(3 turnos/semana)`},
+
+ {cat:"profissionais",title:"Eduardo — Terapia Ocupacional",kw:"terapia atende agenda eduardo equipe ocupacional profissional",body:
+`Eduardo — Terapia Ocupacional
+📍 Unidade 2 · Térreo · Sala(s): S07
+📅 Dias: Seg-Ter-Qua-Qui
+🕐 Turnos: Manhã (P1), Tarde (P2), Fim de tarde (P3)
+⏰ Horários de início: 7h, 13h, 16h
+(3 turnos/semana)`},
+
  // ---------- SENSÍVEL ----------
  {cat:"sensivel",title:"Acolhimento em urgência emocional",kw:"crise urgencia emocional cvv 188 emergencia samu sofrimento",sensivel:true,body:
 `Sentimos muito que você esteja passando por um momento difícil, e agradecemos por confiar na gente. 💙
@@ -645,25 +996,51 @@ Se você está em crise ou precisa de ajuda agora, por favor procure:
 Estamos aqui para te acolher e, assim que possível, vamos te ajudar a organizar um atendimento com nossa equipe. Você não está sozinho(a). 💙`},
 ];
 
+// ---- atribuição de códigos (AGE-01, ATD-03, ...) ----
+(function assignCodes(){
+  const counters={};
+  for(const m of MSGS){
+    counters[m.cat]=(counters[m.cat]||0)+1;
+    const n=String(counters[m.cat]).padStart(2,"0");
+    m.code = (PREFIX[m.cat]||"MSG")+"-"+n;
+    m._codekey = m.code.toLowerCase().replace(/[^a-z0-9]/g,""); // "age01"
+    m._num = counters[m.cat];
+  }
+})();
+
 // ---- normalize for search ----
 const norm = s => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
 const STOP = new Set("com de da do das dos para por e a o os as um uma na no nas nos em que ao aos sobre minha meu meus minhas".split(" "));
 function score(m,tokens){
-  const t=norm(m.title),k=norm(m.kw),b=norm(m.body);let s=0,all=true;
+  const t=norm(m.title),k=norm(m.kw),b=norm(m.body),c=m._codekey;let s=0,all=true;
   for(const tok of tokens){
-    if(t.includes(tok))s+=6;else if(k.includes(tok))s+=3;else if(b.includes(tok))s+=1;else all=false;
+    const tk=tok.replace(/[^a-z0-9]/g,"");
+    if(c && tk && c.includes(tk))s+=8;
+    else if(t.includes(tok))s+=6;else if(k.includes(tok))s+=3;else if(b.includes(tok))s+=1;else all=false;
   }
   if(all&&tokens.length)s+=4;
   return s;
 }
 
+// reconhece código completo (age01), prefixo (age) ou número solto (02)
+function parseCode(qkey){
+  const mFull = qkey.match(/^([a-z]{2,4})(\d{1,2})$/);
+  if(mFull && PREFIX_TO_CAT[mFull[1]]) return {type:"full",cat:PREFIX_TO_CAT[mFull[1]],num:parseInt(mFull[2],10)};
+  if(PREFIX_TO_CAT[qkey]) return {type:"prefix",cat:PREFIX_TO_CAT[qkey]};
+  if(/^\d{1,2}$/.test(qkey)) return {type:"num",num:parseInt(qkey,10)};
+  return null;
+}
+
 let active = "todos";
+let view = "msgs"; // "msgs" | "indice"
 const q = document.getElementById("q");
 const nameI = document.getElementById("name");
 const grid = document.getElementById("grid");
 const chipsEl = document.getElementById("chips");
 const countEl = document.getElementById("count");
 const emptyEl = document.getElementById("empty");
+const indiceEl = document.getElementById("indice");
+const idxBtn = document.getElementById("idxbtn");
 
 // build chips
 function buildChips(){
@@ -672,29 +1049,56 @@ function buildChips(){
   const order = ["todos",...Object.keys(CATS)];
   chipsEl.innerHTML = order.map(c=>{
     const label = c==="todos" ? "Todos" : CATS[c];
-    return `<button class="chip ${c===active?'on':''}" data-c="${c}">${label}<span class="n">${counts[c]}</span></button>`;
+    const pf = c==="todos" ? "" : `<span class="pf">${PREFIX[c]}</span>`;
+    return `<button class="chip ${c===active?'on':''}" data-c="${c}">${label}${pf}<span class="n">${counts[c]}</span></button>`;
   }).join("");
-  chipsEl.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{active=b.dataset.c;buildChips();render();});
+  chipsEl.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{active=b.dataset.c;if(view==="indice"){view="msgs";idxBtn.classList.remove("on");}buildChips();render();});
 }
 
 function escapeHtml(s){return s.replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));}
 
 function render(){
+  if(view==="indice"){renderIndice();return;}
+  indiceEl.style.display="none";
   const raw = norm(q.value.trim());
-  const tokens = raw ? raw.split(/\s+/).filter(t=>t && !STOP.has(t)) : [];
-  let items = MSGS.map((m,idx)=>({m,idx})).filter(o=> active==="todos" || o.m.cat===active);
-  if(tokens.length){
-    items = items.map(o=>({...o, s:score(o.m,tokens)})).filter(o=>o.s>0).sort((a,b)=>b.s-a.s);
+  const qkey = raw.replace(/[^a-z0-9]/g,"");
+  const codeQ = raw ? parseCode(qkey) : null;
+
+  let items, hasQuery=false, codeHit=false;
+
+  if(codeQ){
+    codeHit=true;
+    if(codeQ.type==="full"){
+      items = MSGS.map((m,idx)=>({m,idx})).filter(o=>o.m.cat===codeQ.cat && o.m._num===codeQ.num);
+    }else if(codeQ.type==="prefix"){
+      items = MSGS.map((m,idx)=>({m,idx})).filter(o=>o.m.cat===codeQ.cat);
+    }else{ // num solto
+      items = MSGS.map((m,idx)=>({m,idx}))
+        .filter(o=> (active==="todos"||o.m.cat===active) && o.m._num===codeQ.num);
+    }
+  }else{
+    const tokens = raw ? raw.split(/\s+/).filter(t=>t && !STOP.has(t)) : [];
+    hasQuery = tokens.length>0;
+    items = MSGS.map((m,idx)=>({m,idx})).filter(o=> active==="todos" || o.m.cat===active);
+    if(tokens.length){
+      items = items.map(o=>({...o, s:score(o.m,tokens)})).filter(o=>o.s>0).sort((a,b)=>b.s-a.s);
+    }
   }
-  const hasQuery = tokens.length>0;
+
+  const showBest = (hasQuery || codeHit) && items.length>0;
+  let tail = "";
+  if(codeHit) tail = " · por código";
+  else if(hasQuery) tail = " · por relevância";
+  else if(active!=="todos") tail = " · "+CATS[active];
   countEl.textContent = items.length===0 ? "" :
-    `${items.length} ${items.length===1?'mensagem':'mensagens'}${hasQuery?' · por relevância' : (active!=="todos"?" · "+CATS[active]:"")}`;
+    `${items.length} ${items.length===1?'mensagem':'mensagens'}${tail}`;
   emptyEl.style.display = items.length? "none":"block";
+
   grid.innerHTML = items.map((o,i)=>{
-    const m=o.m, best = hasQuery && i===0;
+    const m=o.m, best = showBest && i===0;
     return `
     <div class="card ${m.sensivel?'sensivel':''} ${best?'best':''}">
-      <div class="card-h"><span class="tag">${CATS[m.cat]}</span>${best?'<span class="best-badge">Melhor resposta</span>':''}</div>
+      <div class="card-h"><span class="code">${m.code}</span><span class="tag">${CATS[m.cat]}</span>${best?'<span class="best-badge">Melhor resposta</span>':''}</div>
       <h3>${escapeHtml(m.title)}</h3>
       <div class="msg">${escapeHtml(m.body)}</div>
       ${m.sensivel?'<div class="note">⚠️ Mensagem sensível — envie com cuidado e, se possível, acione um profissional da equipe.</div>':''}
@@ -702,6 +1106,36 @@ function render(){
     </div>`;}).join("");
   grid.querySelectorAll(".copy").forEach(b=>b.onclick=()=>doCopy(b));
 }
+
+function renderIndice(){
+  grid.innerHTML="";
+  emptyEl.style.display="none";
+  indiceEl.style.display="block";
+  countEl.textContent = `${MSGS.length} mensagens · índice por código`;
+  let html = `<p class="idx-intro">Cada mensagem tem um código fixo (prefixo da categoria + número). Use-o na busca para ir direto à resposta — digite o código completo (ex.: <b>AGE-01</b>), só o prefixo (ex.: <b>AGE</b>) ou, com uma categoria selecionada, só o número (ex.: <b>02</b>). Clique em qualquer linha para abrir a mensagem.</p>`;
+  for(const cat of Object.keys(CATS)){
+    const list = MSGS.filter(m=>m.cat===cat);
+    if(!list.length) continue;
+    html += `<div class="idx-group">
+      <div class="idx-gh"><b>${CATS[cat]}</b><span class="pftag">${PREFIX[cat]}-</span></div>
+      ${list.map(m=>`<div class="idx-row ${m.sensivel?'sens':''}" data-code="${m.code}"><span class="c">${m.code}</span><span class="ti">${escapeHtml(m.title)}</span></div>`).join("")}
+    </div>`;
+  }
+  indiceEl.innerHTML = html;
+  indiceEl.querySelectorAll(".idx-row").forEach(r=>r.onclick=()=>{
+    view="msgs"; idxBtn.classList.remove("on");
+    active="todos";
+    q.value=r.dataset.code;
+    buildChips(); render();
+    window.scrollTo({top:0,behavior:"smooth"});
+  });
+}
+
+idxBtn.onclick=()=>{
+  view = view==="indice" ? "msgs" : "indice";
+  idxBtn.classList.toggle("on", view==="indice");
+  render();
+};
 
 function doCopy(btn){
   const m = MSGS[+btn.dataset.idx];
@@ -721,6 +1155,8 @@ function fallback(text,done){
   document.body.removeChild(ta);
 }
 
-q.addEventListener("input",render);
+q.addEventListener("input",()=>{ if(view==="indice"){view="msgs";idxBtn.classList.remove("on");} render(); });
 buildChips();render();
 </script>
+</body>
+</html>
