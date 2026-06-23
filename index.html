@@ -109,6 +109,28 @@
   .idx-row .c{font-size:12px;font-weight:700;color:var(--forest);font-family:"SFMono-Regular",Menlo,Consolas,monospace;font-variant-numeric:tabular-nums;white-space:nowrap;min-width:62px}
   .idx-row .ti{font-size:13.5px;color:var(--ink)}
   .idx-row.sens .c{color:var(--warn)}
+  #fluxos{display:none}
+  .flo-intro{font-size:13px;color:var(--soft);margin:0 0 18px}
+  .flo-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+  .flo-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;cursor:pointer;transition:border-color .14s}
+  .flo-card:hover{border-color:var(--teal)}
+  .flo-card .flo-title{font-size:15.5px;font-weight:700;color:var(--ink);margin-bottom:5px}
+  .flo-card .flo-desc{font-size:13px;color:var(--soft);line-height:1.45}
+  .flo-card .flo-meta{font-size:11.5px;color:var(--teal);margin-top:10px;font-weight:600}
+  .flo-back{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--card);color:var(--forest);border-radius:10px;padding:7px 13px;font-size:13.5px;font-weight:600;cursor:pointer;margin-bottom:16px}
+  .flo-back:hover{border-color:var(--teal)}
+  .flo-head{font-size:18px;font-weight:700;margin:0 0 4px}
+  .flo-sub{font-size:13px;color:var(--soft);margin:0 0 22px}
+  .flo-step{display:flex;gap:14px;padding:0 0 18px;position:relative}
+  .flo-step:not(:last-child)::before{content:"";position:absolute;left:15px;top:36px;bottom:-2px;width:2px;background:var(--line)}
+  .flo-n{flex:none;width:32px;height:32px;border-radius:50%;background:var(--forest);color:#fff;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;z-index:1}
+  .flo-bd{flex:1;padding-top:4px}
+  .flo-name{font-size:15px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .flo-tag{font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--warn);background:var(--warnbg);border-radius:5px;padding:2px 7px}
+  .flo-note{font-size:13px;color:var(--soft);line-height:1.5;margin:5px 0 10px}
+  .flo-codes{display:flex;flex-wrap:wrap;gap:7px}
+  .flo-code{border:1px solid var(--line);background:var(--mist);color:var(--forest);border-radius:8px;padding:5px 10px;font-size:12.5px;font-weight:700;font-family:"SFMono-Regular",Menlo,Consolas,monospace;cursor:pointer;transition:all .12s}
+  .flo-code:hover{background:var(--forest);color:#fff;border-color:var(--forest)}
 
   footer{border-top:1px solid var(--line);padding:20px 0;color:var(--soft);font-size:12px;text-align:center}
 
@@ -118,7 +140,7 @@
     .logo{height:36px}
   }
   @media print{
-    header .controls,header .fills,header .chips,.idxbtn,.role{display:none}
+    header .controls,header .fills,header .chips,.idxbtn,.flobtn,.role{display:none}
     .idx-group{break-inside:avoid}
   }
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -141,6 +163,7 @@
         <input id="q" autocomplete="off" placeholder="ex.: AGE-01, 02, guia, receita, agendar, valores…">
       </div>
       <button class="idxbtn" id="idxbtn" type="button">📑 Índice</button>
+      <button class="idxbtn flobtn" id="flobtn" type="button">🧭 Fluxos</button>
     </div>
     <div class="fills">
       <span class="fills-label">Preenche ao copiar:</span>
@@ -171,6 +194,7 @@
     Tente outra palavra — como “guia”, “lembrete”, “desistência” ou “cartão” — ou um código como “AGE-01”.
   </div>
   <section id="indice"></section>
+  <section id="fluxos"></section>
 </main>
 
 <footer class="wrap">Equilibrium Med Center · uso interno da equipe. Campos entre [colchetes] devem ser ajustados antes de enviar.</footer>
@@ -467,7 +491,25 @@ Estamos te esperando! 💙`},
 
 Não precisa se preocupar com mais nada — nossa equipe vai te orientar em cada passo. 💙`},
 
- // ---------- ESPECIALIDADES ----------
+{cat:"agendamento",title:"Encaixe — oferta ao paciente",kw:"encaixe espremido vaga horario extra surgiu confirmar agendar disponibilidade",body:
+`Oi, *[NOME DO PACIENTE]*! 😊 Aqui é *[NOME DO ATENDENTE]*, da Equilibrium Med Center.
+
+Consegui um *encaixe* na agenda do(a) *[PROFISSIONAL]*: *[DATA]* às *[HORÁRIO]*. 💙
+
+Por ser um encaixe, esse horário é limitado — me confirma o quanto antes que eu garanto para você. Posso reservar?`},
+
+ {cat:"agendamento",title:"Agenda fechada — sem novos agendamentos",kw:"agenda fechada medico lotada cheia sem vaga novos agendamentos lista espera",body:
+`Oi, *[NOME DO PACIENTE]*! 😊 Obrigado(a) pela compreensão.
+
+No momento, a agenda do(a) *[PROFISSIONAL]* está *temporariamente fechada para novos agendamentos*.
+
+Para não te deixar sem opção, posso:
+✅ Te colocar na *lista de espera* e avisar assim que liberar um horário;
+🔄 Verificar a agenda de *outro(a) profissional* da mesma especialidade.
+
+Qual prefere? Estou à disposição. 💙`},
+
+  // ---------- ESPECIALIDADES ----------
  {cat:"especialidades",title:"Avaliação Neuropsicológica",kw:"neuropsicologica avaliacao tdah laudo testes",body:
 `Com prazer em explicar! 😊 A *Avaliação Neuropsicológica* é um processo detalhado que investiga funções como atenção, memória, raciocínio, linguagem e funções executivas.
 
@@ -697,12 +739,16 @@ Segunda a sexta: [08h às 18h]
 Sábado: [08h às 12h]
 [Confirmar / ajustar os horários reais da clínica.]`},
 
- {cat:"admin",title:"Prazos internos",kw:"prazo autorizacao laudo entrega admin referencia",body:
-`PRAZOS DE REFERÊNCIA
+ {cat:"admin",title:"Prazos internos & regra de retorno",kw:"prazo retorno 30 dias nova consulta guia executada reaproveitar convenio autorizacao laudo entrega admin referencia",body:
+`PRAZOS & REGRA DE CONSULTA
+
+🔁 Retorno / nova consulta (todos os planos):
+• NÃO realizamos retorno antes de 30 dias.
+• A volta do paciente é sempre CONSULTA NOVA, agendada somente após 30 dias da anterior.
+• Cada atendimento tem guia própria — o paciente nunca volta na mesma guia já executada.
 
 Autorização de convênio: [a confirmar]
-Entrega de laudo / relatório: [a confirmar]
-[Defina os prazos reais para padronizar a resposta ao paciente.]`},
+Entrega de laudo / relatório: [a confirmar]`},
 
  // ---------- PROFISSIONAIS ----------
  {cat:"profissionais",title:"Aline — Fonoaudiologia",kw:"atende agenda equipe aline profissional fonoaudiologia",body:
@@ -737,64 +783,68 @@ Entrega de laudo / relatório: [a confirmar]
 ⏰ Horários de início: 13h, 16h
 (2 turnos/semana)`},
 
- {cat:"profissionais",title:"André — Médico",kw:"atende agenda equipe andre profissional medico",body:
-`André — Médico
+ {cat:"profissionais",title:"Dr. André — Médico",kw:"equipe psiquiatra andre medico profissional agenda psiquiatria atende",body:
+`Dr. André — Médico
+ℹ️ Atende em Psiquiatria (prática autorizada pelo CFM). Não é médico psiquiatra — sem título de especialista (RQE).
 📍 Unidade 1 · 2º andar · Sala(s): S27
 📅 Dias: Sex
 🕐 Turnos: Tarde (P2), Fim de tarde (P3)
 ⏰ Horários de início: 13h, 16h
 (2 turnos/semana)`},
 
- {cat:"profissionais",title:"Bruno — Médico",kw:"bruno atende agenda equipe profissional medico",body:
-`Bruno — Médico
+ {cat:"profissionais",title:"Dr. Bruno Caixeta — Médico",kw:"caixeta equipe psiquiatra bruno medico profissional agenda psiquiatria atende",body:
+`Dr. Bruno Caixeta — Médico
+ℹ️ Atende em Psiquiatria (prática autorizada pelo CFM). Não é médico psiquiatra — sem título de especialista (RQE).
 📍 Unidade 1 · 3º andar · Sala(s): S35
 📅 Dias: Seg-Ter-Qua-Qui-Sex
 🕐 Turnos: Manhã (P1)
 ⏰ Horários de início: 8h
-(1 turnos/semana)`},
+(1 turno/semana)`},
 
- {cat:"profissionais",title:"Luan — Médico",kw:"atende agenda luan equipe profissional medico",body:
-`Luan — Médico
+ {cat:"profissionais",title:"Dr. Luan Souza — Psiquiatria",kw:"agenda atende equipe especialista luan medico profissional psiquiatra psiquiatria rqe souza",body:
+`Dr. Luan Souza — Médico Psiquiatra (RQE)
 📍 Unidade 1 · 2º andar · Sala(s): S27
 📅 Dias: Seg-Ter-Qua-Qui
 🕐 Turnos: Manhã (P1), Tarde (P2), Fim de tarde (P3)
 ⏰ Horários de início: 8h, 14h30, 16h
 (3 turnos/semana)`},
 
- {cat:"profissionais",title:"Lucas — Médico",kw:"lucas atende agenda equipe profissional medico",body:
-`Lucas — Médico
+ {cat:"profissionais",title:"Dr. Lucas — Médico",kw:"equipe psiquiatra medico profissional agenda psiquiatria atende lucas",body:
+`Dr. Lucas — Médico
+ℹ️ Atende em Psiquiatria (prática autorizada pelo CFM). Não é médico psiquiatra — sem título de especialista (RQE).
 📍 Unidade 1 · 2º andar · Sala(s): S26
 📅 Dias: Qui
 🕐 Turnos: Tarde (P2), Fim de tarde (P3)
 ⏰ Horários de início: 16h
 (2 turnos/semana)`},
 
- {cat:"profissionais",title:"Marcus — Médico",kw:"atende agenda equipe marcus profissional medico",body:
-`Marcus — Médico
+ {cat:"profissionais",title:"Dr. Marcus — Psiquiatria",kw:"agenda atende equipe especialista marcos marcus medico profissional psiquiatra psiquiatria rqe",body:
+`Dr. Marcus — Médico Psiquiatra (RQE)
 📍 Unidade 1 · 2º andar · Sala(s): S25
 📅 Dias: Qui
 🕐 Turnos: Tarde (P2), Fim de tarde (P3)
 ⏰ Horários de início: 13h, 16h
 (2 turnos/semana)`},
 
- {cat:"profissionais",title:"Priscila — Médico",kw:"atende agenda priscila equipe profissional medico",body:
-`Priscila — Médico
+ {cat:"profissionais",title:"Dra. Priscila — Médico",kw:"equipe psiquiatra medico profissional agenda psiquiatria atende priscila",body:
+`Dra. Priscila — Médico
+ℹ️ Atende em Psiquiatria (prática autorizada pelo CFM). Não é médico psiquiatra — sem título de especialista (RQE).
 📍 Unidade 1 · 2º andar · Sala(s): S27
 📅 Dias: Ter
 🕐 Turnos: Manhã (P1)
 ⏰ Horários de início: 7h
-(1 turnos/semana)`},
+(1 turno/semana)`},
 
- {cat:"profissionais",title:"Vitor — Médico",kw:"atende agenda equipe vitor profissional medico",body:
-`Vitor — Médico
+ {cat:"profissionais",title:"Dr. Vitor Tapias — Psiquiatria",kw:"agenda atende equipe especialista medico profissional psiquiatra psiquiatria rqe tapias vitor",body:
+`Dr. Vitor Tapias — Médico Psiquiatra (RQE)
 📍 Unidade 1 · 2º andar · Sala(s): S25
 📅 Dias: Ter-Sex
 🕐 Turnos: Manhã (P1)
 ⏰ Horários de início: 7h, 8h
 (2 turnos/semana)`},
 
- {cat:"profissionais",title:"Wellington — Médico",kw:"atende wellington agenda equipe profissional medico",body:
-`Wellington — Médico
+ {cat:"profissionais",title:"Dr. Wellington — Psiquiatria",kw:"equipe psiquiatra wellington especialista medico profissional rqe agenda psiquiatria atende",body:
+`Dr. Wellington — Médico Psiquiatra (RQE)
 📍 Unidade 1 · 2º andar · Sala(s): S26
 📅 Dias: Seg-Qua-Sex
 🕐 Turnos: Manhã (P1), Tarde (P2), Fim de tarde (P3)
@@ -1063,6 +1113,58 @@ const countEl = document.getElementById("count");
 const emptyEl = document.getElementById("empty");
 const indiceEl = document.getElementById("indice");
 const idxBtn = document.getElementById("idxbtn");
+const fluxosEl = document.getElementById("fluxos");
+const fluxosBtn = document.getElementById("flobtn");
+let openFlow = null;
+
+const FLOWS = [
+ {id:"psiquiatria", title:"Atendimento em Psiquiatria", desc:"Cliente pede consulta em psiquiatria.", steps:[
+   {name:"Acolher e triar", codes:["ATD-01","PRI-01"], note:"Saudação e triagem: para quem é, convênio ou particular, e se já tem encaminhamento."},
+   {name:"Sinal de crise?", branch:true, codes:["SEN-01"], note:"Se houver urgência emocional, priorize: acolher e orientar CVV 188 / SAMU 192."},
+   {name:"Rotear o profissional", codes:[], note:"Psiquiatra com RQE: Dr. Luan, Dr. Vitor, Dr. Wellington e Dr. Marcus. Ou médico que atende psiquiatria (Bruno, André, Lucas, Priscila) — informe que não têm título de especialista."},
+   {name:"Definir pagamento", codes:["DOC-01","DOC-02","ATD-08","DOC-07","CAR-01"], note:"Convênio: documentos e guia; se o plano não for atendido, ATD-08 e ofereça o cartão. Particular: valores e cartão 50%."},
+   {name:"Agendar", codes:["AGE-01","AGE-02"], note:"Coleta os dados e confirma profissional, data e sala."},
+   {name:"Orientar e lembrar", codes:["AGE-08","AGE-03"], note:"Orientações da primeira consulta e lembrete na véspera."}
+ ]},
+ {id:"medico", title:"Pedido com médico específico", desc:"A pessoa já chega pedindo um médico pelo nome.", steps:[
+   {name:"Acolher", codes:["ATD-01"], note:"Saudação leve — a pessoa já decidiu o profissional."},
+   {name:"Localizar no painel", codes:[], note:"Busque o nome do profissional: o card mostra especialidade, RQE, sala e a agenda real."},
+   {name:"Conferir RQE", branch:true, codes:[], note:"Só se a pessoa pediu psiquiatra e nomeou um médico sem RQE: informe e deixe a escolha com o paciente."},
+   {name:"Confirmar dados", codes:["DOC-01","DOC-07"], note:"Para você ou criança, e convênio ou particular."},
+   {name:"Tem horário?", branch:true, codes:["REA-06","AGE-04","AGE-09","AGE-10"], note:"Sem vaga: lista de espera, reagendar ou encaixe (ver fluxo Encaixe)."},
+   {name:"Agendar e orientar", codes:["AGE-01","AGE-02","AGE-08","AGE-03"], note:"Coleta, confirma, orienta e lembra."}
+ ]},
+ {id:"retorno", title:"Agendar retorno (consulta nova)", desc:"Retorno é sempre consulta nova, com guia própria.", steps:[
+   {name:"Entender o pedido", codes:["ATD-01","ADM-05"], note:"Retorno = consulta nova. Não há retorno antes de 30 dias, e nunca na mesma guia já executada."},
+   {name:"Conferir os 30 dias", branch:true, codes:["ADM-05"], note:"Menos de 30 dias da última consulta: não realizamos. A partir de 30 dias: segue como consulta nova."},
+   {name:"Tem vaga?", branch:true, codes:["REA-06","AGE-04","AGE-09","AGE-10"], note:"Sem vaga: lista de espera, reagendar ou encaixe."},
+   {name:"Definir pagamento", codes:["DOC-01","DOC-02","ATD-08","DOC-07","CAR-01"], note:"Convênio com guia nova, particular ou cartão. Plano não atendido: ATD-08 e ofereça o cartão."},
+   {name:"Agendar e lembrar", codes:["AGE-01","AGE-02","AGE-03"], note:"Coleta, confirma e lembra."}
+ ]},
+ {id:"encaixe", title:"Encaixe (sem vaga normal)", desc:"A recepção tem autonomia para encaixar quando há espaço.", steps:[
+   {name:"Sem vaga normal", codes:[], note:"O paciente precisa de horário e não há vaga regular."},
+   {name:"Verificar a agenda", codes:[], note:"A recepção sempre confere a agenda do profissional antes."},
+   {name:"Agenda fechada?", branch:true, codes:["AGE-10","REA-06"], note:"Médico fechou para novos agendamentos ou está lotada: use o AGE-10 e ofereça lista de espera ou outro profissional."},
+   {name:"Encaixe e contato", codes:["AGE-09"], note:"Havendo espaço para espremer, a recepção encaixa e oferece o horário com o AGE-09."},
+   {name:"Confirmar", codes:["AGE-02"], note:"Confirma o encaixe com o paciente."}
+ ]},
+ {id:"geral", title:"Consulta / sessão (demais especialidades)", desc:"Psicologia, fono, T.O., psicomotricidade, psicopedagogia, terapias infantis e ABA.", steps:[
+   {name:"Acolher e triar", codes:["ATD-01","PRI-01"], note:"Saudação e triagem: para quem é, queixa, convênio ou particular, encaminhamento."},
+   {name:"Direcionar a especialidade", codes:["PRI-03"], note:"Use o guia de direcionamento para confirmar a especialidade certa."},
+   {name:"Definir pagamento", codes:["DOC-01","DOC-02","ATD-08","DOC-07","CAR-01"], note:"Convênio (documentos e guia; se não atendido, ATD-08 e cartão) ou particular (valores e cartão)."},
+   {name:"Agendar", codes:["AGE-01","AGE-02"], note:"Coleta os dados e confirma."},
+   {name:"Orientar e lembrar", codes:["AGE-08","AGE-03"], note:"Orientações e lembrete."}
+ ]},
+ {id:"neuro", title:"Avaliação Neuropsicológica", desc:"Avaliação em sessões, com entrevista, testes e laudo.", steps:[
+   {name:"Acolher e triar", codes:["ATD-01","PRI-01"], note:"Para quem é (criança ou adulto), queixa (TDAH, aprendizagem, desenvolvimento), convênio ou particular, e se tem encaminhamento."},
+   {name:"Explicar a avaliação", codes:["ESP-01"], note:"Processo em algumas sessões: entrevista, aplicação de testes e devolutiva com laudo."},
+   {name:"Encaminhamento e guia", branch:true, codes:["DOC-02"], note:"O plano exige pedido médico com CID. Oriente como conseguir, caso o paciente não tenha."},
+   {name:"Definir pagamento", codes:["DOC-01","DOC-07","CAR-11"], note:"Convênio: documentos e guia. Particular: R$ 3.800; com o cartão sai R$ 1.900 (regra de elegibilidade — CAR-11)."},
+   {name:"Agendar a entrevista inicial", codes:["AGE-01","AGE-02"], note:"Marca a primeira sessão (anamnese/entrevista)."},
+   {name:"Sessões de testagem", codes:["AGE-03"], note:"Agenda as sessões seguintes (geralmente 4 a 8) e usa lembretes."},
+   {name:"Devolutiva e laudo", codes:["DOC-06"], note:"Ao final, devolutiva e entrega do laudo — informe o prazo ao paciente."}
+ ]}
+];
 
 // build chips
 function buildChips(){
@@ -1074,14 +1176,16 @@ function buildChips(){
     const pf = c==="todos" ? "" : `<span class="pf">${PREFIX[c]}</span>`;
     return `<button class="chip ${c===active?'on':''}" data-c="${c}">${label}${pf}<span class="n">${counts[c]}</span></button>`;
   }).join("");
-  chipsEl.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{active=b.dataset.c;if(view==="indice"){view="msgs";idxBtn.classList.remove("on");}buildChips();render();});
+  chipsEl.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{active=b.dataset.c;if(view!=="msgs"){view="msgs";openFlow=null;idxBtn.classList.remove("on");fluxosBtn.classList.remove("on");}buildChips();render();});
 }
 
 function escapeHtml(s){return s.replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));}
 
 function render(){
-  if(view==="indice"){renderIndice();return;}
   indiceEl.style.display="none";
+  fluxosEl.style.display="none";
+  if(view==="indice"){renderIndice();return;}
+  if(view==="fluxos"){renderFluxos();return;}
   const raw = norm(q.value.trim());
   const qkey = raw.replace(/[^a-z0-9]/g,"");
   const codeQ = raw ? parseCode(qkey) : null;
@@ -1144,20 +1248,49 @@ function renderIndice(){
     </div>`;
   }
   indiceEl.innerHTML = html;
-  indiceEl.querySelectorAll(".idx-row").forEach(r=>r.onclick=()=>{
-    view="msgs"; idxBtn.classList.remove("on");
-    active="todos";
-    q.value=r.dataset.code;
-    buildChips(); render();
-    window.scrollTo({top:0,behavior:"smooth"});
-  });
+  indiceEl.querySelectorAll(".idx-row").forEach(r=>r.onclick=()=>gotoCode(r.dataset.code));
 }
 
-idxBtn.onclick=()=>{
-  view = view==="indice" ? "msgs" : "indice";
+function setView(v){
+  view = (view===v) ? "msgs" : v;
+  if(view!=="fluxos") openFlow=null;
   idxBtn.classList.toggle("on", view==="indice");
+  fluxosBtn.classList.toggle("on", view==="fluxos");
   render();
-};
+}
+idxBtn.onclick=()=>setView("indice");
+fluxosBtn.onclick=()=>setView("fluxos");
+
+function gotoCode(code){
+  view="msgs"; openFlow=null;
+  idxBtn.classList.remove("on"); fluxosBtn.classList.remove("on");
+  active="todos"; q.value=code; buildChips(); render();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function renderFluxos(){
+  grid.innerHTML=""; emptyEl.style.display="none"; fluxosEl.style.display="block";
+  if(!openFlow){
+    countEl.textContent = `${FLOWS.length} fluxos guiados`;
+    fluxosEl.innerHTML = `<p class="flo-intro">Escolha um fluxo. Cada etapa traz os balões — clique no código para abrir a mensagem.</p>`
+      + `<div class="flo-list">`
+      + FLOWS.map(f=>`<div class="flo-card" data-flow="${f.id}"><div class="flo-title">${escapeHtml(f.title)}</div><div class="flo-desc">${escapeHtml(f.desc)}</div><div class="flo-meta">${f.steps.length} etapas →</div></div>`).join("")
+      + `</div>`;
+    fluxosEl.querySelectorAll(".flo-card").forEach(c=>c.onclick=()=>{openFlow=c.dataset.flow;renderFluxos();window.scrollTo({top:0,behavior:"smooth"});});
+    return;
+  }
+  const f = FLOWS.find(x=>x.id===openFlow);
+  countEl.textContent = `Fluxo · ${f.title}`;
+  fluxosEl.innerHTML = `<button class="flo-back">← Todos os fluxos</button>`
+    + `<h2 class="flo-head">${escapeHtml(f.title)}</h2><p class="flo-sub">${escapeHtml(f.desc)}</p>`
+    + f.steps.map((s,i)=>`<div class="flo-step"><div class="flo-n">${i+1}</div><div class="flo-bd">`
+        + `<div class="flo-name">${escapeHtml(s.name)}${s.branch?'<span class="flo-tag">desvio</span>':''}</div>`
+        + `<div class="flo-note">${escapeHtml(s.note)}</div>`
+        + ((s.codes&&s.codes.length)?`<div class="flo-codes">${s.codes.map(c=>`<button class="flo-code" data-code="${c}">${c}</button>`).join("")}</div>`:"")
+        + `</div></div>`).join("");
+  fluxosEl.querySelector(".flo-back").onclick=()=>{openFlow=null;renderFluxos();window.scrollTo({top:0,behavior:"smooth"});};
+  fluxosEl.querySelectorAll(".flo-code").forEach(b=>b.onclick=()=>gotoCode(b.dataset.code));
+}
 
 // preenche autocomplete de profissionais com os nomes da agenda
 document.getElementById("proflist").innerHTML =
@@ -1194,7 +1327,7 @@ function fallback(text,done){
   document.body.removeChild(ta);
 }
 
-q.addEventListener("input",()=>{ if(view==="indice"){view="msgs";idxBtn.classList.remove("on");} render(); });
+q.addEventListener("input",()=>{ if(view!=="msgs"){view="msgs";openFlow=null;idxBtn.classList.remove("on");fluxosBtn.classList.remove("on");} render(); });
 buildChips();render();
 </script>
 </body>
