@@ -1,0 +1,656 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Painel de Mensagens · Equilibrium Med Center</title>
+<style>
+  :root{
+    --ink:#14304a; --forest:#1868B0; --teal:#1B86A6; --lime:#50C0D0;
+    --bg:#eef4fb; --card:#ffffff; --mist:#dceaf6; --line:#d2e2f0;
+    --soft:#5d7488; --warn:#b8743a; --warnbg:#fbf0e6;
+    --radius:16px; --shadow:0 1px 2px rgba(20,48,74,.05),0 8px 24px rgba(20,48,74,.07);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--bg); color:var(--ink);
+    font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+
+  /* header */
+  header{background:linear-gradient(180deg,#ffffff, #f7fbfe);border-bottom:1px solid var(--line);
+    position:sticky;top:0;z-index:20;backdrop-filter:saturate(1.1) blur(6px)}
+  .head-top{display:flex;align-items:center;gap:14px;padding:18px 0 14px}
+  .mark{display:flex;align-items:center;gap:14px;flex:1;min-width:0}
+  .logo{height:42px;width:auto;display:block}
+  .sub{font-size:13px;color:var(--soft);padding-left:14px;border-left:1px solid var(--line);letter-spacing:.02em;white-space:nowrap}
+  .role{font-size:12px;color:var(--soft);text-align:right;letter-spacing:.04em;text-transform:uppercase}
+
+  .controls{display:flex;gap:12px;flex-wrap:wrap;padding-bottom:16px}
+  .field{position:relative;flex:1;min-width:200px}
+  .field label{position:absolute;top:7px;left:14px;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--soft)}
+  .field input{width:100%;border:1px solid var(--line);background:var(--card);border-radius:12px;
+    padding:24px 14px 9px;font-size:15px;color:var(--ink);outline:none;transition:border-color .15s,box-shadow .15s}
+  .field input:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(24,104,176,.18)}
+  .field.search{flex:2}
+  .field.search input{padding-left:40px}
+  .field.search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);opacity:.45}
+
+  /* chips */
+  .chips{display:flex;gap:8px;flex-wrap:wrap;padding:0 0 18px}
+  .chip{border:1px solid var(--line);background:var(--card);color:var(--soft);
+    padding:7px 14px;border-radius:999px;font-size:13.5px;cursor:pointer;transition:all .14s;white-space:nowrap}
+  .chip:hover{border-color:var(--teal);color:var(--forest)}
+  .chip.on{background:var(--forest);border-color:var(--forest);color:#fff}
+  .chip .n{opacity:.6;font-variant-numeric:tabular-nums;margin-left:5px}
+  .chip.on .n{opacity:.8}
+
+  /* grid */
+  main{padding:22px 0 60px}
+  .count{font-size:13px;color:var(--soft);margin:0 0 14px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:hidden}
+  .card-h{padding:15px 16px 0;display:flex;align-items:flex-start;gap:10px}
+  .tag{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--teal);
+    background:var(--mist);border-radius:6px;padding:3px 8px;white-space:nowrap;font-weight:600}
+  .card h3{margin:11px 16px 0;font-size:15.5px;line-height:1.3}
+  .msg{margin:10px 16px 0;background:#f4f9fd;border:1px solid var(--line);border-radius:10px;
+    padding:12px 13px;font-size:13.5px;line-height:1.55;white-space:pre-wrap;color:#384a43;
+    max-height:172px;overflow:auto;font-family:"SFMono-Regular",Menlo,Consolas,monospace}
+  .card-f{padding:12px 16px 15px;margin-top:auto;display:flex;gap:8px;align-items:center}
+  .copy{flex:1;border:none;background:var(--forest);color:#fff;border-radius:11px;padding:11px;
+    font-size:14px;font-weight:600;cursor:pointer;transition:background .15s,transform .05s}
+  .copy:hover{background:#12517f}
+  .copy:active{transform:scale(.985)}
+  .copy.done{background:var(--teal)}
+  .card.sensivel{border-color:#d9b48f;box-shadow:0 8px 24px rgba(184,116,58,.1)}
+  .card.best{border-color:var(--forest);box-shadow:0 0 0 2px rgba(24,104,176,.16),var(--shadow)}
+  .best-badge{margin-left:auto;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#fff;background:var(--forest);border-radius:6px;padding:3px 8px;white-space:nowrap}
+  .card.sensivel .tag{color:var(--warn);background:var(--warnbg)}
+  .card.sensivel .msg{background:var(--warnbg);border-color:#e6cdb2}
+  .note{font-size:11.5px;color:var(--warn);margin:9px 16px 0;display:flex;gap:6px;line-height:1.4}
+
+  .empty{text-align:center;color:var(--soft);padding:70px 20px}
+  .empty b{display:block;color:var(--ink);font-size:18px;margin-bottom:6px}
+
+  footer{border-top:1px solid var(--line);padding:20px 0;color:var(--soft);font-size:12px;text-align:center}
+
+  @media (max-width:560px){
+    .role,.sub{display:none}
+    .grid{grid-template-columns:1fr}
+    .logo{height:34px}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header>
+  <div class="wrap">
+    <div class="head-top">
+      <div class="mark">
+        <img class="logo" alt="Equilibrium Med Center" src="data:image/png;base64,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">
+        <span class="sub">Painel de Mensagens</span>
+      </div>
+      <div class="role">Recepção</div>
+    </div>
+    <div class="controls">
+      <div class="field search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#1d2b26" stroke-width="2"/><path d="m20 20-3-3" stroke="#1d2b26" stroke-width="2" stroke-linecap="round"/></svg>
+        <label>Buscar pela situação</label>
+        <input id="q" autocomplete="off" placeholder="ex.: guia, receita, agendar, valores, reativar…">
+      </div>
+      <div class="field">
+        <label>Seu nome (preenche automático)</label>
+        <input id="name" autocomplete="off" placeholder="Digite seu nome">
+      </div>
+    </div>
+    <div class="chips" id="chips"></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <p class="count" id="count"></p>
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty" style="display:none">
+    <b>Nenhuma mensagem encontrada</b>
+    Tente outra palavra — como “guia”, “lembrete”, “desistência” ou “cartão”.
+  </div>
+</main>
+
+<footer class="wrap">Equilibrium Med Center · uso interno da equipe. Campos entre [colchetes] devem ser ajustados antes de enviar.</footer>
+
+<script>
+const CATS = {
+  atendimento:"Atendimento",
+  documentos:"Documentos & Guias",
+  agendamento:"Agendamento",
+  especialidades:"Especialidades",
+  reativacao:"Reativação",
+  cartao:"Cartão & Vendas",
+  sensivel:"Sensível"
+};
+
+const MSGS = [
+ // ---------- ATENDIMENTO ----------
+ {cat:"atendimento",title:"Saudação / primeiro contato",kw:"ola bem vindo inicio menu opcoes",body:
+`Olá! 😊 Seja muito bem-vindo(a) à *Equilibrium Med Center*.
+
+Meu nome é *[NOME DO ATENDENTE]* e será um prazer cuidar do seu atendimento por aqui.
+
+Como podemos te ajudar hoje? Você gostaria de:
+
+1️⃣ Agendar uma consulta ou avaliação
+2️⃣ Tirar dúvidas sobre nossas especialidades
+3️⃣ Saber sobre planos de saúde e valores
+4️⃣ Falar sobre um atendimento já agendado
+
+É só responder pelo número ou escrever com suas palavras. Estou aqui para te ouvir. 💙`},
+
+ {cat:"atendimento",title:"Ausência — fora do horário",kw:"ausencia fora horario fechado nao atendimento",body:
+`Olá! 😊 Obrigado(a) por entrar em contato com a *Equilibrium Med Center*.
+
+No momento estamos fora do horário de atendimento, mas a sua mensagem é muito importante para nós.
+
+🕐 *Atendemos de [segunda a sexta, das 08h às 18h] e [sábado, das 08h às 12h].*
+
+Assim que retornarmos, um de nossos atendentes vai te responder com toda a atenção. Se preferir, já pode deixar aqui sua dúvida ou solicitação que daremos andamento o quanto antes.
+
+Cuide-se. Até breve! 💙`},
+
+ {cat:"atendimento",title:"Ausência — fim de semana / feriado",kw:"feriado fim de semana domingo sabado",body:
+`Olá! 😊 Obrigado(a) pelo seu contato com a *Equilibrium Med Center*.
+
+Hoje nosso atendimento não está funcionando, mas voltaremos *[no próximo dia útil / em DATA]* para te responder com todo o cuidado.
+
+Pode deixar sua mensagem por aqui — assim que retornarmos, ela será a nossa prioridade.
+
+Tenha um ótimo descanso! 💙`},
+
+ {cat:"atendimento",title:"Desculpas — demora curta",kw:"desculpa demora atraso paciencia",body:
+`Oi, *[NOME DO PACIENTE]*! Aqui é *[NOME DO ATENDENTE]*. 😊
+
+Peço desculpas pela demora em retornar — tivemos um volume maior de atendimentos hoje, mas agora estou totalmente à sua disposição.
+
+Obrigado(a) pela paciência! Vamos continuar de onde paramos. 💙`},
+
+ {cat:"atendimento",title:"Desculpas — demora maior",kw:"desculpa demora muito tempo dia retorno",body:
+`Olá, *[NOME DO PACIENTE]*! 😊 Aqui é *[NOME DO ATENDENTE]*, da Equilibrium Med Center.
+
+Sinto muito pela demora no retorno. Sua mensagem é importante para nós e não gostaríamos que você esperasse. Já estou cuidando da sua solicitação com prioridade.
+
+Você ainda precisa de ajuda com *[assunto]*? Estou aqui para resolver isso com você agora. 💙`},
+
+ {cat:"atendimento",title:"Apresentação de serviços",kw:"servicos especialidades o que fazem equipe",body:
+`Claro! Ficamos felizes com o seu interesse. 😊
+
+Na *Equilibrium Med Center* oferecemos atendimento completo em saúde mental e desenvolvimento, com uma equipe multidisciplinar especializada:
+
+🧠 Psiquiatria (adulto e infantil)
+💬 Psicologia e Psicoterapia
+🧩 Terapia ABA
+📋 Avaliação Neuropsicológica
+🗣️ Fonoaudiologia
+✋ Terapia Ocupacional
+🤸 Psicomotricidade
+📚 Psicopedagogia
+👶 Terapias Infantis
+
+Também realizamos *diagnóstico e acompanhamento de transtornos neurocognitivos, neurológicos e de humor.*
+
+Quer que eu te explique melhor sobre alguma dessas especialidades ou já podemos pensar em um agendamento? 💙`},
+
+ {cat:"atendimento",title:"Planos — convênios atendidos",kw:"plano convenio unimed hapvida gndi quais atende",body:
+`Com prazer! 😊 Trabalhamos com os seguintes convênios:
+
+✅ Unimed Uberlândia
+✅ Unimed Intercâmbio
+✅ GNDI
+✅ Hapvida
+✅ Usisaúde
+✅ GEAP Saúde
+✅ Vitallis
+✅ NDI
+
+Para confirmar a cobertura da especialidade que você procura, posso verificar para você. Qual atendimento você está buscando e qual o seu plano? 💙`},
+
+ {cat:"atendimento",title:"Plano não atendido",kw:"plano nao atende particular reembolso",body:
+`Agradecemos muito o seu contato! 😊 No momento, ainda não trabalhamos com o convênio *[PLANO]*.
+
+Mas temos ótimas condições para *atendimento particular*, e ficaríamos felizes em cuidar de você. Quer que eu te passe os valores e as formas de pagamento?
+
+💳 E temos uma vantagem especial: com o cartão *Equilibrium Mais Saúde* você garante *50% de desconto* nos atendimentos particulares.
+
+Se desejar, também posso verificar a possibilidade de *reembolso* pelo seu plano. 💙`},
+
+ {cat:"atendimento",title:"Localização",kw:"endereco onde fica local mapa estacionamento chegar",body:
+`Claro! 😊 Estamos localizados em:
+
+📍 *Avenida Cesário Alvim, 2001 — Bairro Aparecida*
+🗺️ Mapa: https://www.google.com/search?q=equilibrium+medcenter
+
+ℹ️ Não dispomos de estacionamento próprio, mas há opções de estacionamento rotativo e particular nas proximidades.
+
+Qualquer dificuldade para chegar, é só me chamar que te oriento pelo caminho. 💙`},
+
+ {cat:"atendimento",title:"Só um momento",kw:"espera aguarde momento verificar",body:
+`Perfeito! Só um momentinho enquanto verifico essa informação para você. 😊 Já te retorno!`},
+
+ {cat:"atendimento",title:"Transferência para outro setor",kw:"transferir encaminhar setor responsavel",body:
+`Vou te encaminhar para *[SETOR / PESSOA RESPONSÁVEL]*, que vai cuidar dessa solicitação com toda a atenção. 😊
+
+Só um momentinho, por favor. Já retornamos! 💙`},
+
+ {cat:"atendimento",title:"Encerramento / despedida",kw:"despedida tchau encerrar obrigado",body:
+`Foi um prazer te atender, *[NOME DO PACIENTE]*! 😊
+
+Qualquer outra dúvida, estaremos sempre por aqui. Conte com a gente para cuidar de você e de quem você ama.
+
+Tenha um excelente dia! 💙
+*[NOME DO ATENDENTE]* — Equilibrium Med Center`},
+
+ // ---------- DOCUMENTOS ----------
+ {cat:"documentos",title:"Solicitação de documentos (convênio)",kw:"documentos carteirinha rg guia convenio enviar",body:
+`Perfeito! Para darmos andamento ao seu atendimento pelo convênio *[PLANO]*, vamos precisar de alguns documentos. Pode nos enviar por aqui mesmo:
+
+📄 Foto da *carteirinha do plano* (frente e verso)
+🆔 Foto de um *documento com foto* (RG ou CNH)
+📝 *Guia ou pedido médico* de encaminhamento (se já tiver)
+
+Assim que recebermos, nossa equipe verifica a autorização e te retorna com os próximos passos. Pode enviar quando for possível! 💙`},
+
+ {cat:"documentos",title:"Orientação sobre guia / encaminhamento",kw:"guia encaminhamento pedido medico cid",body:
+`Para *[ESPECIALIDADE / avaliação]*, o seu plano solicita um *pedido médico de encaminhamento*. 📝
+
+Esse pedido é feito pelo seu médico (clínico, pediatra, psiquiatra ou neurologista) e deve conter:
+
+• A solicitação da especialidade ou avaliação
+• O CID (quando houver)
+• Data, assinatura e carimbo do médico
+
+Se você já tiver esse documento, pode nos enviar a foto por aqui. Caso ainda não tenha, posso te orientar sobre como conseguir. 💙`},
+
+ {cat:"documentos",title:"Confirmação de recebimento",kw:"recebemos documentos confirmacao autorizacao prazo",body:
+`Recebemos seus documentos, *[NOME DO PACIENTE]*! ✅ Muito obrigado(a).
+
+Agora nossa equipe vai conferir tudo e dar entrada na autorização junto ao convênio. O prazo de retorno costuma ser de *[PRAZO]*.
+
+Assim que tivermos a confirmação, entro em contato para combinarmos o agendamento. Pode ficar tranquilo(a) que vou acompanhar de perto. 💙`},
+
+ {cat:"documentos",title:"Pendência / documento ilegível",kw:"ilegivel reenviar foto pendencia",body:
+`Oi, *[NOME DO PACIENTE]*! 😊 Recebemos seus documentos, obrigado(a)!
+
+Só identificamos uma pendência: a foto da *[carteirinha / guia]* ficou um pouco difícil de ler. Você poderia reenviar com a imagem mais nítida e bem iluminada, por gentileza?
+
+Assim conseguimos dar andamento sem nenhum atraso. 💙`},
+
+ {cat:"documentos",title:"Pedido de receita médica",kw:"receita renovacao medico presencial",body:
+`Olá, *[NOME DO PACIENTE]*! 😊 Obrigado(a) pelo seu contato.
+
+Sobre a sua solicitação de receita: por se tratar de um cuidado com a sua saúde e segurança, *as receitas são emitidas exclusivamente em consulta, presencialmente, com o médico responsável pelo seu atendimento.*
+
+Dessa forma, não realizamos a emissão ou a renovação de receitas por WhatsApp, telefone ou e-mail.
+
+Posso verificar a próxima disponibilidade na agenda do(a) *[PROFISSIONAL]* para você? Assim garantimos que tudo seja feito com toda a atenção que você merece. 💙`},
+
+ {cat:"documentos",title:"Laudo / documento pronto",kw:"laudo relatorio documento prazo retirada",body:
+`Oi, *[NOME DO PACIENTE]*! 😊
+
+Sobre a sua solicitação de *[laudo / relatório / documento]*, o prazo de entrega é de *[PRAZO]*. Assim que estiver pronto, entraremos em contato para combinar a retirada ou o envio.
+
+Qualquer dúvida nesse período, estamos à disposição. 💙`},
+
+ {cat:"documentos",title:"Valores / atendimento particular",kw:"valor preco particular quanto custa pagamento",body:
+`Claro! 😊 Os valores variam conforme a especialidade e o tipo de atendimento (sessão avulsa, pacote ou avaliação completa).
+
+Para te passar um valor certinho e adequado à sua necessidade, posso verificar com você:
+
+• Qual atendimento você procura?
+• É para você ou para outra pessoa (por exemplo, uma criança)?
+• Pretende usar plano de saúde ou atendimento particular?
+
+Com essas informações, te envio os valores atualizados e as formas de pagamento. 💙
+
+💳 *Dica:* com o cartão *Equilibrium Mais Saúde* você tem *50% de desconto* nos atendimentos particulares. Se quiser, te explico como funciona!`},
+
+ // ---------- AGENDAMENTO ----------
+ {cat:"agendamento",title:"Agendamento — coleta de dados",kw:"agendar marcar consulta agendamento horario dados cadastro psiquiatria psiquiatra psicologia psicologo psicoterapia aba neuropsicologica neuropsicologia avaliacao fonoaudiologia fono terapia ocupacional psicomotricidade psicopedagogia infantil sessao",body:
+`Que ótimo! Vamos agendar então. 😊 Para reservar o seu horário, preciso de alguns dados:
+
+👤 Nome completo do paciente
+🎂 Data de nascimento
+📞 Telefone para contato
+🏥 Plano de saúde ou atendimento particular
+🩺 Especialidade desejada
+📅 Melhores dias e horários para você
+
+Assim que eu tiver essas informações, verifico a agenda e confirmo seu atendimento. 💙`},
+
+ {cat:"agendamento",title:"Confirmação de agendamento",kw:"confirmado agendado horario data marcado",body:
+`Tudo certo, *[NOME DO PACIENTE]*! ✅ Seu atendimento está agendado:
+
+🩺 *Especialidade:* [ESPECIALIDADE]
+👩‍⚕️ *Profissional:* [PROFISSIONAL]
+📅 *Data:* [DATA]
+🕐 *Horário:* [HORÁRIO]
+📍 *Local:* Avenida Cesário Alvim, 2001 — Bairro Aparecida
+
+Pedimos que chegue com *15 minutos de antecedência*. Se surgir algum imprevisto, é só nos avisar com antecedência para reorganizarmos sua agenda.
+
+Estamos te esperando! 💙`},
+
+ {cat:"agendamento",title:"Lembrete de consulta",kw:"lembrete lembrar confirmar presenca amanha",body:
+`Oi, *[NOME DO PACIENTE]*! 😊 Passando para lembrar do seu atendimento:
+
+📅 *[DATA]* às 🕐 *[HORÁRIO]*
+👩‍⚕️ com *[PROFISSIONAL]*
+📍 Avenida Cesário Alvim, 2001 — Bairro Aparecida
+
+Podemos confirmar sua presença? Responda com:
+✅ *SIM*, confirmado
+🔄 *Preciso remarcar*
+
+Estamos à disposição! 💙`},
+
+ {cat:"agendamento",title:"Reagendamento",kw:"remarcar reagendar trocar horario imprevisto",body:
+`Sem problemas, *[NOME DO PACIENTE]*! Imprevistos acontecem. 😊
+
+Vamos encontrar um novo horário que funcione melhor para você. Quais dias e períodos ficam bons na sua semana?
+
+Assim que me disser, verifico a disponibilidade e já deixo tudo reorganizado. 💙`},
+
+ {cat:"agendamento",title:"Cancelamento",kw:"cancelar cancelamento desmarcar",body:
+`Entendido, *[NOME DO PACIENTE]*. Seu atendimento do dia *[DATA]* foi cancelado conforme solicitado.
+
+Sem problema algum — quando quiser retomar, estaremos de portas abertas para te receber.
+
+Cuide-se! 💙`},
+
+ {cat:"agendamento",title:"Agradecimento — desistência",kw:"desistencia desistir agradecimento respeito",body:
+`Tudo bem, *[NOME DO PACIENTE]*! 😊 Agradecemos muito por nos avisar.
+
+Entendemos perfeitamente, e sua decisão é sempre respeitada. A Equilibrium Med Center estará de portas abertas no momento em que você decidir cuidar de você — sem qualquer compromisso.
+
+Foi um prazer conversar com você. Conte com a gente sempre que precisar. 💙`},
+
+ {cat:"agendamento",title:"Agradecimento — após remarcação",kw:"remarcado nova data agradecimento compreensao",body:
+`Prontinho, *[NOME DO PACIENTE]*! ✅ Seu atendimento foi remarcado:
+
+📅 *Nova data:* [DATA] às 🕐 *[HORÁRIO]*
+👩‍⚕️ com *[PROFISSIONAL]*
+
+Obrigado(a) pela compreensão e por nos avisar com antecedência — isso nos ajuda muito a organizar a agenda e a atender você e os demais pacientes da melhor forma.
+
+Estamos te esperando! 💙`},
+
+ {cat:"agendamento",title:"Primeira consulta — orientações",kw:"primeira consulta o que levar preparar documentos",body:
+`Para a sua primeira consulta, queremos que você se sinta acolhido(a) e tranquilo(a). 😊 Algumas orientações:
+
+📄 Leve um documento com foto e a carteirinha do plano (se for usar convênio)
+📝 Traga exames, laudos ou relatórios anteriores, caso tenha
+⏰ Chegue com 15 minutos de antecedência
+👶 No caso de atendimento infantil, é importante que um responsável esteja presente
+
+Não precisa se preocupar com mais nada — nossa equipe vai te orientar em cada passo. 💙`},
+
+ // ---------- ESPECIALIDADES ----------
+ {cat:"especialidades",title:"Avaliação Neuropsicológica",kw:"neuropsicologica avaliacao tdah laudo testes",body:
+`Com prazer em explicar! 😊 A *Avaliação Neuropsicológica* é um processo detalhado que investiga funções como atenção, memória, raciocínio, linguagem e funções executivas.
+
+Costuma ser indicada para auxiliar no diagnóstico de condições como TDAH, dificuldades de aprendizagem, transtornos do desenvolvimento, entre outras.
+
+📋 *Como funciona:*
+• É realizada em algumas sessões (geralmente de 4 a 8 encontros)
+• Inclui entrevista, aplicação de testes e devolutiva com laudo
+• Pode ser feita por plano ou particular
+
+Quer que eu verifique a cobertura pelo seu convênio ou te passe os valores particulares? 💙`},
+
+ {cat:"especialidades",title:"Terapia ABA",kw:"aba autismo tea crianca desenvolvimento",body:
+`Claro! 😊 A *Terapia ABA* (Análise do Comportamento Aplicada) é uma das abordagens mais reconhecidas no acompanhamento de crianças com Transtorno do Espectro Autista (TEA) e outras condições do desenvolvimento.
+
+Ela trabalha o desenvolvimento de habilidades de comunicação, socialização, autonomia e comportamento, sempre com um plano individualizado para cada paciente.
+
+Nossa equipe multidisciplinar acompanha de perto a evolução de cada criança, em parceria com a família.
+
+Quer saber como iniciar o acompanhamento ou sobre a cobertura pelo seu plano? 💙`},
+
+ {cat:"especialidades",title:"Psiquiatria",kw:"psiquiatria psiquiatra medico ansiedade depressao",body:
+`Claro! 😊 Na *Psiquiatria*, nosso médico realiza a avaliação, o diagnóstico e o acompanhamento de questões como ansiedade, depressão, transtornos de humor, TDAH, entre outros.
+
+O atendimento é totalmente individualizado e sigiloso, sempre respeitando o seu tempo e a sua história.
+
+Atendemos *adultos e crianças* e trabalhamos de forma integrada com nossa equipe de psicologia e terapias. Quer que eu verifique a disponibilidade de agenda para você? 💙`},
+
+ // ---------- REATIVAÇÃO ----------
+ {cat:"reativacao",title:"Pós-avaliação — converter em terapia",kw:"reativar pos avaliacao terapia continuidade",body:
+`Oi, *[NOME DO PACIENTE/RESPONSÁVEL]*! 😊 Aqui é *[NOME DO ATENDENTE]*, da Equilibrium Med Center.
+
+Estou passando para saber como você está depois da avaliação que concluímos por aqui. 💙
+
+Como foram identificados alguns pontos que podem ser bem trabalhados com acompanhamento, nossa equipe gostaria de te apoiar nessa próxima etapa, no seu tempo e sem pressa.
+
+Quer que eu te explique as opções de acompanhamento e veja um horário que caiba na sua rotina? Se preferir, podemos só conversar sobre as dúvidas primeiro. Estou à disposição.`},
+
+ {cat:"reativacao",title:"Retomar tratamento interrompido",kw:"reativar retomar tratamento parou faltou sumiu",body:
+`Olá, *[NOME DO PACIENTE]*! 😊 Aqui é *[NOME DO ATENDENTE]*, da Equilibrium Med Center.
+
+Faz um tempinho que não nos falamos e lembramos de você por aqui. Sem nenhuma cobrança — a vida fica corrida e tudo bem. 💙
+
+Quando e se você quiser retomar o seu acompanhamento, estaremos de portas abertas para te receber, com o mesmo cuidado de sempre.
+
+Posso verificar um horário para você? Ou, se preferir, é só me dizer como podemos te ajudar agora.`},
+
+ {cat:"reativacao",title:"Check-in de manutenção (pós-alta)",kw:"reativar pos alta check-in bem estar",body:
+`Oi, *[NOME DO PACIENTE]*! 😊 Aqui é *[NOME DO ATENDENTE]*, da Equilibrium Med Center.
+
+Passando só para saber como você tem estado desde que concluímos o seu acompanhamento. 💙
+
+Se estiver tudo bem, ficamos muito felizes! E, caso sinta que seria bom retomar ou fazer uma conversa de acompanhamento, é só me chamar — estaremos sempre por aqui para você.
+
+Cuide-se!`},
+
+ {cat:"reativacao",title:"Reativação leve (inativos)",kw:"reativar inativo arquivado tempo carinho",body:
+`Olá, *[NOME DO PACIENTE]*! 😊 Aqui é a equipe da Equilibrium Med Center.
+
+Estamos passando para deixar um carinho e lembrar que continuamos por aqui, com nossa equipe multidisciplinar pronta para cuidar de você e da sua família sempre que precisar. 💙
+
+Se quiser saber das novidades, tirar uma dúvida ou agendar um horário, é só responder esta mensagem.
+
+Se preferir não receber mais este tipo de contato, basta nos avisar que respeitamos com todo o cuidado. 🤝`},
+
+ {cat:"reativacao",title:"Encaminhamento interno entre especialidades",kw:"encaminhamento interno especialidade complementar",body:
+`Oi, *[NOME DO PACIENTE/RESPONSÁVEL]*! 😊 Aqui é *[NOME DO ATENDENTE]*.
+
+Conversando com a equipe que acompanha *[você / o(a) NOME]*, foi sugerido que um trabalho conjunto com *[ESPECIALIDADE]* poderia somar bastante aos resultados que já estamos construindo. 💙
+
+É um cuidado complementar, feito de forma integrada aqui mesmo na Equilibrium, para você não precisar se preocupar com nada.
+
+Quer que eu te explique como funciona e veja a disponibilidade? Sem compromisso — só para você conhecer a proposta.`},
+
+ {cat:"reativacao",title:"Resgate de cancelamento (lista de espera)",kw:"vaga abriu horario lista de espera resgate",body:
+`Oi, *[NOME DO PACIENTE]*! 😊 Aqui é *[NOME DO ATENDENTE]*, da Equilibrium Med Center.
+
+Tenho uma boa notícia: abriu um horário com *[PROFISSIONAL]* em *[DATA]* às *[HORÁRIO]*. Lembrei de você que estava aguardando! 💙
+
+Esse horário funciona para você? Se sim, já reservo agora mesmo. Como é por ordem de contato, é só me confirmar que garanto para você.`},
+
+ {cat:"reativacao",title:"Segundo lembrete leve",kw:"segundo lembrete sem resposta ultimo alo",body:
+`Oi, *[NOME DO PACIENTE]*! 😊 Passei por aqui há alguns dias e não quis deixar de te dar um último alô.
+
+Sem nenhuma pressa — sempre que você quiser, estaremos prontos para te receber na Equilibrium Med Center. 💙
+
+Se este não for um bom momento, tudo bem! Pode me chamar quando fizer sentido para você.`},
+
+ // ---------- CARTÃO & VENDAS ----------
+ {cat:"cartao",title:"Cartão — pitch de abertura",kw:"cartao mais saude desconto apresentar oferta",body:
+`Posso te apresentar uma forma de cuidar da sua saúde mental gastando bem menos? 😊
+
+O *Equilibrium Mais Saúde* é o nosso programa de descontos: com uma mensalidade acessível, você tem *50% de desconto* nos atendimentos particulares da clínica — psicoterapia, psiquiatria, terapias infantis e mais.
+
+Não é plano de saúde nem convênio: é um clube de benefícios da própria Equilibrium, pensado para quem quer continuidade no cuidado pagando menos. Quer que eu te mostre a conta? 💙`},
+
+ {cat:"cartao",title:"Cartão — frase de impacto (economia)",kw:"economia conta vale a pena consulta paga",body:
+`Olha só: o plano *Mais Individual* custa *R$ 59 por mês*.
+
+Em *uma única consulta psiquiátrica*, você já economiza *R$ 250* — ou seja, mais de 4 meses de mensalidade pagos de uma vez. 💙
+
+E se você faz acompanhamento contínuo, a economia se multiplica todo mês.`},
+
+ {cat:"cartao",title:"Cartão — plano Mais Individual",kw:"cartao mais individual 59 titular",body:
+`Para quem vai cuidar de si mesmo, o plano *Mais Individual* é o ideal: *R$ 59/mês* e 50% de desconto em todos os atendimentos.
+
+Se você pretende fazer acompanhamento, ele se paga sozinho logo na primeira consulta. Quer começar? 💙`},
+
+ {cat:"cartao",title:"Cartão — plano Mais Família",kw:"cartao mais familia 99 dependentes casal",body:
+`Se o cuidado é para a família, o plano *Mais Família* cobre você + até 3 pessoas (total de 4), por *R$ 99/mês*.
+
+É a opção mais escolhida por casais e por famílias com filhos em terapia, porque o desconto de 50% vale para todos os titulares do cartão. Quer que eu monte para a sua família? 💙`},
+
+ {cat:"cartao",title:"Cartão — plano Muito Mais Família",kw:"cartao muito mais familia 119 seis pessoas",body:
+`Para famílias maiores, temos o *Muito Mais Família*: até 6 pessoas (titular + 5), por *R$ 119/mês*.
+
+Quando há mais de um filho em acompanhamento, costuma ser a escolha mais econômica de todas. Posso te explicar como incluir cada pessoa? 💙`},
+
+ {cat:"cartao",title:"Cartão — vantagens (multa zero)",kw:"multa zero fidelidade cancelar arrependimento",body:
+`E o melhor: o *Equilibrium Mais Saúde* não te prende. 😊
+
+✅ *Multa zero* para cancelar
+✅ Após 12 meses, prazo indeterminado — *sem nova fidelidade*
+✅ Tabela de preços transparente, sempre à vista
+✅ Direito de arrependimento garantido
+
+Você fica porque vale a pena, não porque é obrigado(a). 💙`},
+
+ {cat:"cartao",title:"Objeção — “É plano de saúde?”",kw:"objecao plano de saude convenio nao",body:
+`Ótima pergunta! 😊 Não, não é plano de saúde nem convênio. É um *programa de descontos* da própria Equilibrium: você paga uma mensalidade e ganha 50% de desconto nos nossos atendimentos particulares. Os atendimentos continuam sendo particulares — só que com um preço muito menor para você. 💙`},
+
+ {cat:"cartao",title:"Objeção — “Está caro”",kw:"objecao caro compensa conta",body:
+`Entendo! 😊 Vamos fazer a conta juntos: quantos atendimentos você costuma fazer por mês? Em quase todos os casos, a economia de uma ou duas consultas já cobre a mensalidade inteira — o resto do mês é economia pura para você. 💙`},
+
+ {cat:"cartao",title:"Objeção — “Vou pensar”",kw:"objecao vou pensar depois tabela simulacao",body:
+`Claro, fique à vontade! 😊 Posso te deixar a tabelinha de valores e a simulação de economia para você analisar com calma? Quando quiser, é só me chamar que reservo tudo para você sem compromisso. 💙`},
+
+ {cat:"cartao",title:"Objeção — “Já tenho convênio”",kw:"objecao ja tenho convenio complementar fila",body:
+`Que bom! 😊 O cartão pode te ajudar justamente naquilo que o convênio não cobre ou tem fila — como algumas terapias, pacotes infantis ou avaliações. Muita gente usa os dois de forma complementar. Quer que eu te mostre onde ele mais compensa para o seu caso? 💙`},
+
+ {cat:"cartao",title:"Objeção — Avaliação neuropsicológica (elegibilidade)",kw:"objecao neuropsicologica elegibilidade 180 dias quitacao anual",body:
+`A avaliação neuropsicológica, que é particular R$ 3.800, sai por *R$ 1.900* com o cartão. 😊
+
+Por ser um serviço de alto valor, esse desconto integral tem uma *condição de elegibilidade*: vale para quem está há 180 dias com as mensalidades em dia *ou* para quem opta pela quitação anual antecipada. Os demais atendimentos já têm 50% desde a adesão. Quer que eu te explique qual caminho compensa mais para você? 💙`},
+
+ {cat:"cartao",title:"Objeção — “Tem fidelidade?”",kw:"objecao fidelidade multa cancelar prazo",body:
+`Pode ficar tranquilo(a)! 😊 *Multa zero* e, depois dos 12 primeiros meses, o cartão segue por prazo indeterminado, sem nenhuma nova fidelidade. Você permanece só enquanto fizer sentido para você. 💙`},
+
+ {cat:"cartao",title:"Cartão — fechamento",kw:"fechamento adesao cadastro garantir",body:
+`Então vamos garantir o seu *Equilibrium Mais Saúde*? 😊
+
+Para a adesão, eu vou precisar de:
+👤 Seus dados (e dos dependentes, se for plano familiar)
+📄 A escolha do plano: Mais Individual, Mais Família ou Muito Mais Família
+💳 A forma de pagamento da mensalidade
+
+Em poucos minutos você já começa a economizar no seu próximo atendimento. Posso seguir com o seu cadastro? 💙`},
+
+ {cat:"cartao",title:"B2B — abordagem RH",kw:"empresa b2b rh funcionarios beneficio corporativo",body:
+`Olá! 😊 Sou da *Equilibrium Mais Saúde*. Trabalhamos com um programa que pode ser um benefício valioso e de baixo custo para a sua equipe.
+
+A empresa oferece aos funcionários *50% de desconto* em atendimentos de saúde mental — psicoterapia, psiquiatria e mais — a partir de *R$ 25 por funcionário/mês*.
+
+É um cuidado real com o bem-estar do time, que ajuda inclusive na produtividade e na retenção de talentos. Posso preparar uma proposta para o porte da sua empresa? 💙`},
+
+ {cat:"cartao",title:"B2B — argumento de valor",kw:"empresa argumento afastamento produtividade clima",body:
+`Saúde mental é hoje uma das principais causas de afastamento no trabalho. Oferecer acesso facilitado a cuidado, com 50% de desconto, é um investimento que retorna em presença, engajamento e clima organizacional — por um custo mensal muito acessível por colaborador. 💙`},
+
+ // ---------- SENSÍVEL ----------
+ {cat:"sensivel",title:"Acolhimento em urgência emocional",kw:"crise urgencia emocional cvv 188 emergencia samu sofrimento",sensivel:true,body:
+`Sentimos muito que você esteja passando por um momento difícil, e agradecemos por confiar na gente. 💙
+
+É importante saber que o WhatsApp não é um canal de urgência e nem sempre conseguimos responder imediatamente.
+
+Se você está em crise ou precisa de ajuda agora, por favor procure:
+
+🆘 *CVV — Centro de Valorização da Vida:* ligue *188* (24h, gratuito e sigiloso)
+🚑 *Emergência:* *192* (SAMU) ou procure a UPA / hospital mais próximo
+
+Estamos aqui para te acolher e, assim que possível, vamos te ajudar a organizar um atendimento com nossa equipe. Você não está sozinho(a). 💙`},
+];
+
+// ---- normalize for search ----
+const norm = s => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+const STOP = new Set("com de da do das dos para por e a o os as um uma na no nas nos em que ao aos sobre minha meu meus minhas".split(" "));
+function score(m,tokens){
+  const t=norm(m.title),k=norm(m.kw),b=norm(m.body);let s=0,all=true;
+  for(const tok of tokens){
+    if(t.includes(tok))s+=6;else if(k.includes(tok))s+=3;else if(b.includes(tok))s+=1;else all=false;
+  }
+  if(all&&tokens.length)s+=4;
+  return s;
+}
+
+let active = "todos";
+const q = document.getElementById("q");
+const nameI = document.getElementById("name");
+const grid = document.getElementById("grid");
+const chipsEl = document.getElementById("chips");
+const countEl = document.getElementById("count");
+const emptyEl = document.getElementById("empty");
+
+// build chips
+function buildChips(){
+  const counts = {todos:MSGS.length};
+  Object.keys(CATS).forEach(c=>counts[c]=MSGS.filter(m=>m.cat===c).length);
+  const order = ["todos",...Object.keys(CATS)];
+  chipsEl.innerHTML = order.map(c=>{
+    const label = c==="todos" ? "Todos" : CATS[c];
+    return `<button class="chip ${c===active?'on':''}" data-c="${c}">${label}<span class="n">${counts[c]}</span></button>`;
+  }).join("");
+  chipsEl.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{active=b.dataset.c;buildChips();render();});
+}
+
+function escapeHtml(s){return s.replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));}
+
+function render(){
+  const raw = norm(q.value.trim());
+  const tokens = raw ? raw.split(/\s+/).filter(t=>t && !STOP.has(t)) : [];
+  let items = MSGS.map((m,idx)=>({m,idx})).filter(o=> active==="todos" || o.m.cat===active);
+  if(tokens.length){
+    items = items.map(o=>({...o, s:score(o.m,tokens)})).filter(o=>o.s>0).sort((a,b)=>b.s-a.s);
+  }
+  const hasQuery = tokens.length>0;
+  countEl.textContent = items.length===0 ? "" :
+    `${items.length} ${items.length===1?'mensagem':'mensagens'}${hasQuery?' · por relevância' : (active!=="todos"?" · "+CATS[active]:"")}`;
+  emptyEl.style.display = items.length? "none":"block";
+  grid.innerHTML = items.map((o,i)=>{
+    const m=o.m, best = hasQuery && i===0;
+    return `
+    <div class="card ${m.sensivel?'sensivel':''} ${best?'best':''}">
+      <div class="card-h"><span class="tag">${CATS[m.cat]}</span>${best?'<span class="best-badge">Melhor resposta</span>':''}</div>
+      <h3>${escapeHtml(m.title)}</h3>
+      <div class="msg">${escapeHtml(m.body)}</div>
+      ${m.sensivel?'<div class="note">⚠️ Mensagem sensível — envie com cuidado e, se possível, acione um profissional da equipe.</div>':''}
+      <div class="card-f"><button class="copy" data-idx="${o.idx}">Copiar mensagem</button></div>
+    </div>`;}).join("");
+  grid.querySelectorAll(".copy").forEach(b=>b.onclick=()=>doCopy(b));
+}
+
+function doCopy(btn){
+  const m = MSGS[+btn.dataset.idx];
+  const name = nameI.value.trim();
+  let text = m.body;
+  if(name) text = text.split("[NOME DO ATENDENTE]").join(name);
+  const done = ()=>{btn.textContent="Copiado ✓";btn.classList.add("done");
+    setTimeout(()=>{btn.textContent="Copiar mensagem";btn.classList.remove("done");},1600);};
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done).catch(()=>fallback(text,done));
+  } else fallback(text,done);
+}
+function fallback(text,done){
+  const ta=document.createElement("textarea");ta.value=text;ta.style.position="fixed";ta.style.opacity="0";
+  document.body.appendChild(ta);ta.select();
+  try{document.execCommand("copy");done();}catch(e){alert("Não foi possível copiar automaticamente.");}
+  document.body.removeChild(ta);
+}
+
+q.addEventListener("input",render);
+buildChips();render();
+</script>
