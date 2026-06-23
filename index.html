@@ -25,7 +25,7 @@
     position:sticky;top:0;z-index:20;backdrop-filter:saturate(1.1) blur(6px)}
   .head-top{display:flex;align-items:center;gap:14px;padding:18px 0 14px}
   .mark{display:flex;align-items:center;gap:14px;flex:1;min-width:0}
-  .logo{height:42px;width:auto;display:block}
+  .logo{height:44px;width:auto;display:block}
   .sub{font-size:13px;color:var(--soft);padding-left:14px;border-left:1px solid var(--line);letter-spacing:.02em;white-space:nowrap}
   .role{font-size:12px;color:var(--soft);text-align:right;letter-spacing:.04em;text-transform:uppercase}
 
@@ -43,6 +43,13 @@
     transition:all .14s;white-space:nowrap}
   .idxbtn:hover{border-color:var(--teal)}
   .idxbtn.on{background:var(--forest);border-color:var(--forest);color:#fff}
+  .fills{display:flex;gap:12px;flex-wrap:wrap;align-items:center;padding-bottom:16px}
+  .fills-label{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--soft);
+    white-space:nowrap;align-self:center}
+  .clearbtn{border:1px solid var(--line);background:var(--card);color:var(--soft);border-radius:12px;
+    padding:0 16px;height:46px;font-size:13.5px;font-weight:600;cursor:pointer;white-space:nowrap;
+    transition:all .14s}
+  .clearbtn:hover{border-color:var(--warn);color:var(--warn)}
 
   /* chips */
   .chips{display:flex;gap:8px;flex-wrap:wrap;padding:0 0 18px}
@@ -108,10 +115,10 @@
   @media (max-width:560px){
     .role,.sub{display:none}
     .grid{grid-template-columns:1fr}
-    .logo{height:34px}
+    .logo{height:36px}
   }
   @media print{
-    header .controls,header .chips,.idxbtn,.role{display:none}
+    header .controls,header .fills,header .chips,.idxbtn,.role{display:none}
     .idx-group{break-inside:avoid}
   }
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -123,8 +130,7 @@
   <div class="wrap">
     <div class="head-top">
       <div class="mark">
-        <img class="logo" alt="Equilibrium Med Center" src="data:image/png;base64,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">
-        <span class="sub">Painel de Mensagens</span>
+        <img class="logo" alt="Equilibrium Med Center" src="data:image/png;base64,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">
       </div>
       <div class="role">Recepção</div>
     </div>
@@ -134,11 +140,24 @@
         <label>Buscar por situação ou código</label>
         <input id="q" autocomplete="off" placeholder="ex.: AGE-01, 02, guia, receita, agendar, valores…">
       </div>
-      <div class="field">
-        <label>Seu nome (preenche automático)</label>
-        <input id="name" autocomplete="off" placeholder="Digite seu nome">
-      </div>
       <button class="idxbtn" id="idxbtn" type="button">📑 Índice</button>
+    </div>
+    <div class="fills">
+      <span class="fills-label">Preenche ao copiar:</span>
+      <div class="field">
+        <label>Atendente (você)</label>
+        <input id="f_atend" autocomplete="off" placeholder="Seu nome">
+      </div>
+      <div class="field">
+        <label>Paciente</label>
+        <input id="f_pac" autocomplete="off" placeholder="Nome do paciente">
+      </div>
+      <div class="field">
+        <label>Profissional</label>
+        <input id="f_prof" autocomplete="off" list="proflist" placeholder="Nome do profissional">
+        <datalist id="proflist"></datalist>
+      </div>
+      <button class="clearbtn" id="clearbtn" type="button" title="Limpa paciente e profissional para um novo atendimento (mantém o seu nome)">↺ Novo atendimento</button>
     </div>
     <div class="chips" id="chips"></div>
   </div>
@@ -1034,7 +1053,10 @@ function parseCode(qkey){
 let active = "todos";
 let view = "msgs"; // "msgs" | "indice"
 const q = document.getElementById("q");
-const nameI = document.getElementById("name");
+const fAtend = document.getElementById("f_atend");
+const fPac = document.getElementById("f_pac");
+const fProf = document.getElementById("f_prof");
+const clearBtn = document.getElementById("clearbtn");
 const grid = document.getElementById("grid");
 const chipsEl = document.getElementById("chips");
 const countEl = document.getElementById("count");
@@ -1137,11 +1159,28 @@ idxBtn.onclick=()=>{
   render();
 };
 
+// preenche autocomplete de profissionais com os nomes da agenda
+document.getElementById("proflist").innerHTML =
+  MSGS.filter(m=>m.cat==="profissionais")
+      .map(m=>m.title.split(" — ")[0])
+      .map(n=>`<option value="${n.replace(/"/g,"&quot;")}"></option>`).join("");
+
+clearBtn.onclick=()=>{ fPac.value=""; fProf.value=""; fPac.focus(); };
+
+function preencher(text){
+  const at=fAtend.value.trim(), pa=fPac.value.trim(), pr=fProf.value.trim();
+  if(at) text=text.split("[NOME DO ATENDENTE]").join(at);
+  if(pa){
+    text=text.split("[NOME DO PACIENTE/RESPONSÁVEL]").join(pa);
+    text=text.split("[NOME DO PACIENTE]").join(pa);
+  }
+  if(pr) text=text.split("[PROFISSIONAL]").join(pr);
+  return text;
+}
+
 function doCopy(btn){
   const m = MSGS[+btn.dataset.idx];
-  const name = nameI.value.trim();
-  let text = m.body;
-  if(name) text = text.split("[NOME DO ATENDENTE]").join(name);
+  let text = preencher(m.body);
   const done = ()=>{btn.textContent="Copiado ✓";btn.classList.add("done");
     setTimeout(()=>{btn.textContent="Copiar mensagem";btn.classList.remove("done");},1600);};
   if(navigator.clipboard && navigator.clipboard.writeText){
