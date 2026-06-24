@@ -806,14 +806,14 @@ O *Equilibrium Mais Saúde* é o nosso programa de descontos: com uma mensalidad
 Não é plano de saúde nem convênio: é um clube de benefícios da própria Equilibrium, pensado para quem quer continuidade no cuidado pagando menos. Quer que eu te mostre a conta? 💙`},
 
  {cat:"cartao",title:"Cartão — frase de impacto (economia)",kw:"economia conta vale a pena consulta paga",body:
-`Olha só: o plano *Mais Individual* custa *R$ 59 por mês*.
+`Olha só: o plano *Individual* custa *R$ 59 por mês*.
 
 Em *uma única consulta psiquiátrica*, você já economiza *R$ 250* — ou seja, mais de 4 meses de mensalidade pagos de uma vez. 💙
 
 E se você faz acompanhamento contínuo, a economia se multiplica todo mês.`},
 
- {cat:"cartao",title:"Cartão — plano Mais Individual",kw:"cartao mais individual 59 titular",body:
-`Para quem vai cuidar de si mesmo, o plano *Mais Individual* é o ideal: *R$ 59/mês* e 50% de desconto em todos os atendimentos.
+ {cat:"cartao",title:"Cartão — plano Individual",kw:"cartao individual 59 titular",body:
+`Para quem vai cuidar de si mesmo, o plano *Individual* é o ideal: *R$ 59/mês* e 50% de desconto em todos os atendimentos.
 
 Se você pretende fazer acompanhamento, ele se paga sozinho logo na primeira consulta. Quer começar? 💙`},
 
@@ -822,8 +822,8 @@ Se você pretende fazer acompanhamento, ele se paga sozinho logo na primeira con
 
 É a opção mais escolhida por casais e por famílias com filhos em terapia, porque o desconto de 50% vale para todos os titulares do cartão. Quer que eu monte para a sua família? 💙`},
 
- {cat:"cartao",title:"Cartão — plano Muito Mais Família",kw:"cartao muito mais familia 119 seis pessoas",body:
-`Para famílias maiores, temos o *Muito Mais Família*: até 6 pessoas (titular + 5), por *R$ 119/mês*.
+ {cat:"cartao",title:"Cartão — plano Gran Família",kw:"cartao gran familia 119 seis pessoas",body:
+`Para famílias maiores, temos o *Gran Família*: até 6 pessoas (titular + 5), por *R$ 119/mês*.
 
 Quando há mais de um filho em acompanhamento, costuma ser a escolha mais econômica de todas. Posso te explicar como incluir cada pessoa? 💙`},
 
@@ -862,7 +862,7 @@ Por ser um serviço de alto valor, esse desconto integral tem uma *condição de
 
 Para a adesão, eu vou precisar de:
 👤 Seus dados (e dos dependentes, se for plano familiar)
-📄 A escolha do plano: Mais Individual, Mais Família ou Muito Mais Família
+📄 A escolha do plano: Individual, Mais Família ou Gran Família
 💳 A forma de pagamento da mensalidade
 
 Em poucos minutos você já começa a economizar no seu próximo atendimento. Posso seguir com o seu cadastro? 💙`},
@@ -876,6 +876,18 @@ A empresa oferece aos funcionários *50% de desconto* em atendimentos de saúde 
 
  {cat:"cartao",title:"B2B — argumento de valor",kw:"empresa argumento afastamento produtividade clima",body:
 `Saúde mental é hoje uma das principais causas de afastamento no trabalho. Oferecer acesso facilitado a cuidado, com 50% de desconto, é um investimento que retorna em presença, engajamento e clima organizacional — por um custo mensal muito acessível por colaborador. 💙`},
+
+ {cat:"cartao",title:"Cartão — adesão (link online)",kw:"aderir adesao link site online cadastro como assinar contratar cartao mais saude pagamento pix cartao de credito titular dependentes",body:
+`Perfeito! A adesão é online e leva poucos minutos. 😊
+
+É só acessar o link, escolher o plano, cadastrar o titular (e os dependentes, no caso do plano familiar) e finalizar o pagamento:
+
+🔗 https://maisequilibriumsaude.com.br/
+
+🪪 Tenha em mãos *CPF* e *data de nascimento* de cada pessoa do cartão
+💳 Pagamento por *cartão de crédito* (mensal) ou *PIX* (à vista)
+
+Assim que concluir, seu cartão já fica ativo e você começa a economizar no próximo atendimento. Qualquer dúvida no caminho, é só me chamar. 💙`},
 
  // ---------- PRIMEIRO CONTATO ----------
  {cat:"primeiro",title:"Acolhimento inicial — entender a necessidade",kw:"primeiro contato acolhimento entender necessidade triagem perguntas",body:
@@ -1413,6 +1425,18 @@ const FLOWS = [
    {name:"Agendar a entrevista inicial", codes:["AGE-01","AGE-02"], note:"Marca a primeira sessão (anamnese/entrevista)."},
    {name:"Sessões de testagem", codes:["AGE-03"], note:"Agenda as sessões seguintes (geralmente 4 a 8) e usa lembretes."},
    {name:"Devolutiva e laudo", codes:["DOC-06"], note:"Ao final, devolutiva e entrega do laudo — informe o prazo ao paciente."}
+ ]},
+ {id:"cartao", color:"#CB6B4A", title:"Venda do Cartão Mais Saúde", desc:"Clube de vantagens (não é plano de saúde). Adesão online: maisequilibriumsaude.com.br. Oferta consultiva, nunca empurrada.", steps:[
+   {name:"Antes de ofertar", codes:[], note:"Adesão online em maisequilibriumsaude.com.br. O cartão é uma oferta, nunca um empurrão — puxe o assunto só quando houver um bom gancho."},
+   {name:"Identificar a deixa", codes:["ATD-08","DOC-07"], note:"Bons ganchos: paciente particular, plano não atendido (ATD-08), achou o valor alto ou perguntou sobre desconto. Sem gancho, não puxe o assunto."},
+   {name:"Abrir com o pitch", codes:["CAR-01","CAR-02"], note:"Apresente o que é (clube de vantagens) e a frase de impacto da economia. Seja transparente desde já: não é plano de saúde."},
+   {name:"É plano de saúde?", branch:true, codes:["CAR-07"], note:"Havendo qualquer dúvida, esclareça de imediato: é um clube de descontos, não um plano de saúde (Lei 9.656/98). Transparência sempre, em primeiro lugar."},
+   {name:"Apresentar o plano certo", codes:["CAR-03","CAR-04","CAR-05"], note:"Pergunte para quantas pessoas antes de sugerir. Individual R$ 59, Mais Família R$ 99, Gran Família R$ 119 — encaixe na necessidade real."},
+   {name:"Mostrar a economia concreta", codes:["DOC-07","CAR-11"], note:"Use o número que importa para o paciente. Ex.: avaliação neuropsicológica de R$ 3.800 por R$ 1.900 com o cartão (50%) — confira a elegibilidade no CAR-11."},
+   {name:"Contornar objeções", branch:true, codes:["CAR-08","CAR-09","CAR-10","CAR-12"], note:"'Está caro' (CAR-08), 'Vou pensar' (CAR-09), 'Já tenho convênio' (CAR-10), 'Tem fidelidade?' (CAR-12). Acolha a objeção antes de responder."},
+   {name:"Reforçar as vantagens", codes:["CAR-06"], note:"Multa zero, cancela quando quiser, sem fidelidade. A tabela completa de descontos por serviço está no site (maisequilibriumsaude.com.br)."},
+   {name:"Fechar e aderir", codes:["CAR-13","CAR-16"], note:"Feche com o CAR-13 e envie o link de adesão (CAR-16). A adesão é online (maisequilibriumsaude.com.br): o paciente escolhe o plano, cadastra titular e dependentes com CPF e paga por PIX ou cartão. Acompanhe se precisar."},
+   {name:"Empresas (B2B / RH)", branch:true, codes:["CAR-14","CAR-15"], note:"Caminho separado, para empresas: abordagem ao RH (CAR-14) e argumento de valor (CAR-15). Use só quando o contato for corporativo."}
  ]}
 ];
 
