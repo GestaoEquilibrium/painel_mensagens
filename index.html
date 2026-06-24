@@ -77,14 +77,15 @@
   .count{font-size:13px;color:var(--soft);margin:0 0 14px}
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px}
   .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
-    box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:hidden}
+    box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:hidden;position:relative}
+  .card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--cc,var(--forest));z-index:2}
   .card-h{padding:15px 16px 0;display:flex;align-items:center;gap:9px}
-  .code{font-size:12px;font-weight:700;letter-spacing:.04em;color:#fff;background:var(--forest);
+  .code{font-size:12px;font-weight:700;letter-spacing:.04em;color:#fff;background:var(--cc,var(--forest));
     border-radius:7px;padding:4px 9px;font-family:"SFMono-Regular",Menlo,Consolas,monospace;
     font-variant-numeric:tabular-nums;white-space:nowrap}
   .tag{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--teal);
     background:var(--mist);border-radius:6px;padding:3px 8px;white-space:nowrap;font-weight:600}
-  .card h3{margin:11px 16px 0;font-size:15.5px;line-height:1.3}
+  .card h3{margin:11px 16px 0;font-size:15.5px;line-height:1.3;color:var(--cc,var(--ink))}
   .msg{margin:10px 16px 0;background:#f4f9fd;border:1px solid var(--line);border-radius:10px;
     padding:12px 13px;font-size:13.5px;line-height:1.55;white-space:pre-wrap;color:#384a43;
     max-height:172px;overflow:auto;font-family:"SFMono-Regular",Menlo,Consolas,monospace}
@@ -1414,7 +1415,8 @@ function gotoCode(code){
 }
 
 function cardHTML(m,idx,best){
-  return `<div class="card ${m.sensivel?'sensivel':''} ${best?'best':''}">
+  const cc = (typeof CHIPCOLORS!=="undefined" && CHIPCOLORS[m.cat]) || "#1868B0";
+  return `<div class="card ${m.sensivel?'sensivel':''} ${best?'best':''}" style="--cc:${cc}">
     <div class="card-h"><span class="code">${m.code}</span><span class="tag">${CATS[m.cat]}</span>${best?'<span class="best-badge">Melhor resposta</span>':''}</div>
     <h3>${escapeHtml(m.title)}</h3>
     <div class="msg">${linkify(escapeHtml(m.body))}</div>
