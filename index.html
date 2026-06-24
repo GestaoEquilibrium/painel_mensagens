@@ -674,6 +674,27 @@ Informamos que, em razão de *[EVENTO]* (por exemplo, um jogo da Copa do Mundo),
 
 Sentimos muito pelo imprevisto. Já podemos reagendar para a próxima data disponível, no melhor horário para você. Qual período prefere — manhã ou tarde? Cuidaremos disso com prioridade. 🙏`},
 
+ {cat:"agendamento",title:"Reagendamento — Neuropsicologia (resposta)",kw:"reagendar remarcar neuropsicologia neuro avaliacao sessao imprevisto nao posso comparecer nao vou conseguir comparecer continuidade etapas processo paciente",body:
+`Bom dia, *[NOME DO PACIENTE]*! 😊 Imagina, fique tranquilo(a) — imprevistos acontecem. 💙
+
+Já registrei aqui o cancelamento da sua sessão de hoje e vamos cuidar do seu reagendamento.
+
+Como a *avaliação neuropsicológica* é feita em etapas, o ideal é remarcarmos o quanto antes para mantermos a continuidade do processo. Tenho estas opções:
+
+📅 *[OPÇÃO 1 — DIA E HORÁRIO]*
+📅 *[OPÇÃO 2 — DIA E HORÁRIO]*
+📅 *[OPÇÃO 3 — DIA E HORÁRIO]*
+
+Qual fica melhor para você? Assim que confirmar, já deixo sua nova sessão agendada com *[PROFISSIONAL]*. 🤝`},
+
+ {cat:"agendamento",title:"Reagendamento — Neuropsicologia (verificar agenda)",kw:"reagendar remarcar neuropsicologia neuro verificar agenda retornar consultar disponibilidade sessao avaliacao opcoes continuidade",body:
+`Perfeito, *[NOME DO PACIENTE]*! 😊 Vou verificar a agenda do(a) *[PROFISSIONAL]* e já te retorno com as melhores opções de dia e horário.
+
+Fique tranquilo(a): garantimos a continuidade da sua avaliação neuropsicológica, sem perder o andamento do processo. 💙
+
+Em instantes te trago as opções. 🤝`},
+
+
   // ---------- ESPECIALIDADES ----------
  {cat:"especialidades",title:"Avaliação Neuropsicológica",kw:"neuropsicologica avaliacao tdah laudo testes parcelar parcelamento 3x valor",body:
 `Com prazer em explicar! 😊 A *Avaliação Neuropsicológica* é um processo detalhado que investiga funções como atenção, memória, raciocínio, linguagem e funções executivas.
@@ -1517,7 +1538,7 @@ const GENERIC = new Set(["consulta","atendimento","clinica","equilibrium","gosta
 const INTENT = [
  {m:["passando mal","crise","panico","desesper","nao aguento","nao guento","vontade de sumir","me matar","tirar minha vida","suicid","me cortar","automutil","surto","nao quero mais viver","sem forcas"], c:["SEN-01"], w:14},
  {m:["encaix","espremer","tem como hoje","tem vaga hoje","alguma vaga hoje","consigo hoje","ainda hoje"], c:["AGE-09"], w:9},
- {m:["remarc","reagend","mudar o horario","mudar horario","trocar o horario","trocar horario","mudar a data","outro dia","outro horario","adiar","passar para outro dia"], c:["AGE-04"], w:9},
+ {m:["remarc","reagend","mudar o horario","mudar horario","trocar o horario","trocar horario","mudar a data","outro dia","outro horario","adiar","passar para outro dia"], c:["AGE-04","AGE-16","AGE-17","AGE-09"], w:9},
  {m:["cancel","desmarc","nao vou poder ir","nao poderei ir","preciso cancelar","quero cancelar"], c:["AGE-05"], w:8},
  {m:["lista de espera","me avisa se abrir","fila de espera","se abrir vaga","se desmarcar"], c:["REA-06"], w:7},
  {m:["valor","preco","quanto custa","quanto fica","quanto e a","quanto sai","particular","quanto seria"], c:["DOC-07"], w:8},
