@@ -133,6 +133,17 @@
   .flo-codes{display:flex;flex-wrap:wrap;gap:7px}
   .flo-code{border:1px solid var(--line);background:var(--mist);color:var(--forest);border-radius:8px;padding:5px 10px;font-size:12.5px;font-weight:700;font-family:"SFMono-Regular",Menlo,Consolas,monospace;cursor:pointer;transition:all .12s}
   .flo-code:hover{background:var(--forest);color:#fff;border-color:var(--forest)}
+  #assist{display:none}
+  .as-box{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-bottom:18px}
+  .as-box label{display:block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--soft);margin-bottom:8px}
+  .as-box textarea{width:100%;min-height:96px;resize:vertical;border:1px solid var(--line);border-radius:12px;padding:12px 13px;font-size:14px;line-height:1.5;color:var(--ink);font-family:inherit;outline:none}
+  .as-box textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(24,104,176,.18)}
+  .as-row{display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap}
+  .as-go{border:none;background:var(--forest);color:#fff;border-radius:11px;padding:11px 20px;font-size:14px;font-weight:600;cursor:pointer}
+  .as-go:hover{background:#12517f}
+  .as-clear{border:1px solid var(--line);background:var(--card);color:var(--soft);border-radius:11px;padding:10px 16px;font-size:13.5px;font-weight:600;cursor:pointer}
+  .as-clear:hover{border-color:var(--teal);color:var(--forest)}
+  .as-hint{font-size:12px;color:var(--soft);margin:0}
 
   footer{border-top:1px solid var(--line);padding:20px 0;color:var(--soft);font-size:12px;text-align:center}
 
@@ -166,6 +177,7 @@
       </div>
       <button class="idxbtn" id="idxbtn" type="button">📑 Índice</button>
       <button class="idxbtn flobtn" id="flobtn" type="button">🧭 Fluxos</button>
+      <button class="idxbtn asbtn" id="asbtn" type="button">💬 Resposta</button>
     </div>
     <div class="fills">
       <span class="fills-label">Preenche ao copiar:</span>
@@ -210,6 +222,18 @@
   </div>
   <section id="indice"></section>
   <section id="fluxos"></section>
+  <section id="assist">
+    <div class="as-box">
+      <label>Cole a mensagem ou a conversa do paciente</label>
+      <textarea id="assist_in" placeholder="Ex.: 'Oi, queria marcar uma consulta com psiquiatra. Vocês atendem Unimed? Qual o valor?'"></textarea>
+      <div class="as-row">
+        <button class="as-go" id="assist_go" type="button">🔎 Buscar resposta</button>
+        <button class="as-clear" id="assist_clear" type="button">Limpar</button>
+        <span class="as-hint">A análise é feita no seu navegador — nada é enviado para fora.</span>
+      </div>
+    </div>
+    <div class="grid" id="assist_results"></div>
+  </section>
 </main>
 
 <footer class="wrap">Equilibrium Med Center · uso interno da equipe. Campos entre [colchetes] devem ser ajustados antes de enviar.</footer>
@@ -1167,6 +1191,10 @@ const idxBtn = document.getElementById("idxbtn");
 const fluxosEl = document.getElementById("fluxos");
 const fluxosBtn = document.getElementById("flobtn");
 let openFlow = null;
+const assistEl = document.getElementById("assist");
+const asBtn = document.getElementById("asbtn");
+const assistIn = document.getElementById("assist_in");
+let assistResults = [];
 
 const FLOWS = [
  {id:"psiquiatria", color:"#1868B0", title:"Atendimento em Psiquiatria", desc:"Cliente pede consulta em psiquiatria.", steps:[
@@ -1227,7 +1255,7 @@ function buildChips(){
     const pf = c==="todos" ? "" : `<span class="pf">${PREFIX[c]}</span>`;
     return `<button class="chip ${c===active?'on':''}" data-c="${c}">${label}${pf}<span class="n">${counts[c]}</span></button>`;
   }).join("");
-  chipsEl.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{active=b.dataset.c;if(view!=="msgs"){view="msgs";openFlow=null;idxBtn.classList.remove("on");fluxosBtn.classList.remove("on");}buildChips();render();});
+  chipsEl.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{active=b.dataset.c;if(view!=="msgs"){view="msgs";openFlow=null;idxBtn.classList.remove("on");fluxosBtn.classList.remove("on");asBtn.classList.remove("on");}buildChips();render();});
 }
 
 function escapeHtml(s){return s.replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));}
@@ -1235,8 +1263,10 @@ function escapeHtml(s){return s.replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>'
 function render(){
   indiceEl.style.display="none";
   fluxosEl.style.display="none";
+  assistEl.style.display="none";
   if(view==="indice"){renderIndice();return;}
   if(view==="fluxos"){renderFluxos();return;}
+  if(view==="assist"){renderAssist();return;}
   const raw = norm(q.value.trim());
   const qkey = raw.replace(/[^a-z0-9]/g,"");
   const codeQ = raw ? parseCode(qkey) : null;
@@ -1307,17 +1337,97 @@ function setView(v){
   if(view!=="fluxos") openFlow=null;
   idxBtn.classList.toggle("on", view==="indice");
   fluxosBtn.classList.toggle("on", view==="fluxos");
+  asBtn.classList.toggle("on", view==="assist");
   render();
 }
 idxBtn.onclick=()=>setView("indice");
 fluxosBtn.onclick=()=>setView("fluxos");
+asBtn.onclick=()=>{setView("assist"); if(view==="assist") assistIn.focus();};
 
 function gotoCode(code){
   view="msgs"; openFlow=null;
-  idxBtn.classList.remove("on"); fluxosBtn.classList.remove("on");
+  idxBtn.classList.remove("on"); fluxosBtn.classList.remove("on"); asBtn.classList.remove("on");
   active="todos"; q.value=code; buildChips(); render();
   window.scrollTo({top:0,behavior:"smooth"});
 }
+
+function cardHTML(m,idx,best){
+  return `<div class="card ${m.sensivel?'sensivel':''} ${best?'best':''}">
+    <div class="card-h"><span class="code">${m.code}</span><span class="tag">${CATS[m.cat]}</span>${best?'<span class="best-badge">Melhor resposta</span>':''}</div>
+    <h3>${escapeHtml(m.title)}</h3>
+    <div class="msg">${escapeHtml(m.body)}</div>
+    ${m.sensivel?'<div class="note">⚠️ Mensagem sensível — envie com cuidado e, se possível, acione um profissional da equipe.</div>':''}
+    <div class="card-f"><button class="copy" data-idx="${idx}">Copiar mensagem</button></div>
+  </div>`;
+}
+
+const GENERIC = new Set(["consulta","atendimento","clinica","equilibrium","gostaria","queria","preciso","quero","fazer","saber","ajuda","favor","informacao","informacoes","duvida","dia","tarde","noite","bom","boa"]);
+const INTENT = [
+ {m:["passando mal","crise","panico","desesper","nao aguento","nao guento","vontade de sumir","me matar","tirar minha vida","suicid","me cortar","automutil","surto","nao quero mais viver","sem forcas"], c:["SEN-01"], w:14},
+ {m:["encaix","espremer","tem como hoje","tem vaga hoje","alguma vaga hoje","consigo hoje","ainda hoje"], c:["AGE-09"], w:9},
+ {m:["remarc","reagend","mudar o horario","mudar horario","trocar o horario","trocar horario","mudar a data","outro dia","outro horario","adiar","passar para outro dia"], c:["AGE-04"], w:9},
+ {m:["cancel","desmarc","nao vou poder ir","nao poderei ir","preciso cancelar","quero cancelar"], c:["AGE-05"], w:8},
+ {m:["lista de espera","me avisa se abrir","fila de espera","se abrir vaga","se desmarcar"], c:["REA-06"], w:7},
+ {m:["valor","preco","quanto custa","quanto fica","quanto e a","quanto sai","particular","quanto seria"], c:["DOC-07"], w:8},
+ {m:["convenio","plano de saude","unimed","gndi","hapvida","usisaude","geap","vitallis","atende meu plano","aceita o plano","aceitam plano","trabalham com","atendem pelo","cobre"], c:["ATD-07"], w:8},
+ {m:["cartao","desconto","mais saude","clube de vantagens"], c:["CAR-01"], w:8},
+ {m:["psiquiatr"], c:["ESP-04","ESP-03"], w:6},
+ {m:["neuropsico","neuro psico","tdah","dificuldade de aprend","dificuldade na escola","laudo escolar"], c:["ESP-01"], w:9},
+ {m:["autis","espectro","terapia aba","comportamento do meu filho"], c:["ESP-02"], w:8},
+ {m:["endereco","onde fica","onde voces fica","onde e a clinica","como chego","como chegar","localiza","estacionamento","qual o bairro"], c:["ATD-09"], w:9},
+ {m:["que horas abre","horario de funcionamento","ate que horas","funciona ate","atendem sabado","abrem sabado","que horas fecha","abre que horas","atende domingo"], c:["ADM-04"], w:8},
+ {m:["guia","encaminhamento","pedido medico","autorizacao","preciso de autoriza"], c:["DOC-02"], w:7},
+ {m:["o que levar","o que preciso levar","que documento","levar algum documento","preciso levar","carteirinha"], c:["DOC-01"], w:6},
+ {m:["receita","renovar","renovacao","prescric","remedio acabou","renovar a receita"], c:["DOC-05"], w:8},
+ {m:["laudo pronto","laudo ficou pronto","meu laudo","resultado da avaliacao","relatorio pronto"], c:["DOC-06"], w:7},
+ {m:["marcar","agendar","quero consulta","queria marcar","quero marcar","marcar uma consulta","agendar uma consulta","marcar horario","primeira vez","nunca fui"], c:["AGE-01","ATD-01"], w:4}
+];
+function fieldHit(field,w){
+  if(field.includes(w)) return true;
+  if(w.length>=5 && field.includes(w.slice(0,w.length-2))) return true;
+  return false;
+}
+function assistScore(m,toks){
+  const t=norm(m.title), k=norm(m.kw||""), b=norm(m.body);
+  let s=0;
+  for(const w of toks){
+    const wt = GENERIC.has(w) ? 0.3 : 1;
+    if(fieldHit(k,w)) s+=3*wt;
+    if(fieldHit(t,w)) s+=4*wt;
+    else if(b.includes(w)) s+=1*wt;
+  }
+  return s;
+}
+function runAssist(){
+  const clean = norm(assistIn.value).replace(/[^a-z0-9 ]+/g," ").replace(/\s+/g," ").trim();
+  const toks = [...new Set(clean.split(" ").filter(t=>t.length>2 && !STOP.has(t)))];
+  const boost={};
+  for(const it of INTENT){ if(it.m.some(p=>clean.includes(p))){ for(const c of it.c) boost[c]=(boost[c]||0)+it.w; } }
+  if(!toks.length && !Object.keys(boost).length){ assistResults=[]; renderAssist(); return; }
+  assistResults = MSGS.map((m,idx)=>({m,idx,s:assistScore(m,toks)+(boost[m.code]||0)}))
+      .filter(o=>o.s>0 && !/uso interno/i.test(o.m.title))
+      .sort((a,b)=>b.s-a.s).slice(0,5);
+  renderAssist();
+}
+
+function renderAssist(){
+  assistEl.style.display="block";
+  grid.innerHTML=""; emptyEl.style.display="none";
+  const box = document.getElementById("assist_results");
+  countEl.textContent = assistResults.length ? `${assistResults.length} ${assistResults.length===1?'sugestão':'sugestões'} · por relevância` : "";
+  if(!assistResults.length){
+    box.innerHTML = assistIn.value.trim()
+      ? `<p class="as-hint" style="padding:8px 2px">Nenhum balão correspondente. Cole a parte da mensagem do paciente com o assunto (ex.: agendar, valor, convênio, remarcar, receita).</p>`
+      : "";
+    return;
+  }
+  box.innerHTML = assistResults.map((o,i)=>cardHTML(o.m,o.idx,i===0)).join("");
+  box.querySelectorAll(".copy").forEach(b=>b.onclick=()=>doCopy(b));
+}
+
+document.getElementById("assist_go").onclick=runAssist;
+document.getElementById("assist_clear").onclick=()=>{assistIn.value="";assistResults=[];renderAssist();assistIn.focus();};
+assistIn.addEventListener("keydown",e=>{ if((e.ctrlKey||e.metaKey)&&e.key==="Enter") runAssist(); });
 
 function renderFluxos(){
   grid.innerHTML=""; emptyEl.style.display="none"; fluxosEl.style.display="block";
@@ -1385,7 +1495,7 @@ function fallback(text,done){
   document.body.removeChild(ta);
 }
 
-q.addEventListener("input",()=>{ if(view!=="msgs"){view="msgs";openFlow=null;idxBtn.classList.remove("on");fluxosBtn.classList.remove("on");} render(); });
+q.addEventListener("input",()=>{ if(view!=="msgs"){view="msgs";openFlow=null;idxBtn.classList.remove("on");fluxosBtn.classList.remove("on");asBtn.classList.remove("on");} render(); });
 buildChips();render();
 </script>
 </body>
