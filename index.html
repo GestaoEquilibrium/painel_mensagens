@@ -44,6 +44,7 @@
   .idxbtn:hover{border-color:var(--teal)}
   .idxbtn.on{background:var(--forest);border-color:var(--forest);color:#fff}
   .fills{display:flex;gap:12px;flex-wrap:wrap;align-items:center;padding-bottom:16px}
+  .field.sm{flex:0 1 130px;min-width:110px}
   .fills-label{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--soft);
     white-space:nowrap;align-self:center}
   .clearbtn{border:1px solid var(--line);background:var(--card);color:var(--soft);border-radius:12px;
@@ -179,6 +180,19 @@
         <label>Profissional</label>
         <input id="f_prof" autocomplete="off" list="proflist" placeholder="Nome do profissional">
         <datalist id="proflist"></datalist>
+      </div>
+      <div class="field">
+        <label>Especialidade</label>
+        <input id="f_esp" autocomplete="off" list="esplist" placeholder="Especialidade">
+        <datalist id="esplist"></datalist>
+      </div>
+      <div class="field sm">
+        <label>Data</label>
+        <input id="f_data" autocomplete="off" placeholder="00/00">
+      </div>
+      <div class="field sm">
+        <label>Hora</label>
+        <input id="f_hora" autocomplete="off" placeholder="00h00">
       </div>
       <button class="clearbtn" id="clearbtn" type="button" title="Limpa paciente e profissional para um novo atendimento (mantém o seu nome)">↺ Novo atendimento</button>
     </div>
@@ -509,6 +523,27 @@ Para não te deixar sem opção, posso:
 
 Qual prefere? Estou à disposição. 💙`},
 
+ {cat:"agendamento",title:"Confirmação de consulta (envio)",kw:"confirmacao consulta confirmar enviar presenca especialidade data hora profissional",body:
+`Olá, *[NOME DO PACIENTE]*! ✅ Sua consulta está confirmada:
+
+🩺 *Especialidade:* [ESPECIALIDADE]
+👩‍⚕️ *Profissional:* [PROFISSIONAL]
+📅 *Data:* [DATA]
+🕐 *Horário:* [HORÁRIO]
+📍 *Local:* Avenida Cesário Alvim, 2001 — Bairro Aparecida
+
+Pedimos que chegue com 15 minutos de antecedência. Se precisar remarcar, é só nos avisar. Até lá! 💙`},
+
+ {cat:"agendamento",title:"Confirmação de sessão de psicoterapia",kw:"sessao psicoterapia psicologia confirmar confirmacao terapia data hora profissional",body:
+`Oi, *[NOME DO PACIENTE]*! 😊 Passando para confirmar sua sessão de psicoterapia:
+
+👩‍⚕️ *Profissional:* [PROFISSIONAL]
+📅 *Data:* [DATA]
+🕐 *Horário:* [HORÁRIO]
+📍 Avenida Cesário Alvim, 2001 — Bairro Aparecida
+
+Chegue uns 10 minutinhos antes. Se precisar remarcar, me avise com antecedência — assim consigo reorganizar sua agenda com cuidado. Tudo certo para te receber! 💙`},
+
   // ---------- ESPECIALIDADES ----------
  {cat:"especialidades",title:"Avaliação Neuropsicológica",kw:"neuropsicologica avaliacao tdah laudo testes",body:
 `Com prazer em explicar! 😊 A *Avaliação Neuropsicológica* é um processo detalhado que investiga funções como atenção, memória, raciocínio, linguagem e funções executivas.
@@ -538,7 +573,19 @@ O atendimento é totalmente individualizado e sigiloso, sempre respeitando o seu
 
 Atendemos *adultos e crianças* e trabalhamos de forma integrada com nossa equipe de psicologia e terapias. Quer que eu verifique a disponibilidade de agenda para você? 💙`},
 
- // ---------- REATIVAÇÃO ----------
+{cat:"especialidades",title:"Psiquiatra (RQE) × médico que atende psiquiatria",kw:"psiquiatra rqe especialista diferenca esclarecer medico atende psiquiatria titulo cfm transparencia",body:
+`Antes de seguir com o agendamento, deixo uma informação importante, com toda a transparência. 💙
+
+Aqui na Equilibrium, o atendimento em Psiquiatria pode ser feito por dois tipos de profissional:
+
+🩺 *Médico Psiquiatra (com RQE)* — tem o título de especialista em Psiquiatria registrado no conselho.
+São eles: *Dr. Luan Souza, Dr. Vitor Tapias, Dr. Wellington e Dr. Marcus.*
+
+🩺 *Médico que atende em Psiquiatria* — médico que realiza o atendimento psiquiátrico, prática autorizada pelo CFM, mas que não possui o título de especialista (RQE).
+
+Os dois cuidam de você com toda a atenção — a escolha é totalmente sua. Você prefere agendar com um *psiquiatra (RQE)* ou quer ver os horários disponíveis entre todos os médicos? 😊`},
+
+  // ---------- REATIVAÇÃO ----------
  {cat:"reativacao",title:"Pós-avaliação — converter em terapia",kw:"reativar pos avaliacao terapia continuidade",body:
 `Oi, *[NOME DO PACIENTE/RESPONSÁVEL]*! 😊 Aqui é *[NOME DO ATENDENTE]*, da Equilibrium Med Center.
 
@@ -1106,6 +1153,9 @@ const q = document.getElementById("q");
 const fAtend = document.getElementById("f_atend");
 const fPac = document.getElementById("f_pac");
 const fProf = document.getElementById("f_prof");
+const fEsp = document.getElementById("f_esp");
+const fData = document.getElementById("f_data");
+const fHora = document.getElementById("f_hora");
 const clearBtn = document.getElementById("clearbtn");
 const grid = document.getElementById("grid");
 const chipsEl = document.getElementById("chips");
@@ -1121,7 +1171,7 @@ const FLOWS = [
  {id:"psiquiatria", title:"Atendimento em Psiquiatria", desc:"Cliente pede consulta em psiquiatria.", steps:[
    {name:"Acolher e triar", codes:["ATD-01","PRI-01"], note:"Saudação e triagem: para quem é, convênio ou particular, e se já tem encaminhamento."},
    {name:"Sinal de crise?", branch:true, codes:["SEN-01"], note:"Se houver urgência emocional, priorize: acolher e orientar CVV 188 / SAMU 192."},
-   {name:"Rotear o profissional", codes:[], note:"Psiquiatra com RQE: Dr. Luan, Dr. Vitor, Dr. Wellington e Dr. Marcus. Ou médico que atende psiquiatria (Bruno, André, Lucas, Priscila) — informe que não têm título de especialista."},
+   {name:"Esclarecer e rotear", codes:["ESP-04"], note:"Sempre esclareça a diferença: psiquiatra com RQE (Luan, Vitor, Wellington, Marcus) e médico que atende psiquiatria (Bruno, André, Lucas, Priscila). Deixe a escolha com o paciente."},
    {name:"Definir pagamento", codes:["DOC-01","DOC-02","ATD-08","DOC-07","CAR-01"], note:"Convênio: documentos e guia; se o plano não for atendido, ATD-08 e ofereça o cartão. Particular: valores e cartão 50%."},
    {name:"Agendar", codes:["AGE-01","AGE-02"], note:"Coleta os dados e confirma profissional, data e sala."},
    {name:"Orientar e lembrar", codes:["AGE-08","AGE-03"], note:"Orientações da primeira consulta e lembrete na véspera."}
@@ -1129,7 +1179,7 @@ const FLOWS = [
  {id:"medico", title:"Pedido com médico específico", desc:"A pessoa já chega pedindo um médico pelo nome.", steps:[
    {name:"Acolher", codes:["ATD-01"], note:"Saudação leve — a pessoa já decidiu o profissional."},
    {name:"Localizar no painel", codes:[], note:"Busque o nome do profissional: o card mostra especialidade, RQE, sala e a agenda real."},
-   {name:"Conferir RQE", branch:true, codes:[], note:"Só se a pessoa pediu psiquiatra e nomeou um médico sem RQE: informe e deixe a escolha com o paciente."},
+   {name:"Conferir RQE", branch:true, codes:["ESP-04"], note:"Só se a pessoa pediu psiquiatra e nomeou um médico sem RQE: esclareça a diferença (ESP-04) e deixe a escolha com o paciente."},
    {name:"Confirmar dados", codes:["DOC-01","DOC-07"], note:"Para você ou criança, e convênio ou particular."},
    {name:"Tem horário?", branch:true, codes:["REA-06","AGE-04","AGE-09","AGE-10"], note:"Sem vaga: lista de espera, reagendar ou encaixe (ver fluxo Encaixe)."},
    {name:"Agendar e orientar", codes:["AGE-01","AGE-02","AGE-08","AGE-03"], note:"Coleta, confirma, orienta e lembra."}
@@ -1297,17 +1347,24 @@ document.getElementById("proflist").innerHTML =
   MSGS.filter(m=>m.cat==="profissionais")
       .map(m=>m.title.split(" — ")[0])
       .map(n=>`<option value="${n.replace(/"/g,"&quot;")}"></option>`).join("");
+document.getElementById("esplist").innerHTML =
+  [...new Set(MSGS.filter(m=>m.cat==="profissionais").map(m=>m.title.split(" — ")[1]).filter(Boolean))]
+      .map(n=>`<option value="${n.replace(/"/g,"&quot;")}"></option>`).join("");
 
-clearBtn.onclick=()=>{ fPac.value=""; fProf.value=""; fPac.focus(); };
+clearBtn.onclick=()=>{ fPac.value=""; fProf.value=""; fEsp.value=""; fData.value=""; fHora.value=""; fPac.focus(); };
 
 function preencher(text){
-  const at=fAtend.value.trim(), pa=fPac.value.trim(), pr=fProf.value.trim();
+  const at=fAtend.value.trim(), pa=fPac.value.trim(), pr=fProf.value.trim(),
+        es=fEsp.value.trim(), da=fData.value.trim(), ho=fHora.value.trim();
   if(at) text=text.split("[NOME DO ATENDENTE]").join(at);
   if(pa){
     text=text.split("[NOME DO PACIENTE/RESPONSÁVEL]").join(pa);
     text=text.split("[NOME DO PACIENTE]").join(pa);
   }
   if(pr) text=text.split("[PROFISSIONAL]").join(pr);
+  if(es) text=text.split("[ESPECIALIDADE]").join(es);
+  if(da) text=text.split("[DATA]").join(da);
+  if(ho) text=text.split("[HORÁRIO]").join(ho);
   return text;
 }
 
