@@ -889,6 +889,15 @@ A empresa oferece aos funcionários *50% de desconto* em atendimentos de saúde 
 
 Assim que concluir, seu cartão já fica ativo e você começa a economizar no próximo atendimento. Qualquer dúvida no caminho, é só me chamar. 💙`},
 
+ {cat:"cartao",title:"Cartão — abertura com apresentação",kw:"abertura apresentacao cartao mais saude ola eu sou novidade apresentar oferecer clube beneficios proativo bom dia",body:
+`Olá! 😊 Aqui é o(a) *[NOME DO ATENDENTE]*, da *Equilibrium Med Center*.
+
+Tudo bem? Passando para te apresentar uma novidade que pode ajudar você e a sua família a cuidar da saúde gastando bem menos: o nosso *Cartão Equilibrium Mais Saúde*. 💙
+
+É um clube de benefícios da própria clínica, com até *50% de desconto* nos atendimentos particulares — e não é plano de saúde nem convênio.
+
+Posso te explicar rapidinho como funciona? 😊`},
+
  // ---------- PRIMEIRO CONTATO ----------
  {cat:"primeiro",title:"Acolhimento inicial — entender a necessidade",kw:"primeiro contato acolhimento entender necessidade triagem perguntas",body:
 `Olá! 😊 Para eu te ajudar da melhor forma, posso te fazer algumas perguntinhas rápidas?
@@ -1429,7 +1438,7 @@ const FLOWS = [
  {id:"cartao", color:"#CB6B4A", title:"Venda do Cartão Mais Saúde", desc:"Clube de vantagens (não é plano de saúde). Adesão online: maisequilibriumsaude.com.br. Oferta consultiva, nunca empurrada.", steps:[
    {name:"Antes de ofertar", codes:[], note:"Adesão online em maisequilibriumsaude.com.br. O cartão é uma oferta, nunca um empurrão — puxe o assunto só quando houver um bom gancho."},
    {name:"Identificar a deixa", codes:["ATD-08","DOC-07"], note:"Bons ganchos: paciente particular, plano não atendido (ATD-08), achou o valor alto ou perguntou sobre desconto. Sem gancho, não puxe o assunto."},
-   {name:"Abrir com o pitch", codes:["CAR-01","CAR-02"], note:"Apresente o que é (clube de vantagens) e a frase de impacto da economia. Seja transparente desde já: não é plano de saúde."},
+   {name:"Abrir com o pitch", codes:["CAR-17","CAR-01","CAR-02"], note:"Se for você quem inicia a conversa, comece se apresentando (CAR-17). Em seguida, o que é o cartão (CAR-01) e a frase de impacto da economia (CAR-02). Transparente desde já: não é plano de saúde."},
    {name:"É plano de saúde?", branch:true, codes:["CAR-07"], note:"Havendo qualquer dúvida, esclareça de imediato: é um clube de descontos, não um plano de saúde (Lei 9.656/98). Transparência sempre, em primeiro lugar."},
    {name:"Apresentar o plano certo", codes:["CAR-03","CAR-04","CAR-05"], note:"Pergunte para quantas pessoas antes de sugerir. Individual R$ 59, Mais Família R$ 99, Gran Família R$ 119 — encaixe na necessidade real."},
    {name:"Mostrar a economia concreta", codes:["DOC-07","CAR-11"], note:"Use o número que importa para o paciente. Ex.: avaliação neuropsicológica de R$ 3.800 por R$ 1.900 com o cartão (50%) — confira a elegibilidade no CAR-11."},
