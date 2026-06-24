@@ -38,11 +38,16 @@
   .field.search{flex:2}
   .field.search input{padding-left:40px}
   .field.search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);opacity:.45}
-  .idxbtn{border:1px solid var(--line);background:var(--card);color:var(--forest);border-radius:12px;
+  .idxbtn{border:1.5px solid var(--bc,var(--line));background:var(--bg,var(--card));color:var(--ink);border-radius:12px;
     padding:0 18px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;
     transition:all .14s;white-space:nowrap}
-  .idxbtn:hover{border-color:var(--teal)}
-  .idxbtn.on{background:var(--forest);border-color:var(--forest);color:#fff}
+  .idxbtn:hover{filter:brightness(.97)}
+  .idxbtn.on{background:var(--bc,var(--forest));border-color:var(--bc,var(--forest));color:var(--on-text,#fff)}
+  #idxbtn{--bc:#1868B0;--bg:#E8F1FA}
+  #flobtn{--bc:#C99700;--bg:#FBF1D5;--on-text:#3f3100}
+  #asbtn{--bc:#1E8455;--bg:#E5F3EC}
+  #planobtn{--bc:#C0392B;--bg:#FBEAE8}
+  #pgtobtn{--bc:#6D4FA8;--bg:#F0EBF8}
   .fills{display:flex;gap:12px;flex-wrap:wrap;align-items:center;padding-bottom:16px}
   .field.sm{flex:0 1 130px;min-width:110px}
   .fills-label{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--soft);
@@ -252,6 +257,7 @@ const CATS = {
   agendamento:"Agendamento",
   especialidades:"Especialidades",
   reativacao:"Reativação",
+  feedback:"Feedback",
   cartao:"Cartão & Vendas",
   admin:"Administrativo",
   profissionais:"Profissionais",
@@ -266,6 +272,7 @@ const PREFIX = {
   agendamento:"AGE",
   especialidades:"ESP",
   reativacao:"REA",
+  feedback:"FBK",
   cartao:"CAR",
   admin:"ADM",
   profissionais:"PRO",
@@ -1145,7 +1152,29 @@ Entrega de laudo / relatório: [a confirmar]`},
 ⏰ Horários de início: 7h, 13h, 16h
 (3 turnos/semana)`},
 
- // ---------- SENSÍVEL ----------
+ // ---------- FEEDBACK ----------
+ {cat:"feedback",title:"Elogio — agradecimento",kw:"elogio agradecimento feedback positivo carinho obrigado parabens otimo gratidao",body:
+`Que alegria receber o seu carinho! 😊💙 Muito obrigado(a) por compartilhar isso com a gente.
+
+Vou repassar o seu elogio para toda a equipe da Equilibrium — comentários como o seu nos motivam a cuidar cada vez melhor de você e da sua família.
+
+Se precisar de qualquer coisa, é só chamar. Estamos sempre por aqui! 🌟`},
+
+ {cat:"feedback",title:"Sugestão — acolhimento",kw:"sugestao ideia melhoria feedback opiniao recomendacao proposta",body:
+`Muito obrigado(a) pela sua sugestão! 🙏 A sua opinião é muito importante para nós.
+
+Vou registrar e encaminhar para a nossa equipe avaliar com carinho — é assim que conseguimos melhorar a cada dia.
+
+Agradecemos por nos ajudar a evoluir. Conte sempre conosco! 💙`},
+
+ {cat:"feedback",title:"Reclamação — acolhimento e encaminhamento",kw:"reclamacao reclamar insatisfacao problema queixa feedback negativo coordenacao insatisfeito",body:
+`Sinto muito que a sua experiência não tenha sido como esperávamos. 💙 Agradeço por nos contar — levamos isso a sério.
+
+Vou registrar o ocorrido e encaminhar para a nossa coordenação analisar com atenção e te retornar o quanto antes.
+
+Para nos ajudar a resolver da melhor forma, pode me dar mais alguns detalhes (data, profissional ou situação)? Obrigado(a) pela confiança em nos avisar.`},
+
+  // ---------- SENSÍVEL ----------
  {cat:"sensivel",title:"Acolhimento em urgência emocional",kw:"crise urgencia emocional cvv 188 emergencia samu sofrimento",sensivel:true,body:
 `Sentimos muito que você esteja passando por um momento difícil, e agradecemos por confiar na gente. 💙
 
