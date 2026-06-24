@@ -1571,11 +1571,78 @@ function assistScore(m,toks){
   }
   return s;
 }
+const PROF=[
+  {code:"PRO-01",esp:"fono",n:["aline"]},
+  {code:"PRO-02",esp:"fono",n:["hugo"]},
+  {code:"PRO-03",esp:"fono",n:["lara"]},
+  {code:"PRO-04",esp:"musicoterapia",n:["sandra"]},
+  {code:"PRO-05",esp:"psiquiatria",n:["andre"]},
+  {code:"PRO-06",esp:"psiquiatria",n:["bruno","caixeta"]},
+  {code:"PRO-07",esp:"psiquiatria",n:["luan","souza"]},
+  {code:"PRO-08",esp:"psiquiatria",n:["lucas"]},
+  {code:"PRO-09",esp:"psiquiatria",n:["marcus"]},
+  {code:"PRO-10",esp:"psiquiatria",n:["priscila"]},
+  {code:"PRO-11",esp:"psiquiatria",n:["vitor","tapias"]},
+  {code:"PRO-12",esp:"psiquiatria",n:["wellington"]},
+  {code:"PRO-13",esp:"neuro",n:["emilly"]},
+  {code:"PRO-14",esp:"neuro",n:["karolina"]},
+  {code:"PRO-15",esp:"neuro",n:["mariana"]},
+  {code:"PRO-16",esp:"neuro",n:["natalia"]},
+  {code:"PRO-17",esp:"neuro",n:["pamela"]},
+  {code:"PRO-18",esp:"neuro",n:["tais"]},
+  {code:"PRO-19",esp:"neuro",n:["wessilon"]},
+  {code:"PRO-20",esp:"psicologia",n:["francisca"]},
+  {code:"PRO-21",esp:"psicologia",n:["gabriela"]},
+  {code:"PRO-22",esp:"psicologia",n:["jeniffer"]},
+  {code:"PRO-23",esp:"psicologia",n:["jessica"]},
+  {code:"PRO-24",esp:"psicologia",n:["kenia"]},
+  {code:"PRO-25",esp:"psicologia",n:["lais"]},
+  {code:"PRO-26",esp:"psicologia",n:["mara"]},
+  {code:"PRO-27",esp:"psicologia",n:["michelle"]},
+  {code:"PRO-28",esp:"psicologia",n:["rosana"]},
+  {code:"PRO-29",esp:"psicologia",n:["silvia"]},
+  {code:"PRO-30",esp:"psicologia",n:["vitoria"]},
+  {code:"PRO-31",esp:"psicologia",n:["yuri"]},
+  {code:"PRO-32",esp:"psicologia",n:["mayumi"]},
+  {code:"PRO-33",esp:"psicomotricidade",n:["mona"]},
+  {code:"PRO-34",esp:"psicopedagogia",n:["ana maria"]},
+  {code:"PRO-35",esp:"psicopedagogia",n:["daiane"]},
+  {code:"PRO-37",esp:"to",n:["eduardo"]}
+];
+const ESP_KW=[["neuropsico","neuro"],["neuro psico","neuro"],["psicomotr","psicomotricidade"],
+["psicopedagog","psicopedagogia"],["psiquiatr","psiquiatria"],["musicoterap","musicoterapia"],
+["fonoaudiolog","fono"],["fono","fono"],["terapia ocupacional","to"],["ocupacional","to"],
+["terapia aba","aba"],["autis","aba"],["espectro","aba"],["psicoterapia","psicologia"],["psicolog","psicologia"]];
+const ESP_PRIMARY={neuro:["ESP-01"],psiquiatria:["ESP-03","ESP-04"],aba:["ESP-02"]};
+const RESCHED_SET=new Set(["AGE-04","AGE-09","AGE-16","AGE-17"]);
+function reschedFor(esp){ return esp==="neuro" ? ["AGE-16","AGE-17"] : ["AGE-04"]; }
+function nameHit(clean,tok){
+  const re=new RegExp("\\b(?:com|dr|dra|doutor|doutora|doutura|prof|profa|da|do|de)\\b\\.?\\s+(?:a |o |as |os )?"+tok.replace(/ /g,"\\s+")+"\\b");
+  return re.test(clean);
+}
+// foco: profissional (exige marcador antes do nome) ou especialidade
+function detectFocus(clean){
+  for(const p of PROF){ if(p.n.some(t=>nameHit(clean,t))) return {esp:p.esp, code:p.code}; }
+  for(const [kw,esp] of ESP_KW){ if(clean.includes(kw)) return {esp:esp, code:null}; }
+  return null;
+}
+
 function runAssist(){
   const clean = norm(assistIn.value).replace(/[^a-z0-9 ]+/g," ").replace(/\s+/g," ").trim();
   const toks = [...new Set(clean.split(" ").filter(t=>t.length>2 && !STOP.has(t)))];
   const boost={};
-  for(const it of INTENT){ if(it.m.some(p=>clean.includes(p))){ for(const c of it.c) boost[c]=(boost[c]||0)+it.w; } }
+  const focus = detectFocus(clean);
+  for(const it of INTENT){
+    if(it.m.some(p=>clean.includes(p))){
+      let codes = it.c;
+      if(focus && it.c.some(c=>RESCHED_SET.has(c))){ codes = it.c.filter(c=>!RESCHED_SET.has(c)).concat(reschedFor(focus.esp)); }
+      for(const c of codes) boost[c]=(boost[c]||0)+it.w;
+    }
+  }
+  if(focus){
+    if(focus.code){ boost[focus.code]=(boost[focus.code]||0)+11; }
+    else { (ESP_PRIMARY[focus.esp]||[]).forEach(c=> boost[c]=(boost[c]||0)+9); }
+  }
   if(!toks.length && !Object.keys(boost).length){ assistResults=[]; renderAssist(); return; }
   assistResults = MSGS.map((m,idx)=>({m,idx,s:assistScore(m,toks)+(boost[m.code]||0)}))
       .filter(o=>o.s>0 && !/uso interno/i.test(o.m.title))
