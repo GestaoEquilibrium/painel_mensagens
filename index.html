@@ -43,10 +43,10 @@
     transition:all .14s;white-space:nowrap}
   .idxbtn:hover{filter:brightness(.97)}
   .idxbtn.on{background:var(--bc,var(--forest));border-color:var(--bc,var(--forest));color:var(--on-text,#fff)}
-  #idxbtn{--bc:#1868B0;--bg:#E8F1FA}
-  #flobtn{--bc:#C99700;--bg:#FBF1D5;--on-text:#3f3100}
-  #asbtn{--bc:#1E8455;--bg:#E5F3EC}
-  #planobtn{--bc:#C0392B;--bg:#FBEAE8}
+  #idxbtn{--bc:#1868B0;--bg:#E9F1FA}
+  #flobtn{--bc:#C68A1E;--bg:#FAF1DC;--on-text:#3a2c00}
+  #asbtn{--bc:#1E8A5A;--bg:#E5F4EC}
+  #planobtn{--bc:#C0504D;--bg:#FAEAE9}
   #pgtobtn{--bc:#6D4FA8;--bg:#F0EBF8}
   .fills{display:flex;gap:12px;flex-wrap:wrap;align-items:center;padding-bottom:16px}
   .field.sm{flex:0 1 130px;min-width:110px}
@@ -153,6 +153,7 @@
   .qr img{width:190px;height:auto;border:1px solid var(--line);border-radius:12px;background:#fff;padding:6px}
   .qr-dl{font-size:13px;font-weight:600;color:var(--forest);text-decoration:none;border:1px solid var(--line);border-radius:9px;padding:7px 13px;display:inline-block}
   .qr-dl:hover{border-color:var(--teal)}
+  .msg a{color:var(--forest);font-weight:600;text-decoration:underline;word-break:break-all}
 
   footer{border-top:1px solid var(--line);padding:20px 0;color:var(--soft);font-size:12px;text-align:center}
 
@@ -1174,6 +1175,14 @@ Vou registrar o ocorrido e encaminhar para a nossa coordenação analisar com at
 
 Para nos ajudar a resolver da melhor forma, pode me dar mais alguns detalhes (data, profissional ou situação)? Obrigado(a) pela confiança em nos avisar.`},
 
+  {cat:"feedback",title:"Convite para avaliação no Google",kw:"avaliacao google review estrelas opiniao recomendar nota link",body:
+`Foi um prazer cuidar de você! 💙 Se a sua experiência na Equilibrium foi positiva, você nos ajudaria muito deixando uma avaliação no Google. ⭐
+
+É rapidinho, leva menos de 1 minuto:
+👉 https://g.page/r/CVq0oQK8oq7HEAE/review
+
+A sua opinião fortalece o nosso trabalho e ajuda outras famílias a encontrarem a gente. Muito obrigado(a)! 🌟`},
+
   // ---------- SENSÍVEL ----------
  {cat:"sensivel",title:"Acolhimento em urgência emocional",kw:"crise urgencia emocional cvv 188 emergencia samu sofrimento",sensivel:true,body:
 `Sentimos muito que você esteja passando por um momento difícil, e agradecemos por confiar na gente. 💙
@@ -1310,6 +1319,7 @@ function buildChips(){
 }
 
 function escapeHtml(s){return s.replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));}
+function linkify(s){return s.replace(/(https?:\/\/[^\s]+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>');}
 
 function render(){
   indiceEl.style.display="none";
@@ -1397,7 +1407,7 @@ function cardHTML(m,idx,best){
   return `<div class="card ${m.sensivel?'sensivel':''} ${best?'best':''}">
     <div class="card-h"><span class="code">${m.code}</span><span class="tag">${CATS[m.cat]}</span>${best?'<span class="best-badge">Melhor resposta</span>':''}</div>
     <h3>${escapeHtml(m.title)}</h3>
-    <div class="msg">${escapeHtml(m.body)}</div>
+    <div class="msg">${linkify(escapeHtml(m.body))}</div>
     ${m.img?`<div class="qr"><img src="${m.img}" alt="QR Code PIX" loading="lazy"><a class="qr-dl" href="${m.img}" download="pix-equilibrium.png">⬇ Baixar QR Code</a></div>`:""}
     ${m.sensivel?'<div class="note">⚠️ Mensagem sensível — envie com cuidado e, se possível, acione um profissional da equipe.</div>':''}
     <div class="card-f"><button class="copy" data-idx="${idx}">Copiar mensagem</button></div>
