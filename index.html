@@ -178,6 +178,8 @@
       <button class="idxbtn" id="idxbtn" type="button">📑 Índice</button>
       <button class="idxbtn flobtn" id="flobtn" type="button">🧭 Fluxos</button>
       <button class="idxbtn asbtn" id="asbtn" type="button">💬 Resposta</button>
+      <button class="idxbtn planobtn" id="planobtn" type="button">🏥 Plano de saúde</button>
+      <button class="idxbtn pgtobtn" id="pgtobtn" type="button">💳 Pagamento</button>
     </div>
     <div class="fills">
       <span class="fills-label">Preenche ao copiar:</span>
@@ -1428,6 +1430,23 @@ function renderAssist(){
 document.getElementById("assist_go").onclick=runAssist;
 document.getElementById("assist_clear").onclick=()=>{assistIn.value="";assistResults=[];renderAssist();assistIn.focus();};
 assistIn.addEventListener("keydown",e=>{ if((e.ctrlKey||e.metaKey)&&e.key==="Enter") runAssist(); });
+
+const planoBtn = document.getElementById("planobtn");
+const pgtoBtn  = document.getElementById("pgtobtn");
+function quickShow(label, codes){
+  view="msgs"; openFlow=null;
+  [idxBtn,fluxosBtn,asBtn].forEach(b=>b.classList.remove("on"));
+  indiceEl.style.display="none"; fluxosEl.style.display="none"; assistEl.style.display="none";
+  active="todos"; q.value=""; buildChips();
+  const items = codes.map(code=>{ const idx=MSGS.findIndex(m=>m.code===code); return idx>=0?{m:MSGS[idx],idx}:null; }).filter(Boolean);
+  emptyEl.style.display="none";
+  countEl.textContent = `${label} · ${items.length} ${items.length===1?'mensagem':'mensagens'}`;
+  grid.innerHTML = items.map((o,i)=>cardHTML(o.m,o.idx,i===0)).join("");
+  grid.querySelectorAll(".copy").forEach(b=>b.onclick=()=>doCopy(b));
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+planoBtn.onclick=()=>quickShow("Plano de saúde", ["ATD-07","ATD-08","DOC-01","DOC-02"]);
+pgtoBtn.onclick =()=>quickShow("Formas de pagamento", ["ADM-03","DOC-07","CAR-01"]);
 
 function renderFluxos(){
   grid.innerHTML=""; emptyEl.style.display="none"; fluxosEl.style.display="block";
