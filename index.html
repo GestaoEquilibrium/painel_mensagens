@@ -418,6 +418,30 @@ Nosso WhatsApp principal está *temporariamente fora do ar*. Para continuar te a
 
 Atendemos normalmente por este número — agendamentos, confirmações e dúvidas. Assim que o canal principal voltar, avisamos. Obrigado(a) pela compreensão!`},
 
+  {cat:"atendimento",title:"Setor Financeiro",kw:"financeiro pagamento recibo nota negociacao cobranca setor falar",body:
+`Claro, será um prazer ajudar! 😊 Para assuntos do *setor financeiro* (pagamentos, recibos, notas ou negociações), vou encaminhar o seu contato para a nossa equipe responsável.
+
+Pode me informar o seu *nome completo* e um breve resumo do que precisa? Se preferir registrar por escrito, é só enviar para o e-mail da nossa gestão: gestaoequilibriummedcenter@gmail.com. Cuidaremos do seu atendimento o quanto antes. 💙`},
+
+ {cat:"atendimento",title:"RH — Envio de currículo",kw:"rh recursos humanos curriculo vaga emprego trabalhar candidatura processo seletivo",body:
+`Que bom saber do seu interesse em fazer parte da nossa equipe! 🌟 Agradecemos muito o contato.
+
+Para se candidatar, envie o seu currículo para o e-mail da nossa gestão: gestaoequilibriummedcenter@gmail.com. Se preferir, pode deixá-lo por aqui mesmo que encaminhamos internamente.
+
+Assim que surgir uma oportunidade alinhada ao seu perfil, entraremos em contato. Desejamos muito sucesso! 💙`},
+
+ {cat:"atendimento",title:"Falar com a Gestão",kw:"gestao gerencia coordenacao responsavel falar setor administrativo email niela diretora clinica",body:
+`Claro! 😊 Para assuntos com a *gestão* da Equilibrium, o nosso canal oficial é o e-mail da nossa *Diretora Clínica, Niela*:
+
+📧 gestaoequilibriummedcenter@gmail.com
+
+Pode escrever por lá com toda a tranquilidade — todos os assuntos relacionados à clínica são tratados por esse canal. Se preferir, me passe o seu nome, contato e um resumo que eu encaminho internamente. 💙`},
+
+ {cat:"atendimento",title:"Falar com o Proprietário (Dr. Wessilon)",kw:"proprietario dono wessilon diretor falar gestao recado",body:
+`Com certeza! 😊 Para falar com o nosso proprietário, *Dr. Wessilon*, vou registrar a sua solicitação e encaminhá-la pessoalmente.
+
+Pode me informar o seu *nome completo*, o melhor contato e o assunto que gostaria de tratar? Se preferir deixar por escrito, pode enviar para o e-mail da nossa gestão: gestaoequilibriummedcenter@gmail.com. Garantimos que o seu recado chegue até ele. 💙`},
+
   // ---------- DOCUMENTOS ----------
  {cat:"documentos",title:"Solicitação de documentos (convênio)",kw:"documentos carteirinha rg guia convenio enviar",body:
 `Perfeito! Para darmos andamento ao seu atendimento pelo convênio *[PLANO]*, vamos precisar de alguns documentos. Pode nos enviar por aqui mesmo:
@@ -625,6 +649,13 @@ Sentimos muito pelo transtorno. Já podemos reagendar para a primeira data dispo
 Tivemos um imprevisto pessoal com o(a) *[PROFISSIONAL]* e, infelizmente, precisaremos desmarcar a sua consulta de psiquiatria de *[DATA]* às *[HORÁRIO]*. Sentimos muito pelo transtorno. 😔
 
 Você tem interesse em *reagendar*? Se sim, é só me avisar que eu já verifico a próxima data disponível com o(a) *[PROFISSIONAL]* — ou, se preferir, com outro de nossos médicos. Fico no aguardo para cuidar disso com você. 🙏`},
+
+ {cat:"agendamento",title:"Desmarcação por evento nacional/mundial",kw:"desmarcar evento nacional mundial copa do mundo jogo feriado expediente operacao remarcar fechado",body:
+`Olá, *[NOME DO PACIENTE]*! 💙 Aqui é *[NOME DO ATENDENTE]*, da Equilibrium Med Center.
+
+Informamos que, em razão de *[EVENTO]* (por exemplo, um jogo da Copa do Mundo), a clínica *não terá expediente* em *[DATA]*. Por isso, a sua consulta marcada para *[HORÁRIO]* precisará ser remarcada.
+
+Sentimos muito pelo imprevisto. Já podemos reagendar para a próxima data disponível, no melhor horário para você. Qual período prefere — manhã ou tarde? Cuidaremos disso com prioridade. 🙏`},
 
   // ---------- ESPECIALIDADES ----------
  {cat:"especialidades",title:"Avaliação Neuropsicológica",kw:"neuropsicologica avaliacao tdah laudo testes parcelar parcelamento 3x valor",body:
@@ -848,7 +879,10 @@ Na dúvida, agende uma avaliação inicial e a equipe redireciona.`},
 
 Razão social: EQUILIBRIUM MED CENTER LTDA
 CNPJ: 34.032.586/0001-98
-Endereço: Avenida Cesário Alvim, 2001 — Bairro Aparecida, Uberlândia/MG`},
+Endereço: Avenida Cesário Alvim, 2001 — Bairro Aparecida, Uberlândia/MG
+E-mail da gestão: gestaoequilibriummedcenter@gmail.com
+Diretora Clínica: Niela
+Proprietário: Dr. Wessilon`},
 
  {cat:"admin",title:"Convênios atendidos (referência)",kw:"convenios planos referencia lista admin unimed hapvida gndi",body:
 `CONVÊNIOS ATENDIDOS
@@ -1353,7 +1387,7 @@ function buildChips(){
 }
 
 function escapeHtml(s){return s.replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));}
-function linkify(s){return s.replace(/(https?:\/\/[^\s]+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>');}
+function linkify(s){return s.replace(/(https?:\/\/[^\s]+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>').replace(/([A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,})/g,'<a href="mailto:$1">$1</a>');}
 
 function render(){
   indiceEl.style.display="none";
