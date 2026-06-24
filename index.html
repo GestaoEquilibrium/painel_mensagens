@@ -115,9 +115,10 @@
   .flo-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
   .flo-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;cursor:pointer;transition:border-color .14s}
   .flo-card:hover{border-color:var(--teal)}
-  .flo-card .flo-title{font-size:15.5px;font-weight:700;color:var(--ink);margin-bottom:5px}
+  .flo-card .flo-title{font-size:15.5px;font-weight:700;color:var(--ink);margin-bottom:5px;display:flex;align-items:center}
   .flo-card .flo-desc{font-size:13px;color:var(--soft);line-height:1.45}
   .flo-card .flo-meta{font-size:11.5px;color:var(--teal);margin-top:10px;font-weight:600}
+  .flo-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:9px;vertical-align:middle;flex:none}
   .flo-back{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--card);color:var(--forest);border-radius:10px;padding:7px 13px;font-size:13.5px;font-weight:600;cursor:pointer;margin-bottom:16px}
   .flo-back:hover{border-color:var(--teal)}
   .flo-head{font-size:18px;font-weight:700;margin:0 0 4px}
@@ -1168,7 +1169,7 @@ const fluxosBtn = document.getElementById("flobtn");
 let openFlow = null;
 
 const FLOWS = [
- {id:"psiquiatria", title:"Atendimento em Psiquiatria", desc:"Cliente pede consulta em psiquiatria.", steps:[
+ {id:"psiquiatria", color:"#1868B0", title:"Atendimento em Psiquiatria", desc:"Cliente pede consulta em psiquiatria.", steps:[
    {name:"Acolher e triar", codes:["ATD-01","PRI-01"], note:"Saudação e triagem: para quem é, convênio ou particular, e se já tem encaminhamento."},
    {name:"Sinal de crise?", branch:true, codes:["SEN-01"], note:"Se houver urgência emocional, priorize: acolher e orientar CVV 188 / SAMU 192."},
    {name:"Esclarecer e rotear", codes:["ESP-04"], note:"Sempre esclareça a diferença: psiquiatra com RQE (Luan, Vitor, Wellington, Marcus) e médico que atende psiquiatria (Bruno, André, Lucas, Priscila). Deixe a escolha com o paciente."},
@@ -1176,7 +1177,7 @@ const FLOWS = [
    {name:"Agendar", codes:["AGE-01","AGE-02"], note:"Coleta os dados e confirma profissional, data e sala."},
    {name:"Orientar e lembrar", codes:["AGE-08","AGE-03"], note:"Orientações da primeira consulta e lembrete na véspera."}
  ]},
- {id:"medico", title:"Pedido com médico específico", desc:"A pessoa já chega pedindo um médico pelo nome.", steps:[
+ {id:"medico", color:"#5B4C9E", title:"Pedido com médico específico", desc:"A pessoa já chega pedindo um médico pelo nome.", steps:[
    {name:"Acolher", codes:["ATD-01"], note:"Saudação leve — a pessoa já decidiu o profissional."},
    {name:"Localizar no painel", codes:[], note:"Busque o nome do profissional: o card mostra especialidade, RQE, sala e a agenda real."},
    {name:"Conferir RQE", branch:true, codes:["ESP-04"], note:"Só se a pessoa pediu psiquiatra e nomeou um médico sem RQE: esclareça a diferença (ESP-04) e deixe a escolha com o paciente."},
@@ -1184,28 +1185,28 @@ const FLOWS = [
    {name:"Tem horário?", branch:true, codes:["REA-06","AGE-04","AGE-09","AGE-10"], note:"Sem vaga: lista de espera, reagendar ou encaixe (ver fluxo Encaixe)."},
    {name:"Agendar e orientar", codes:["AGE-01","AGE-02","AGE-08","AGE-03"], note:"Coleta, confirma, orienta e lembra."}
  ]},
- {id:"retorno", title:"Agendar retorno (consulta nova)", desc:"Retorno é sempre consulta nova, com guia própria.", steps:[
+ {id:"retorno", color:"#A65D14", title:"Agendar retorno (consulta nova)", desc:"Retorno é sempre consulta nova, com guia própria.", steps:[
    {name:"Entender o pedido", codes:["ATD-01","ADM-05"], note:"Retorno = consulta nova. Não há retorno antes de 30 dias, e nunca na mesma guia já executada."},
    {name:"Conferir os 30 dias", branch:true, codes:["ADM-05"], note:"Menos de 30 dias da última consulta: não realizamos. A partir de 30 dias: segue como consulta nova."},
    {name:"Tem vaga?", branch:true, codes:["REA-06","AGE-04","AGE-09","AGE-10"], note:"Sem vaga: lista de espera, reagendar ou encaixe."},
    {name:"Definir pagamento", codes:["DOC-01","DOC-02","ATD-08","DOC-07","CAR-01"], note:"Convênio com guia nova, particular ou cartão. Plano não atendido: ATD-08 e ofereça o cartão."},
    {name:"Agendar e lembrar", codes:["AGE-01","AGE-02","AGE-03"], note:"Coleta, confirma e lembra."}
  ]},
- {id:"encaixe", title:"Encaixe (sem vaga normal)", desc:"A recepção tem autonomia para encaixar quando há espaço.", steps:[
+ {id:"encaixe", color:"#1E8455", title:"Encaixe (sem vaga normal)", desc:"A recepção tem autonomia para encaixar quando há espaço.", steps:[
    {name:"Sem vaga normal", codes:[], note:"O paciente precisa de horário e não há vaga regular."},
    {name:"Verificar a agenda", codes:[], note:"A recepção sempre confere a agenda do profissional antes."},
    {name:"Agenda fechada?", branch:true, codes:["AGE-10","REA-06"], note:"Médico fechou para novos agendamentos ou está lotada: use o AGE-10 e ofereça lista de espera ou outro profissional."},
    {name:"Encaixe e contato", codes:["AGE-09"], note:"Havendo espaço para espremer, a recepção encaixa e oferece o horário com o AGE-09."},
    {name:"Confirmar", codes:["AGE-02"], note:"Confirma o encaixe com o paciente."}
  ]},
- {id:"geral", title:"Consulta / sessão (demais especialidades)", desc:"Psicologia, fono, T.O., psicomotricidade, psicopedagogia, terapias infantis e ABA.", steps:[
+ {id:"geral", color:"#0F6E86", title:"Consulta / sessão (demais especialidades)", desc:"Psicologia, fono, T.O., psicomotricidade, psicopedagogia, terapias infantis e ABA.", steps:[
    {name:"Acolher e triar", codes:["ATD-01","PRI-01"], note:"Saudação e triagem: para quem é, queixa, convênio ou particular, encaminhamento."},
    {name:"Direcionar a especialidade", codes:["PRI-03"], note:"Use o guia de direcionamento para confirmar a especialidade certa."},
    {name:"Definir pagamento", codes:["DOC-01","DOC-02","ATD-08","DOC-07","CAR-01"], note:"Convênio (documentos e guia; se não atendido, ATD-08 e cartão) ou particular (valores e cartão)."},
    {name:"Agendar", codes:["AGE-01","AGE-02"], note:"Coleta os dados e confirma."},
    {name:"Orientar e lembrar", codes:["AGE-08","AGE-03"], note:"Orientações e lembrete."}
  ]},
- {id:"neuro", title:"Avaliação Neuropsicológica", desc:"Avaliação em sessões, com entrevista, testes e laudo.", steps:[
+ {id:"neuro", color:"#A83A66", title:"Avaliação Neuropsicológica", desc:"Avaliação em sessões, com entrevista, testes e laudo.", steps:[
    {name:"Acolher e triar", codes:["ATD-01","PRI-01"], note:"Para quem é (criança ou adulto), queixa (TDAH, aprendizagem, desenvolvimento), convênio ou particular, e se tem encaminhamento."},
    {name:"Explicar a avaliação", codes:["ESP-01"], note:"Processo em algumas sessões: entrevista, aplicação de testes e devolutiva com laudo."},
    {name:"Encaminhamento e guia", branch:true, codes:["DOC-02"], note:"O plano exige pedido médico com CID. Oriente como conseguir, caso o paciente não tenha."},
@@ -1324,7 +1325,7 @@ function renderFluxos(){
     countEl.textContent = `${FLOWS.length} fluxos guiados`;
     fluxosEl.innerHTML = `<p class="flo-intro">Escolha um fluxo. Cada etapa traz os balões — clique no código para abrir a mensagem.</p>`
       + `<div class="flo-list">`
-      + FLOWS.map(f=>`<div class="flo-card" data-flow="${f.id}"><div class="flo-title">${escapeHtml(f.title)}</div><div class="flo-desc">${escapeHtml(f.desc)}</div><div class="flo-meta">${f.steps.length} etapas →</div></div>`).join("")
+      + FLOWS.map(f=>`<div class="flo-card" data-flow="${f.id}" style="border-left:5px solid ${f.color}"><div class="flo-title"><span class="flo-dot" style="background:${f.color}"></span>${escapeHtml(f.title)}</div><div class="flo-desc">${escapeHtml(f.desc)}</div><div class="flo-meta" style="color:${f.color}">${f.steps.length} etapas →</div></div>`).join("")
       + `</div>`;
     fluxosEl.querySelectorAll(".flo-card").forEach(c=>c.onclick=()=>{openFlow=c.dataset.flow;renderFluxos();window.scrollTo({top:0,behavior:"smooth"});});
     return;
@@ -1332,8 +1333,8 @@ function renderFluxos(){
   const f = FLOWS.find(x=>x.id===openFlow);
   countEl.textContent = `Fluxo · ${f.title}`;
   fluxosEl.innerHTML = `<button class="flo-back">← Todos os fluxos</button>`
-    + `<h2 class="flo-head">${escapeHtml(f.title)}</h2><p class="flo-sub">${escapeHtml(f.desc)}</p>`
-    + f.steps.map((s,i)=>`<div class="flo-step"><div class="flo-n">${i+1}</div><div class="flo-bd">`
+    + `<h2 class="flo-head"><span class="flo-dot" style="background:${f.color}"></span>${escapeHtml(f.title)}</h2><p class="flo-sub">${escapeHtml(f.desc)}</p>`
+    + f.steps.map((s,i)=>`<div class="flo-step"><div class="flo-n" style="background:${f.color}">${i+1}</div><div class="flo-bd">`
         + `<div class="flo-name">${escapeHtml(s.name)}${s.branch?'<span class="flo-tag">desvio</span>':''}</div>`
         + `<div class="flo-note">${escapeHtml(s.note)}</div>`
         + ((s.codes&&s.codes.length)?`<div class="flo-codes">${s.codes.map(c=>`<button class="flo-code" data-code="${c}">${c}</button>`).join("")}</div>`:"")
