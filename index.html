@@ -35,14 +35,15 @@ input,textarea,select{font-family:inherit;font-size:14px;color:var(--texto)}
 .login-box .sub{color:var(--muted);font-size:13.5px;margin-bottom:24px}
 .login-box .label{font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted);
   text-align:left;margin:14px 2px 10px;font-weight:700}
-.users{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.users{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:10px}
 .user-btn{display:flex;align-items:center;gap:10px;border:1px solid var(--linha-2);background:#fff;
   border-radius:12px;padding:11px 12px;text-align:left;transition:all .14s}
 .user-btn:hover{border-color:var(--azul);box-shadow:0 4px 14px rgba(24,104,176,.12);transform:translateY(-1px)}
 .avatar{width:34px;height:34px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;
   color:#fff;font-weight:700;font-size:14px}
-.user-btn .nome{font-weight:600;font-size:14px;line-height:1.1}
-.user-btn .papel{font-size:11px;color:var(--muted)}
+.user-btn .info{display:flex;flex-direction:column;min-width:0}
+.user-btn .nome{font-weight:600;font-size:14px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-btn .papel{font-size:11px;color:var(--muted);line-height:1.1;margin-top:1px}
 .login-foot{margin-top:22px;font-size:12px;color:var(--muted)}
 
 /* ---------- APP ---------- */
@@ -310,7 +311,7 @@ function montarLogin(){
   $('userList').innerHTML = USUARIOS.filter(u=>u.ativo!==false).map(u=>`
     <button class="user-btn" onclick="entrar('${u.id}')">
       <span class="avatar" style="background:${u.cor}">${u.nome.split(' ').map(p=>p[0]).slice(0,2).join('')}</span>
-      <span><span class="nome">${esc(u.nome)}</span><span class="papel">${labelPapel(u.papel)}</span></span>
+      <span class="info"><span class="nome">${esc(u.nome)}</span><span class="papel">${labelPapel(u.papel)}</span></span>
     </button>`).join('') || '<div style="grid-column:1/-1;color:var(--muted);font-size:13px">Nenhum usuário ativo. Cadastre pelo banco para começar.</div>';
 }
 async function entrar(id){
