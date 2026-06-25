@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sua apresentação · Equilibrium Med Center</title>
+<link rel="icon" type="image/png" href="data:image/png;base64,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">
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
+<meta name="theme-color" content="#e23b3b">
+
+<style>
+:root{--azul:#1868B0;--azul-2:#12568f;--ciano:#50C0D0;--tinta:#1e2a3a;--muted:#6b7785;--linha:#e4ebf2;--bg:#eef4fa}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;overflow-x:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  background:var(--bg);color:var(--tinta);line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:640px;margin:0 auto;padding:20px 16px 60px}
+.topo{background:linear-gradient(135deg,var(--azul),var(--ciano));border-radius:20px;padding:26px 22px;color:#fff;
+  text-align:center;box-shadow:0 14px 40px rgba(16,40,70,.18)}
+.topo img{width:62px;height:62px;border-radius:14px;background:#fff;padding:6px;object-fit:contain;margin-bottom:12px}
+.topo h1{margin:0 0 6px;font-size:21px;font-weight:700}
+.topo p{margin:0;font-size:13.5px;opacity:.95;max-width:440px;margin:0 auto}
+.bloco{background:#fff;border:1px solid var(--linha);border-radius:16px;padding:20px;margin-top:18px}
+.bloco h2{margin:0 0 4px;font-size:15px;color:var(--azul)}
+.bloco .ajuda{font-size:12.5px;color:var(--muted);margin:0 0 16px}
+.campo{margin-bottom:16px}
+.campo:last-child{margin-bottom:0}
+.campo label{display:block;font-size:13px;font-weight:700;color:var(--tinta);margin-bottom:6px}
+.campo .sub{font-weight:400;color:var(--muted);font-size:12px}
+.campo input,.campo select,.campo textarea{width:100%;border:1px solid var(--linha);border-radius:11px;
+  padding:12px 13px;font-size:14.5px;font-family:inherit;outline:none;background:#f9fbfd;color:var(--tinta)}
+.campo textarea{resize:vertical;min-height:78px;line-height:1.5}
+.campo input:focus,.campo select:focus,.campo textarea:focus{border-color:var(--ciano);background:#fff}
+.cont{font-size:11px;color:var(--muted);text-align:right;margin-top:4px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips label{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--linha);border-radius:999px;
+  padding:8px 13px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;background:#f9fbfd;user-select:none}
+.chips input{display:none}
+.chips label.on{background:#e7f3fb;border-color:var(--ciano);color:var(--azul)}
+/* Prévia */
+.previa{background:linear-gradient(160deg,#fafdff,#f1f7fc);border:1px solid #d9e7f3}
+.card{background:#fff;border:1px solid var(--linha);border-left:5px solid var(--azul);border-radius:14px;padding:18px;
+  box-shadow:0 6px 18px rgba(16,40,70,.06)}
+.card .cab{display:flex;align-items:center;gap:13px;margin-bottom:12px}
+.card .av{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--azul),var(--ciano));
+  color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:21px;flex:none}
+.card .nome{font-size:17px;font-weight:700;line-height:1.2}
+.card .esp{display:inline-block;margin-top:4px;background:#e7f3fb;color:var(--azul);font-size:11.5px;
+  font-weight:700;padding:3px 9px;border-radius:999px}
+.card .frase{font-size:14.5px;font-style:italic;color:var(--azul-2);margin:0 0 12px;line-height:1.45}
+.card .pub{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.card .pub span{font-size:11px;background:#f1f4f8;color:var(--muted);padding:3px 9px;border-radius:999px;font-weight:600}
+.card .par{font-size:13.5px;color:#384655;margin:0 0 9px;line-height:1.5}
+.card .par:last-child{margin-bottom:0}
+.card .par b{color:var(--tinta)}
+.card .vazio{color:#9aa7b4;font-size:13px;text-align:center;padding:18px 0}
+.acoes{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+.acoes button{border:0;border-radius:12px;padding:14px;font-size:14.5px;font-weight:700;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:8px}
+.b-zap{background:#25D366;color:#fff}.b-zap:hover{background:#1fbe5b}
+.b-mail{background:var(--azul);color:#fff}.b-mail:hover{background:var(--azul-2)}
+.b-copy{background:#fff;color:var(--azul);border:1px solid var(--azul)}.b-copy:hover{background:#f1f6fb}
+.b-zap:disabled,.b-mail:disabled,.b-copy:disabled{opacity:.45;cursor:not-allowed}
+.aviso{font-size:12px;color:var(--muted);text-align:center;margin-top:12px;line-height:1.5}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--tinta);
+  color:#fff;padding:12px 20px;border-radius:12px;font-size:13.5px;font-weight:600;opacity:0;pointer-events:none;
+  transition:.25s;z-index:50;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:520px){.wrap{padding:14px 12px 50px}.bloco{padding:16px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topo">
+    <img src="data:image/png;base64,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" alt="Equilibrium Med Center">
+    <h1>Conte um pouco sobre você 💙</h1>
+    <p>Esta apresentação vai compor o seu card individual no nosso painel de atendimento. Escreva com as suas palavras, do seu jeito — é assim que as famílias vão te conhecer antes do primeiro encontro.</p>
+  </div>
+
+  <div class="bloco">
+    <h2>1. Quem é você?</h2>
+    <p class="ajuda">Selecione o seu nome na lista. <b>Não está na lista (administrativo, estágio)?</b> Escolha <b>“Outro”</b> e escreva o seu nome. Os campos seguintes você escreve à vontade.</p>
+    <div class="campo">
+      <label>Seu nome na equipe</label>
+      <select id="fSelect" onchange="aoSelecionar()"><option value="">Selecione…</option><optgroup label="Psiquiatria"><option>Dr. Bruno Caixeta</option><option>Dr. Vitor Tapias</option><option>Dr. Marcus</option><option>Dr. Lucas</option><option>Dr. Wellington</option><option>Dr. Luan Souza</option><option>Dra. Priscila</option><option>Dr. André</option></optgroup><optgroup label="Psicologia"><option>Francisca</option><option>Kênia</option><option>Jéssica</option><option>Sílvia</option><option>Laís</option><option>Gabriela</option><option>Rosana</option><option>Jeniffer</option><option>Vitória</option><option>Yuri</option><option>Michelle</option><option>Mara</option></optgroup><optgroup label="Neuropsicologia"><option>Natália</option><option>Wessilon</option><option>Pâmela</option><option>Emilly</option><option>Taís</option><option>Karolina</option><option>Mariana</option></optgroup><optgroup label="Fonoaudiologia"><option>Hugo</option><option>Aline</option><option>Lara</option></optgroup><optgroup label="Terapia Ocupacional"><option>Eduardo</option></optgroup><optgroup label="Psicomotricidade"><option>Mona</option></optgroup><optgroup label="Psicopedagogia"><option>Ana Maria</option><option>Daiane</option></optgroup><optgroup label="Musicoterapia"><option>Sandra</option></optgroup><optgroup label="Psicologia Adolescência/Infantil"><option>Mayumi</option></optgroup><optgroup label="Terapia ABA"><option>Terapia ABA (8 salas)</option></optgroup><optgroup label="Direção / Coordenação"><option>Michele Cristina</option><option>Niela</option></optgroup><optgroup label="Equipe administrativa"><option>Claudia Virginia</option><option>Cristina Beatriz</option><option>Thais Helena</option><option>Erika Mariana</option><option>Eva Augusta</option><option>Stefany Caroline</option><option>Maria Julia</option><option>Thalita Silveira</option><option>Mikaelly Fonseca</option><option>Cristiane Aparecida</option><option>Taís de Oliveira</option><option>Giovanna Alves</option></optgroup><optgroup label="Estágio"><option>Nickolly Emilly</option><option>Leticia Victoria</option><option>Ana Julia</option><option>Maria Luiza</option><option>Carolina Assis</option><option>Lara Pires</option><option>Maria Eduarda Espindola</option><option>Eduarda Nascimento</option><option>Tifanny Roane</option><option>Italo Bueno</option><option>Marcela Silva</option><option>Amanda Chris</option><option>Natalia Paulino</option><option>Samuel Vinicius</option></optgroup><optgroup label="Estágio — ABA"><option>Isabella Moreira</option><option>Sara Cristina</option><option>Maria Clara</option><option>Gabrielle Silva</option><option>Enzo Tobias</option><option>Ana Livia</option><option>Ana Carolina</option></optgroup><optgroup label="Estágio — Neuropsicologia"><option>Mariana Candida</option><option>Maria Eduarda de Leva</option><option>Anna Luiza</option></optgroup><optgroup label="Estágio — Administrativo"><option>Guilherme Henrique</option><option>Graziella Pereira</option></optgroup><optgroup label="Outros"><option value="__outro__">✏️ Outro / não estou na lista (escrever meu nome)</option></optgroup></select>
+    </div>
+    <div class="campo">
+      <label>Como você prefere ser chamado(a) no card? <span class="sub">(ex.: Dra. Michelle, Mona)</span></label>
+      <input id="fNome" maxlength="40" placeholder="Seu nome de apresentação" oninput="render()">
+    </div>
+    <div class="campo">
+      <label>Sua especialidade ou função</label>
+      <input id="fEsp" maxlength="50" placeholder="Ex.: Psicologia · Recepção · Estagiária de Psicologia" oninput="render()">
+    </div>
+  </div>
+
+  <div class="bloco">
+    <h2>2. Seu jeito de cuidar</h2>
+    <p class="ajuda">Sem campos formais, sem registro nem convênios — só você. Pode ser curtinho.</p>
+    <div class="campo">
+      <label>Uma frase que resume o seu jeito de cuidar <span class="sub">(vira o destaque do card)</span></label>
+      <input id="fFrase" maxlength="140" placeholder="Ex.: Acredito que cada pessoa avança no seu próprio tempo." oninput="render()">
+      <div class="cont"><span id="cFrase">0</span>/140</div>
+    </div>
+    <div class="campo">
+      <label>Quem você atende</label>
+      <div class="chips" id="fPublico">
+        <label><input type="checkbox" value="Crianças" onchange="togChip(this)">Crianças</label>
+        <label><input type="checkbox" value="Adolescentes" onchange="togChip(this)">Adolescentes</label>
+        <label><input type="checkbox" value="Adultos" onchange="togChip(this)">Adultos</label>
+        <label><input type="checkbox" value="Idosos" onchange="togChip(this)">Idosos</label>
+        <label><input type="checkbox" value="Famílias" onchange="togChip(this)">Famílias</label>
+        <label><input type="checkbox" value="Casais" onchange="togChip(this)">Casais</label>
+      </div>
+    </div>
+    <div class="campo">
+      <label>O que mais te motiva no seu trabalho?</label>
+      <textarea id="fMotiva" maxlength="320" placeholder="O que te faz gostar do que você faz?" oninput="render()"></textarea>
+      <div class="cont"><span id="cMotiva">0</span>/320</div>
+    </div>
+    <div class="campo">
+      <label>Como você ajuda quem chega a se sentir à vontade?</label>
+      <textarea id="fAcolhe" maxlength="320" placeholder="O que você gostaria que a pessoa soubesse antes do primeiro encontro?" oninput="render()"></textarea>
+      <div class="cont"><span id="cAcolhe">0</span>/320</div>
+    </div>
+    <div class="campo">
+      <label>Formação, em uma frase <span class="sub">(opcional)</span></label>
+      <input id="fForma" maxlength="160" placeholder="Ex.: Psicóloga, com especialização em terapia infantil." oninput="render()">
+    </div>
+    <div class="campo">
+      <label>Um toque pessoal <span class="sub">(opcional — um hobby, uma paixão)</span></label>
+      <input id="fPessoal" maxlength="160" placeholder="Ex.: Nas horas livres, sou apaixonada por jardinagem." oninput="render()">
+    </div>
+  </div>
+
+  <div class="bloco previa">
+    <h2>Prévia do seu card</h2>
+    <p class="ajuda">É assim, mais ou menos, que a sua apresentação vai aparecer.</p>
+    <div class="card" id="card"></div>
+    <div class="acoes">
+      <button class="b-zap"  id="btnZap"  onclick="enviarZap()" disabled>Enviar pelo WhatsApp</button>
+      <button class="b-mail" id="btnMail" onclick="enviarMail()" disabled>Enviar por e-mail à gestão</button>
+      <button class="b-copy" id="btnCopy" onclick="copiar()" disabled>Copiar minha apresentação</button>
+    </div>
+    <div class="aviso">Ao enviar, a sua apresentação chega à recepção/gestão, que a inclui no painel. Você pode revisar e atualizar quando quiser.</div>
+  </div>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===== Configuração ===== */
+var WHATS_RECEPCAO = "";              /* coloque aqui o WhatsApp da recepção, ex.: "5534999999999" (só números, com 55). Vazio = botão copia o texto. */
+var EMAIL_GESTAO   = "gestaoequilibriummedcenter@gmail.com";
+
+var ROSTER = [["Psiquiatria", ["Dr. Bruno Caixeta", "Dr. Vitor Tapias", "Dr. Marcus", "Dr. Lucas", "Dr. Wellington", "Dr. Luan Souza", "Dra. Priscila", "Dr. André"]], ["Psicologia", ["Francisca", "Kênia", "Jéssica", "Sílvia", "Laís", "Gabriela", "Rosana", "Jeniffer", "Vitória", "Yuri", "Michelle", "Mara"]], ["Neuropsicologia", ["Natália", "Wessilon", "Pâmela", "Emilly", "Taís", "Karolina", "Mariana"]], ["Fonoaudiologia", ["Hugo", "Aline", "Lara"]], ["Terapia Ocupacional", ["Eduardo"]], ["Psicomotricidade", ["Mona"]], ["Psicopedagogia", ["Ana Maria", "Daiane"]], ["Musicoterapia", ["Sandra"]], ["Psicologia Adolescência/Infantil", ["Mayumi"]], ["Terapia ABA", ["Terapia ABA (8 salas)"]], ["Direção / Coordenação", ["Michele Cristina", "Niela"]], ["Equipe administrativa", ["Claudia Virginia", "Cristina Beatriz", "Thais Helena", "Erika Mariana", "Eva Augusta", "Stefany Caroline", "Maria Julia", "Thalita Silveira", "Mikaelly Fonseca", "Cristiane Aparecida", "Taís de Oliveira", "Giovanna Alves"]], ["Estágio", ["Nickolly Emilly", "Leticia Victoria", "Ana Julia", "Maria Luiza", "Carolina Assis", "Lara Pires", "Maria Eduarda Espindola", "Eduarda Nascimento", "Tifanny Roane", "Italo Bueno", "Marcela Silva", "Amanda Chris", "Natalia Paulino", "Samuel Vinicius"]], ["Estágio — ABA", ["Isabella Moreira", "Sara Cristina", "Maria Clara", "Gabrielle Silva", "Enzo Tobias", "Ana Livia", "Ana Carolina"]], ["Estágio — Neuropsicologia", ["Mariana Candida", "Maria Eduarda de Leva", "Anna Luiza"]], ["Estágio — Administrativo", ["Guilherme Henrique", "Graziella Pereira"]]];
+var ESP_DE = {};
+ROSTER.forEach(function(g){ g[1].forEach(function(n){ ESP_DE[n]=g[0]; }); });
+
+function el(id){return document.getElementById(id);}
+var pub=[];
+
+function aoSelecionar(){
+  var n=el('fSelect').value;
+  if(n==='__outro__'){ el('fNome').value=''; el('fEsp').value=''; el('fNome').focus(); }
+  else if(n){ el('fNome').value=n; el('fEsp').value=ESP_DE[n]||''; }
+  render();
+}
+function togChip(cb){
+  cb.parentElement.classList.toggle('on',cb.checked);
+  pub=[].slice.call(document.querySelectorAll('#fPublico input:checked')).map(function(x){return x.value;});
+  render();
+}
+function inicial(nome){
+  var s=(nome||'').replace(/^(dr\.?|dra\.?)\s*/i,'').trim();
+  return (s?s[0]:'?').toUpperCase();
+}
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function dados(){
+  return {
+    nome:el('fNome').value.trim(), especialidade:el('fEsp').value.trim(),
+    frase:el('fFrase').value.trim(), publico:pub.slice(),
+    motivacao:el('fMotiva').value.trim(), acolhimento:el('fAcolhe').value.trim(),
+    formacao:el('fForma').value.trim(), pessoal:el('fPessoal').value.trim()
+  };
+}
+function completo(d){
+  return d.nome && d.especialidade && (d.frase || d.motivacao || d.acolhimento);
+}
+
+function render(){
+  el('cFrase').textContent=el('fFrase').value.length;
+  el('cMotiva').textContent=el('fMotiva').value.length;
+  el('cAcolhe').textContent=el('fAcolhe').value.length;
+  var d=dados();
+  var c=el('card');
+  if(!d.nome && !d.especialidade && !d.frase){
+    c.innerHTML='<div class="vazio">Preencha os campos acima e a sua apresentação aparece aqui. ✨</div>';
+  } else {
+    var h='<div class="cab"><div class="av">'+esc(inicial(d.nome))+'</div>'+
+      '<div><div class="nome">'+(esc(d.nome)||'Seu nome')+'</div>'+
+      (d.especialidade?'<span class="esp">'+esc(d.especialidade)+'</span>':'')+'</div></div>';
+    if(d.frase) h+='<p class="frase">“'+esc(d.frase)+'”</p>';
+    if(d.publico.length) h+='<div class="pub">'+d.publico.map(function(p){return '<span>'+esc(p)+'</span>';}).join('')+'</div>';
+    if(d.motivacao) h+='<p class="par"><b>O que me move:</b> '+esc(d.motivacao)+'</p>';
+    if(d.acolhimento) h+='<p class="par"><b>No nosso primeiro encontro:</b> '+esc(d.acolhimento)+'</p>';
+    if(d.formacao) h+='<p class="par"><b>Formação:</b> '+esc(d.formacao)+'</p>';
+    if(d.pessoal) h+='<p class="par"><b>Um pouco de mim:</b> '+esc(d.pessoal)+'</p>';
+    c.innerHTML=h;
+  }
+  var ok=completo(d);
+  el('btnZap').disabled=!ok; el('btnMail').disabled=!ok; el('btnCopy').disabled=!ok;
+}
+
+function textoEnvio(){
+  var d=dados(); var L=[];
+  L.push('✨ Apresentação — '+d.nome+' · '+d.especialidade);
+  L.push('Equilibrium Med Center');
+  L.push('');
+  if(d.frase) L.push('“'+d.frase+'”');
+  if(d.publico.length) L.push('Atende: '+d.publico.join(', '));
+  if(d.motivacao) L.push('O que me move: '+d.motivacao);
+  if(d.acolhimento) L.push('No primeiro encontro: '+d.acolhimento);
+  if(d.formacao) L.push('Formação: '+d.formacao);
+  if(d.pessoal) L.push('Um pouco de mim: '+d.pessoal);
+  L.push('');
+  L.push('—— dados para o painel (não apagar) ——');
+  L.push(JSON.stringify(d));
+  return L.join('\n');
+}
+
+function toast(m){var t=el('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('show');},2400);}
+
+function copiar(){
+  var txt=textoEnvio();
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(function(){toast('Apresentação copiada 💙 Agora é só colar para a recepção.');},function(){fallbackCopy(txt);});
+  } else { fallbackCopy(txt); }
+}
+function fallbackCopy(txt){
+  var ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';
+  document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast('Apresentação copiada 💙');}catch(e){toast('Não consegui copiar — selecione e copie manualmente.');}
+  document.body.removeChild(ta);
+}
+function enviarMail(){
+  var d=dados();
+  var assunto='Apresentação - '+d.nome+' ('+d.especialidade+')';
+  var corpo=textoEnvio();
+  window.location.href='mailto:'+EMAIL_GESTAO+'?subject='+encodeURIComponent(assunto)+'&body='+encodeURIComponent(corpo);
+}
+function enviarZap(){
+  var txt=textoEnvio();
+  if(WHATS_RECEPCAO){
+    window.open('https://wa.me/'+WHATS_RECEPCAO+'?text='+encodeURIComponent(txt),'_blank');
+  } else if(navigator.share){
+    navigator.share({title:'Minha apresentação',text:txt}).catch(function(){});
+  } else {
+    copiar(); toast('Apresentação copiada 💙 Cole no WhatsApp da recepção.');
+  }
+}
+
+/* Pré-seleção via link: apresentacao.html?p=Nome */
+(function(){
+  try{
+    var p=new URLSearchParams(location.search).get('p');
+    if(p){
+      var alvo=null;
+      ROSTER.forEach(function(g){g[1].forEach(function(n){ if(n.toLowerCase()===p.toLowerCase()) alvo=n; });});
+      if(alvo){ el('fSelect').value=alvo; aoSelecionar(); }
+      else { el('fSelect').value='__outro__'; el('fNome').value=p; el('fEsp').value=''; render(); }
+    }
+  }catch(e){}
+  render();
+})();
+</script>
+</body>
+</html>
