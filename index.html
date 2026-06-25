@@ -345,6 +345,22 @@ body.autenticado #loginGate{display:none}
 .acs-hash input{flex:1;min-width:160px;border:1px solid var(--linha);border-radius:9px;padding:9px 11px;font-size:13px;outline:none}
 .acs-hash button{border:0;border-radius:9px;padding:9px 14px;background:var(--azul);color:#fff;font-weight:700;font-size:13px;cursor:pointer}
 .acs-hash code{display:block;margin-top:10px;background:#fff;border:1px dashed var(--linha);border-radius:8px;padding:10px;font-size:12px;word-break:break-all;color:#334155}
+/* Apresentações da equipe */
+#navApres{background:#eef9fb;color:#0c6e80;font-weight:700;margin-bottom:4px;border:1px solid #cdeef3}
+#navApres:hover{background:#e0f4f8}
+#navApres.ativo{background:#e0f4f8;box-shadow:inset 4px 0 0 var(--ciano)}
+#navApres .flowicon{stroke:#0c6e80;opacity:1}
+.ap-aviso{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:11px;padding:11px 14px;font-size:12.5px;margin:6px 0 18px}
+.ap-rotulo{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin:22px 0 8px}
+.ap-link{display:flex;gap:8px;flex-wrap:wrap;align-items:center;background:#f7fbfd;border:1px solid var(--linha);border-radius:12px;padding:12px}
+.ap-link code{flex:1;min-width:200px;font-size:13px;color:#0c5a8c;word-break:break-all}
+.ap-link button{border:0;border-radius:9px;padding:10px 15px;font-weight:700;font-size:13px;cursor:pointer;background:var(--azul);color:#fff;white-space:nowrap}
+.ap-link button.sec{background:#fff;color:var(--azul);border:1px solid var(--azul)}
+.ap-link button:hover{filter:brightness(.96)}
+.ap-msg{background:#f9fbfd;border:1px dashed var(--linha);border-radius:12px;padding:14px;white-space:pre-wrap;font-size:13.5px;color:#33414f;line-height:1.55;margin-top:8px}
+.ap-sel{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.ap-sel select{flex:1;min-width:200px;border:1px solid var(--linha);border-radius:10px;padding:11px 12px;font-size:14px;background:#f9fbfd;font-family:inherit;outline:none}
+.ap-sel select:focus{border-color:var(--ciano);background:#fff}
 </style>
 </head>
 <body>
@@ -393,6 +409,10 @@ body.autenticado #loginGate{display:none}
         <svg class="flowicon" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2.2"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.3 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.3a2 2 0 0 0-3.4 0z"/></svg>
         Lacunas (sem resposta)
         <span class="cont" id="lacCont">0</span>
+      </button>
+      <button class="navitem" id="navApres" onclick="abrirApres()">
+        <svg class="flowicon" viewBox="0 0 24 24" fill="none" stroke="#0c6e80" stroke-width="2.2"><path d="M4 19V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v13"/><path d="M2 19h20"/><circle cx="12" cy="10" r="2.2"/><path d="M8.5 16a3.5 3.5 0 0 1 7 0"/></svg>
+        Apresentações da equipe
       </button>
       <button class="navitem" id="navAcessos" onclick="abrirAcessos()" style="display:none">
         <svg class="flowicon" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
@@ -634,6 +654,7 @@ function navSidebar(){
   const _nw=document.getElementById('navWhats'); if(_nw) _nw.className='navitem'+(atual.tipo==='whats'?' ativo':'');
   const _nl=document.getElementById('navLacunas'); if(_nl) _nl.className='navitem'+(atual.tipo==='lacunas'?' ativo':'');
   const _na=document.getElementById('navAcessos'); if(_na){ _na.style.display=(SESSAO&&SESSAO.admin)?'':'none'; _na.className='navitem'+(atual.tipo==='acessos'?' ativo':''); }
+  const _ap=document.getElementById('navApres'); if(_ap) _ap.className='navitem'+(atual.tipo==='apresent'?' ativo':'');
   atualizaLacCont();
 }
 function fechaMenuMobile(){document.getElementById('side').classList.remove('aberta');}
@@ -671,6 +692,8 @@ function render(){
     c.innerHTML=renderLacunas();
   } else if(atual.tipo==='acessos'){
     c.innerHTML=renderAcessos();
+  } else if(atual.tipo==='apresent'){
+    c.innerHTML=renderApres();
   } else if(atual.tipo==='esp'){
     c.innerHTML=renderEspIndex();
   } else if(atual.tipo==='espdet'){
@@ -1024,6 +1047,48 @@ function renderLacunas(){
       '</div>';
     }).join('');
   }
+  return h;
+}
+
+/* ====================== APRESENTAÇÕES DA EQUIPE ====================== */
+function apresLink(){ return location.href.replace(/[?#].*$/,'').replace(/[^/]*$/,'')+'apresentacao.html'; }
+function apresLinkProf(nome){ return apresLink()+'?p='+encodeURIComponent(nome); }
+function apresMsg(link,nome){
+  var oi = nome? ('Oi, '+nome+'! 💙') : 'Oi, pessoal! 💙';
+  return oi+' Estamos montando a apresentação individual de cada um no nosso painel de atendimento. É rapidinho e do seu jeito — você escreve com as suas palavras. Acesse, escolha o seu nome e preencha:\n'+link+'\nAo final, é só tocar em "Enviar" que chega aqui pra gente. Obrigado(a)! 😊';
+}
+function abrirApres(){ atual={tipo:'apresent'}; render(); fechaMenuMobile(); var ct=document.getElementById('content'); if(ct) ct.scrollTop=0; }
+function copiarTxt(t,msg){ if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(function(){toast(msg||'Copiado');},function(){toast('Não foi possível copiar');}); } else { toast('Não foi possível copiar'); } }
+function copiarLinkGeral(){ copiarTxt(apresLink(),'Link copiado 💙'); }
+function copiarMsgGeral(){ copiarTxt(apresMsg(apresLink(),''),'Mensagem copiada — cole no WhatsApp'); }
+function apresProfMudou(){
+  var n=document.getElementById('apProf').value, box=document.getElementById('apProfBox');
+  if(!n){ box.style.display='none'; return; }
+  box.style.display=''; document.getElementById('apProfLink').textContent=apresLinkProf(n);
+}
+function copiarLinkProf(){ var n=document.getElementById('apProf').value; if(!n){toast('Escolha um profissional');return;} copiarTxt(apresLinkProf(n),'Link copiado 💙'); }
+function copiarMsgProf(){ var n=document.getElementById('apProf').value; if(!n){toast('Escolha um profissional');return;} copiarTxt(apresMsg(apresLinkProf(n),n.replace(/^(dr\.?|dra\.?)\s*/i,'')),'Convite copiado'); }
+function renderApres(){
+  document.getElementById('crumb').textContent='Apresentações da equipe';
+  var link=apresLink();
+  var h='<div class="eyebrow" style="color:#0c6e80">Ferramenta</div>'+
+    '<div class="h1">Link de apresentação da equipe 🪪</div>'+
+    '<div class="sub">Envie este link para cada profissional (e administrativo/estágio) se apresentar. A pessoa abre, escolhe o nome e preenche — a apresentação volta pra você por WhatsApp, e-mail ou cópia.</div>';
+  h+='<div class="ap-aviso">⚠️ Para o link funcionar, o arquivo <b>apresentacao.html</b> precisa estar publicado no GitHub, na mesma pasta do painel.</div>';
+  h+='<div class="ap-rotulo">Link para todos (o mesmo para a equipe inteira)</div>';
+  h+='<div class="ap-link"><code>'+esc(link)+'</code>'+
+     '<button onclick="copiarLinkGeral()">Copiar link</button>'+
+     '<button class="sec" onclick="window.open(apresLink(),\'_blank\')">Abrir</button></div>';
+  h+='<div class="ap-rotulo">Mensagem pronta para enviar</div>';
+  h+='<div class="ap-msg">'+esc(apresMsg(link,''))+'</div>';
+  h+='<div style="margin-top:10px"><button style="border:1px solid var(--azul);color:var(--azul);background:#fff;border-radius:9px;padding:10px 15px;font-weight:700;cursor:pointer" onclick="copiarMsgGeral()">📋 Copiar mensagem</button></div>';
+  h+='<div class="ap-rotulo">Link personalizado por profissional (abre já com o nome)</div>';
+  var opts='<option value="">Escolher profissional…</option>';
+  EQUIPE.forEach(function(g){ opts+='<optgroup label="'+esc(g.esp)+'">'+g.profs.map(function(p){return '<option>'+esc(p.nome)+'</option>';}).join('')+'</optgroup>'; });
+  h+='<div class="ap-sel"><select id="apProf" onchange="apresProfMudou()">'+opts+'</select></div>';
+  h+='<div id="apProfBox" style="display:none;margin-top:10px"><div class="ap-link"><code id="apProfLink"></code>'+
+     '<button onclick="copiarLinkProf()">Copiar link</button>'+
+     '<button class="sec" onclick="copiarMsgProf()">Copiar convite</button></div></div>';
   return h;
 }
 
