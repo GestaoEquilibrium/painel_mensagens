@@ -172,6 +172,15 @@ button{font-family:inherit;cursor:pointer}
   font-size:14px;outline:none;font-family:inherit;background:#f9fbfd}
 .campo input:focus,.campo select:focus{border-color:var(--ciano);background:#fff}
 .linha2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.campo-conversa{margin:0 0 16px;padding:12px 12px 12px 14px;border-radius:12px;
+  background:#f0faf4;border:1px solid #cdeedd;border-left:4px solid var(--verde)}
+.campo-conversa label{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;
+  color:#0c7a52;margin-bottom:6px;letter-spacing:.3px}
+.campo-conversa label svg{width:15px;height:15px}
+.campo-conversa textarea{width:100%;border:1px solid #bfe6d2;border-radius:10px;padding:10px 11px;
+  font-size:13.5px;outline:none;font-family:inherit;background:#fff;resize:vertical;min-height:74px;max-height:200px;line-height:1.4}
+.campo-conversa textarea:focus{border-color:var(--verde)}
+.campo-conversa .dica{font-size:11px;color:#3f8e6c;margin-top:5px}
 .modal .rodape{padding:8px 24px 22px;display:flex;gap:10px}
 .modal .rodape button{flex:1;border:0;border-radius:11px;padding:13px;font-size:14px;font-weight:700}
 .modal .rodape .pular{flex:none;background:#f1f4f8;color:var(--muted)}
@@ -326,6 +335,11 @@ button{font-family:inherit;cursor:pointer}
       <p>Preencha para que os balões já saiam prontos. Você pode editar tudo depois.</p>
     </div>
     <div class="form">
+      <div class="campo-conversa">
+        <label><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Conversa do paciente (opcional)</label>
+        <textarea id="fConversa" placeholder="Cole aqui a conversa do paciente para o painel sugerir os melhores balões…"></textarea>
+        <div class="dica">Ao salvar, abrimos o simulador já com as respostas sugeridas para esta conversa.</div>
+      </div>
       <div class="campo">
         <label>Nome do atendente (você)</label>
         <input id="fAtendente" placeholder="Ex.: Ana">
@@ -368,7 +382,7 @@ button{font-family:inherit;cursor:pointer}
 <script>
 /* ====================== CONTEXTO ====================== */
 const KEYS = ['atendente','paciente','profissional','especialidade','data','hora','motivo'];
-let CTX = {atendente:'',paciente:'',profissional:'',especialidade:'',data:'',hora:'',motivo:''};
+let CTX = {atendente:'',paciente:'',profissional:'',especialidade:'',data:'',hora:'',motivo:'',conversa:''};
 const TOKENMAP={'NOME DO ATENDENTE':'atendente','NOME DO PACIENTE':'paciente','NOME DO PACIENTE/RESPONSÁVEL':'paciente','PROFISSIONAL':'profissional','ESPECIALIDADE':'especialidade','DATA':'data','HORÁRIO':'hora','MOTIVO':'motivo'};
 const AVISO_BASE='📢 *Aviso importante — Equilibrium Med Center*\n\nEm virtude de *[MOTIVO]*, nossa clínica estará *fechada para atendimento ao público*.\n\nRetomaremos os atendimentos normalmente logo após. Qualquer dúvida, é só deixar sua mensagem que retornamos assim que possível. 💙';
 try{ const s=localStorage.getItem('equi_ctx'); if(s) CTX=Object.assign(CTX,JSON.parse(s)); }catch(e){}
@@ -814,6 +828,7 @@ function waLimpar(){waChat=[];waLast=[];waRenderBody();const h=document.getEleme
 
 /* ====================== MODAL ====================== */
 function abrirModal(){
+  document.getElementById('fConversa').value=CTX.conversa||'';
   document.getElementById('fAtendente').value=CTX.atendente;
   document.getElementById('fPaciente').value=CTX.paciente;
   document.getElementById('fProfissional').value=CTX.profissional;
@@ -825,6 +840,7 @@ function abrirModal(){
 }
 function fecharModal(){document.getElementById('overlay').classList.add('escondido');}
 function salvarDados(){
+  const conversa=document.getElementById('fConversa').value.trim();
   CTX={
     atendente:document.getElementById('fAtendente').value.trim(),
     paciente:document.getElementById('fPaciente').value.trim(),
@@ -832,10 +848,19 @@ function salvarDados(){
     especialidade:document.getElementById('fEspecialidade').value.trim(),
     data:document.getElementById('fData').value.trim(),
     hora:document.getElementById('fHora').value.trim(),
-    motivo:document.getElementById('fMotivo').value.trim()
+    motivo:document.getElementById('fMotivo').value.trim(),
+    conversa:conversa
   };
-  try{localStorage.setItem('equi_ctx',JSON.stringify(CTX));}catch(e){}
-  atualizaUser();fecharModal();render();toast('Dados aplicados aos balões');
+  try{const p=Object.assign({},CTX);delete p.conversa;localStorage.setItem('equi_ctx',JSON.stringify(p));}catch(e){}
+  atualizaUser();fecharModal();
+  if(conversa){
+    waChat=[{from:'in',text:conversa,t:waAgora()}];
+    waLast=matchBaloes(conversa);
+    abrirWhats();
+    toast('Conversa enviada ao simulador');
+  } else {
+    render();toast('Dados aplicados aos balões');
+  }
 }
 function atualizaContador(){
   const totB=CATS.reduce((s,c)=>s+c.baloes.length,0);
