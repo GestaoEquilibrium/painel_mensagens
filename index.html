@@ -163,6 +163,14 @@ input,textarea,select{font-family:inherit;font-size:14px;color:var(--texto)}
 .uhint{padding:10px 16px;font-size:12px;color:var(--muted);background:#f8fafc}
 
 /* apresentações */
+.apcard.rasc{border-left-color:var(--warn);background:#fffdf8}
+.aptopbar{grid-column:1/-1;display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-bottom:4px}
+.aptag{font-size:10.5px;font-weight:700;border-radius:6px;padding:3px 8px}
+.aptag.rasc{background:#fdf1e3;color:var(--warn)}
+.aptag.pub{background:#e7f0fa;color:var(--azul)}
+.apfiltro{display:inline-flex;gap:6px;margin-left:auto}
+.apfiltro button{border:1px solid var(--linha-2);background:#fff;border-radius:9px;padding:6px 11px;font-size:12.5px;font-weight:600;color:var(--muted)}
+.apfiltro button.on{border-color:var(--azul);color:var(--azul);background:#eef5fc}
 .apcard{background:var(--card);border:1px solid var(--linha);border-radius:var(--raio);box-shadow:var(--sombra);border-left:5px solid var(--azul);display:flex;flex-direction:column;overflow:hidden}
 .apcab{display:flex;align-items:center;gap:12px;padding:15px 16px 0}
 .apav{width:50px;height:50px;border-radius:50%;flex:none;background:linear-gradient(135deg,var(--azul),var(--ciano));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px}
@@ -299,6 +307,7 @@ let ME=null, view={tipo:'todos'};
 let USUARIOS=[], CATEGORIAS=[], VARIAVEIS=[], CARDS=[], AVISO=null;
 let FAVS=new Set(), VOTES=new Set(), CTX={};
 let APRES=[];
+const APRES_FORM_URL='https://gestaoequilibrium.github.io/painel_mensagens/apresentacao.html';
 const PUBLICOS=['Crianças','Adolescentes','Adultos','Idosos','Famílias','Casais'];
 var ROSTER = [["Psiquiatria", ["Dr. Bruno Caixeta", "Dr. Vitor Tapias", "Dr. Marcus", "Dr. Lucas", "Dr. Wellington", "Dr. Luan Souza", "Dra. Priscila", "Dr. André"]], ["Psicologia", ["Francisca", "Kênia", "Jéssica", "Sílvia", "Laís", "Gabriela", "Rosana", "Jeniffer", "Vitória", "Yuri", "Michelle", "Mara"]], ["Neuropsicologia", ["Natália", "Wessilon", "Pâmela", "Emilly", "Taís", "Karolina", "Mariana"]], ["Fonoaudiologia", ["Hugo", "Aline", "Lara"]], ["Terapia Ocupacional", ["Eduardo"]], ["Psicomotricidade", ["Mona"]], ["Psicopedagogia", ["Ana Maria", "Daiane"]], ["Musicoterapia", ["Sandra"]], ["Psicologia Adolescência/Infantil", ["Mayumi"]], ["Terapia ABA", ["Terapia ABA (8 salas)"]], ["Direção / Coordenação", ["Michele Cristina", "Niela"]], ["Equipe administrativa", ["Claudia Virginia", "Cristina Beatriz", "Thais Helena", "Erika Mariana", "Eva Augusta", "Stefany Caroline", "Maria Julia", "Thalita Silveira", "Mikaelly Fonseca", "Cristiane Aparecida", "Taís de Oliveira", "Giovanna Alves"]], ["Estágio", ["Nickolly Emilly", "Leticia Victoria", "Ana Julia", "Maria Luiza", "Carolina Assis", "Lara Pires", "Maria Eduarda Espindola", "Eduarda Nascimento", "Tifanny Roane", "Italo Bueno", "Marcela Silva", "Amanda Chris", "Natalia Paulino", "Samuel Vinicius"]], ["Estágio — ABA", ["Isabella Moreira", "Sara Cristina", "Maria Clara", "Gabrielle Silva", "Enzo Tobias", "Ana Livia", "Ana Carolina"]], ["Estágio — Neuropsicologia", ["Mariana Candida", "Maria Eduarda de Leva", "Anna Luiza"]], ["Estágio — Administrativo", ["Guilherme Henrique", "Graziella Pereira"]]];
 const ESP_DE={}; ROSTER.forEach(g=>g[1].forEach(n=>ESP_DE[n]=g[0]));
@@ -638,21 +647,53 @@ function apTexto(a){
 function renderApresentacoes(){
   $('crumb').textContent='Apresentações'; $('avisoWrap').innerHTML='';
   const q=$('busca').value.trim().toLowerCase();
+  const rascunhos=APRES.filter(a=>a.status==='rascunho').length;
   let lista=APRES.slice();
+  if(apFiltro==='rascunho') lista=lista.filter(a=>a.status==='rascunho');
+  else if(apFiltro==='publicada') lista=lista.filter(a=>a.status!=='rascunho');
   if(q) lista=lista.filter(a=>(a.nome+' '+(a.especialidade||'')+' '+(a.frase||'')+' '+(a.motivacao||'')).toLowerCase().includes(q));
-  $('contagem').textContent = lista.length+(lista.length===1?' apresentação':' apresentações');
+  $('contagem').textContent = lista.length+(lista.length===1?' apresentação':' apresentações')+(rascunhos&&ME.papel==='administrador'?' · '+rascunhos+' aguardando publicação':'');
+  const barra = `<div class="aptopbar">
+      <button class="btn" onclick="enviarFormulario()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7Z"/></svg> Enviar para responder</button>
+      <div class="apfiltro">
+        <button class="${apFiltro==='todas'?'on':''}" onclick="apSetFiltro('todas')">Todas</button>
+        <button class="${apFiltro==='publicada'?'on':''}" onclick="apSetFiltro('publicada')">Publicadas</button>
+        <button class="${apFiltro==='rascunho'?'on':''}" onclick="apSetFiltro('rascunho')">Rascunhos${rascunhos?' ('+rascunhos+')':''}</button>
+      </div></div>`;
   if(!lista.length){
-    $('grid').innerHTML = `<div class="apvazio"><b style="display:block;color:var(--texto);font-size:17px;margin-bottom:5px">Nenhuma apresentação ainda</b>Clique em “Nova apresentação” para cadastrar a primeira.</div>`;
+    $('grid').innerHTML = barra+`<div class="apvazio"><b style="display:block;color:var(--texto);font-size:17px;margin-bottom:5px">Nada aqui ainda</b>Use “Enviar para responder” para um profissional preencher, ou “Nova apresentação” para cadastrar você mesmo.</div>`;
   } else {
-    $('grid').innerHTML = lista.map(apCardHTML).join('');
+    $('grid').innerHTML = barra + lista.map(apCardHTML).join('');
   }
-  // botão "Novo card" da topbar vira "Nova apresentação" enquanto estiver nesta seção? Mantemos ambos via botão próprio:
 }
+function apSetFiltro(f){ apFiltro=f; renderApresentacoes(); }
+function enviarFormulario(){
+  const ov=document.createElement('div'); ov.className='overlay'; ov.id='ovEnv';
+  const sel='<option value="">Sem nome pré-preenchido</option>'+ROSTER.map(g=>'<optgroup label="'+esc(g[0])+'">'+g[1].map(n=>'<option>'+esc(n)+'</option>').join('')+'</optgroup>').join('');
+  ov.innerHTML=`<div class="modal" style="max-width:460px">
+    <div class="modal-h"><h2>Enviar para responder</h2><button class="x" onclick="document.getElementById('ovEnv').remove()">×</button></div>
+    <div class="modal-b">
+      <p style="font-size:13.5px;color:var(--muted);margin:6px 0 2px">Gere o link do formulário para o profissional preencher a própria apresentação. A resposta volta como rascunho aqui.</p>
+      <label class="flbl">Pré-preencher o nome (opcional)</label>
+      <select id="envNome">${sel}</select>
+      <label class="flbl">Link</label>
+      <input type="text" id="envLink" readonly value="${APRES_FORM_URL}" onclick="this.select()" style="font-size:12.5px">
+    </div>
+    <div class="modal-f">
+      <button class="btn" onclick="copiarLink()">Copiar link</button>
+      <button class="btn btn-primary" onclick="zapLink()">Enviar no WhatsApp</button>
+    </div></div>`;
+  $('app').appendChild(ov);
+  const sl=$('envNome'); sl.onchange=()=>{ const n=sl.value; $('envLink').value = n? APRES_FORM_URL+'?p='+encodeURIComponent(n) : APRES_FORM_URL; };
+}
+function copiarLink(){ const l=$('envLink').value; navigator.clipboard?.writeText(l).catch(()=>{}); toast('Link copiado'); }
+function zapLink(){ const l=$('envLink').value; const msg='Oi! 😊 Quando puder, preenche a sua apresentação para o nosso painel de atendimento: '+l+' 💙'; window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank'); }
 function apCardHTML(a){
   const podeDel = ME.papel==='administrador' || a.criado_por===ME.id;
-  return `<div class="card apcard">
+  const rasc = a.status==='rascunho';
+  return `<div class="card apcard ${rasc?'rasc':''}">
     <div class="apcab"><div class="apav">${esc(inicialNome(a.nome))}</div>
-      <div><div class="apnome">${esc(a.nome)}</div>${a.especialidade?'<span class="apesp">'+esc(a.especialidade)+'</span>':''}</div></div>
+      <div><div class="apnome">${esc(a.nome)} ${rasc?'<span class="aptag rasc">Rascunho</span>':''}</div>${a.especialidade?'<span class="apesp">'+esc(a.especialidade)+'</span>':''}</div></div>
     ${a.frase?'<p class="apfrase">“'+esc(a.frase)+'”</p>':''}
     ${(a.publico&&a.publico.length)?'<div class="appub">'+a.publico.map(p=>'<span>'+esc(p)+'</span>').join('')+'</div>':''}
     ${a.motivacao?'<p class="appar"><b>O que me move:</b> '+esc(a.motivacao)+'</p>':''}
@@ -660,7 +701,7 @@ function apCardHTML(a){
     ${a.formacao?'<p class="appar"><b>Formação:</b> '+esc(a.formacao)+'</p>':''}
     ${a.pessoal?'<p class="appar"><b>Um pouco de mim:</b> '+esc(a.pessoal)+'</p>':''}
     <div class="card-f">
-      <button class="copy" onclick="apCopiar('${a.id}',this)">Copiar</button>
+      ${(rasc && ME.papel==='administrador')?`<button class="copy" style="background:var(--ok)" onclick="publicarApresentacao('${a.id}')">Publicar</button>`:`<button class="copy" onclick="apCopiar('${a.id}',this)">Copiar</button>`}
       <button class="zap" onclick="apZap('${a.id}')" title="Abrir no WhatsApp"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.7-.1-.4-.1-.9-.3-1.6-.6-2.8-1.2-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 .9-2.2.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.4 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1l.6-.8c.2-.2.4-.2.6-.1l1.7.8c.3.2.5.3.5.4.1.1.1.6-.1 1.2Z"/></svg></button>
       <button class="iconbtn" onclick="abrirApresentacao('${a.id}')" title="Editar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>
       ${podeDel?`<button class="iconbtn" onclick="excluirApresentacao('${a.id}')" title="Excluir"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>`:''}
@@ -673,6 +714,7 @@ function apCopiar(id,btn){
 }
 function apZap(id){ const a=APRES.find(x=>x.id===id); window.open('https://wa.me/?text='+encodeURIComponent(apTexto(a)),'_blank'); toast('Abrindo no WhatsApp…'); }
 
+let apFiltro='todas';
 let editApId=null;
 function abrirApresentacao(id){
   editApId=id||null;
@@ -729,6 +771,12 @@ async function salvarApresentacao(){
   fecharApresentacao();
   const ap=await sb.from('apresentacoes').select('*').order('nome'); APRES=ap.data||[];
   montarNav(); renderApresentacoes();
+}
+async function publicarApresentacao(id){
+  const {error}=await sb.from('apresentacoes').update({status:'publicada',atualizado_por:ME.id,atualizado_em:new Date().toISOString()}).eq('id',id);
+  if(error){ toast('Erro ao publicar'); return; }
+  const ap=await sb.from('apresentacoes').select('*').order('nome'); APRES=ap.data||[];
+  montarNav(); renderApresentacoes(); toast('Apresentação publicada 💙');
 }
 async function excluirApresentacao(id){
   if(!confirm('Excluir esta apresentação? Esta ação não pode ser desfeita.')) return;
