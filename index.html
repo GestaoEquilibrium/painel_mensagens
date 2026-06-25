@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Painel de Mensagens — Equilibrium Med Center</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 16 L16 4 A12 12 0 0 1 28 16 Z' fill='%2325D366'/%3E%3Cpath d='M16 16 L28 16 A12 12 0 0 1 16 28 Z' fill='%231868B0'/%3E%3Cpath d='M16 16 L16 28 A12 12 0 0 1 4 16 Z' fill='%2350C0D0'/%3E%3Cpath d='M16 16 L4 16 A12 12 0 0 1 16 4 Z' fill='%2325D366'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20100%20100%27%3E%3Cpath%20d%3D%27M50%2C50C49%2C43%2047%2C28%2051%2C18C53%2C12%2058%2C11%2062%2C15C71%2C23%2079%2C34%2076%2C43C73%2C51%2063%2C49%2057%2C49C53%2C49%2051%2C50%2050%2C50Z%27%20fill%3D%27%231868B0%27%20transform%3D%27rotate%280%2050%2050%29%27/%3E%3Cpath%20d%3D%27M50%2C50C49%2C43%2047%2C28%2051%2C18C53%2C12%2058%2C11%2062%2C15C71%2C23%2079%2C34%2076%2C43C73%2C51%2063%2C49%2057%2C49C53%2C49%2051%2C50%2050%2C50Z%27%20fill%3D%27%2350C0D0%27%20transform%3D%27rotate%2890%2050%2050%29%27/%3E%3Cpath%20d%3D%27M50%2C50C49%2C43%2047%2C28%2051%2C18C53%2C12%2058%2C11%2062%2C15C71%2C23%2079%2C34%2076%2C43C73%2C51%2063%2C49%2057%2C49C53%2C49%2051%2C50%2050%2C50Z%27%20fill%3D%27%231868B0%27%20transform%3D%27rotate%28180%2050%2050%29%27/%3E%3Cpath%20d%3D%27M50%2C50C49%2C43%2047%2C28%2051%2C18C53%2C12%2058%2C11%2062%2C15C71%2C23%2079%2C34%2076%2C43C73%2C51%2063%2C49%2057%2C49C53%2C49%2051%2C50%2050%2C50Z%27%20fill%3D%27%2350C0D0%27%20transform%3D%27rotate%28270%2050%2050%29%27/%3E%3C/svg%3E">
 <style>
 :root{
   --azul:#1868B0; --azul-2:#0f4d86; --ciano:#50C0D0;
@@ -156,6 +156,21 @@ button{font-family:inherit;cursor:pointer}
 .modal .rodape .salvar{background:var(--azul);color:#fff}
 .modal .rodape .salvar:hover{background:var(--azul-2)}
 
+
+.logo-tile{width:46px;height:46px;background:#fff;border-radius:13px;flex:none;display:flex;
+  align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(0,0,0,.18)}
+.logo-tile svg{width:36px;height:36px}
+.prof-meta{padding:2px 14px 0;font-size:12.5px;color:var(--muted)}
+.prof-meta b{color:#33404f;font-weight:600}
+.prof-dias{display:flex;flex-wrap:wrap;gap:5px;padding:8px 14px 4px}
+.diac{font-size:11px;font-weight:700;background:#eef6fd;color:var(--azul);border-radius:6px;padding:2px 7px}
+.rqe{font-size:10px;font-weight:800;letter-spacing:.4px;padding:3px 7px;border-radius:20px;margin-left:auto}
+.rqe.sim{background:#e8f7ee;color:#1d7a45}
+.rqe.nao{background:#fff3e6;color:#b5701b}
+.prof-enr{padding:8px 14px 4px;display:grid;gap:6px}
+.enr-row{display:flex;align-items:baseline;gap:7px;font-size:12px}
+.enr-row .lbl{color:var(--muted);font-weight:700;min-width:74px;flex:none}
+.amarelo{background:#fff8df!important;border-color:#e9d27a!important;color:#7a5d12!important}
 .vazio{text-align:center;color:var(--muted);padding:60px 20px}
 .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--texto);color:#fff;
   padding:11px 20px;border-radius:30px;font-size:13.5px;z-index:80;opacity:0;transition:opacity .25s;pointer-events:none}
@@ -173,12 +188,13 @@ button{font-family:inherit;cursor:pointer}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><path id="blade" d="M50,50C49,43 47,28 51,18C53,12 58,11 62,15C71,23 79,34 76,43C73,51 63,49 57,49C53,49 51,50 50,50Z"/></defs></svg>
 <div class="app">
 
   <!-- SIDEBAR -->
   <aside class="side" id="side">
     <div class="brand">
-      <svg viewBox="0 0 32 32"><path d="M16 16 L16 3 A13 13 0 0 1 29 16 Z" fill="#bfe9f0"/><path d="M16 16 L29 16 A13 13 0 0 1 16 29 Z" fill="#ffffff"/><path d="M16 16 L16 29 A13 13 0 0 1 3 16 Z" fill="#bfe9f0"/><path d="M16 16 L3 16 A13 13 0 0 1 16 3 Z" fill="#ffffff"/></svg>
+      <span class="logo-tile"><svg viewBox="0 0 100 100"><use href="#blade" fill="#1868B0" transform="rotate(0 50 50)"/><use href="#blade" fill="#50C0D0" transform="rotate(90 50 50)"/><use href="#blade" fill="#1868B0" transform="rotate(180 50 50)"/><use href="#blade" fill="#50C0D0" transform="rotate(270 50 50)"/></svg></span>
       <div class="nome"><b>equilibrium</b><span>MED CENTER</span></div>
     </div>
     <div class="scroll">
@@ -186,6 +202,8 @@ button{font-family:inherit;cursor:pointer}
       <div id="navCats"></div>
       <div class="grp">Fluxos de conversa</div>
       <div id="navFlows"></div>
+      <div class="grp">Equipe por especialidade</div>
+      <div id="navEquipe"></div>
     </div>
   </aside>
 
@@ -367,6 +385,21 @@ const FLOWS = [
   ]}
 ];
 
+const EQUIPE = [{"esp": "Psiquiatria", "profs": [{"nome": "Dr. Bruno Caixeta", "unidade": "UNIDADE 1", "andar": "3º ANDAR", "salas": "SALA 35", "dias": ["2ª", "3ª", "4ª", "5ª", "6ª"], "rqe": false}, {"nome": "Dr. Vitor Tapias", "unidade": "UNIDADE 1", "andar": "2º ANDAR", "salas": "SALA 25", "dias": ["3ª", "6ª"], "rqe": true}, {"nome": "Dr. Marcus", "unidade": "UNIDADE 1", "andar": "2º ANDAR", "salas": "SALA 25", "dias": ["5ª"], "rqe": true}, {"nome": "Dr. Lucas", "unidade": "UNIDADE 1", "andar": "2º ANDAR", "salas": "SALA 26", "dias": ["5ª"], "rqe": false}, {"nome": "Dr. Wellington", "unidade": "UNIDADE 1", "andar": "2º ANDAR", "salas": "SALA 26", "dias": ["2ª", "4ª", "6ª"], "rqe": true}, {"nome": "Dr. Luan Souza", "unidade": "UNIDADE 1", "andar": "2º ANDAR", "salas": "SALA 27", "dias": ["2ª", "3ª", "4ª", "5ª"], "rqe": true}, {"nome": "Dra. Priscila", "unidade": "UNIDADE 1", "andar": "2º ANDAR", "salas": "SALA 27", "dias": ["3ª"], "rqe": false}, {"nome": "Dr. André", "unidade": "UNIDADE 1", "andar": "2º ANDAR", "salas": "SALA 27", "dias": ["6ª"], "rqe": false}]}, {"esp": "Psicologia", "profs": [{"nome": "Francisca", "unidade": "UNIDADE 1", "andar": "3º ANDAR", "salas": "SALA 32", "dias": ["2ª", "3ª", "4ª", "5ª", "6ª"], "rqe": null}, {"nome": "Kênia", "unidade": "UNIDADE 1", "andar": "3º ANDAR", "salas": "SALA 32", "dias": ["2ª", "3ª", "4ª", "5ª", "6ª", "Sáb"], "rqe": null}, {"nome": "Jéssica", "unidade": "UNIDADE 1", "andar": "3º ANDAR", "salas": "SALA 33", "dias": ["2ª", "3ª", "4ª", "5ª", "6ª", "Sáb"], "rqe": null}, {"nome": "Sílvia", "unidade": "UNIDADE 1", "andar": "3º ANDAR", "salas": "SALA 35", "dias": ["2ª", "3ª", "5ª"], "rqe": null}, {"nome": "Laís", "unidade": "UNIDADE 1", "andar": "1º ANDAR", "salas": "SALA 11", "dias": ["2ª", "3ª", "4ª", "5ª", "6ª"], "rqe": null}, {"nome": "Gabriela", "unidade": "UNIDADE 1", "andar": "1º ANDAR", "salas": "SALA 12", "dias": ["2ª", "3ª", "4ª", "5ª", "6ª"], "rqe": null}, {"nome": "Rosana", "unidade": "UNIDADE 1", "andar": "1º ANDAR", "salas": "SALA 13", "dias": ["2ª", "3ª", "4ª", "5ª"], "rqe": null}, {"nome": "Jeniffer", "unidade": "UNIDADE 1", "andar": "1º ANDAR", "salas": "SALA 13, SALA 17", "dias": ["4ª", "6ª"], "rqe": null}, {"nome": "Vitória", "unidade": "UNIDADE 1", "andar": "1º ANDAR", "salas": "SALA 14", "dias": ["2ª", "3ª", "4ª", "5ª"], "rqe": null}, {"nome": "Yuri", "unidade": "UNIDADE 1", "andar": "1º ANDAR", "salas": "SALA 15", "dias": ["2ª", "3ª", "4ª", "5ª", "6ª"], "rqe": null}, {"nome": "Michelle", "unidade": "UNIDADE 1", "andar": "1º ANDAR", "salas": "SALA 15", "dias": ["2ª", "3ª", "4ª", "5ª", "6ª", "Sáb"], "rqe": null}, {"nome": "Mara", "unidade": "UNIDADE 1", "andar": "1º ANDAR", "salas": "SALA 16", "dias": ["2ª", "3ª", "4ª", "5ª", "6ª"], "rqe": null}]}, {"esp": "Neuropsicologia", "profs": [{"nome": "Natália", "unidade": "UNIDADE 1", "andar": "3º ANDAR", "salas": "SALA 36", "dias": ["2ª", "3ª", "4ª", "5ª", "6ª"], "rqe": null}, {"nome": "Wessilon", "unidade": "UNIDADE 1", "andar": "3º ANDAR", "salas": "SALA 37", "dias": ["2ª", "3ª", "4ª", "5ª", "6ª"], "rqe": null}, {"nome": "Pâmela", "unidade": "UNIDADE 1", "andar": "2º ANDAR", "salas": "SALA 21", "dias": ["2ª", "3ª", "4ª", "5ª", "6ª"], "rqe": null}, {"nome": "Emilly", "unidade": "UNIDADE 1", "andar": "2º ANDAR", "salas": "SALA 22", "dias": ["2ª", "3ª", "4ª", "5ª", "6ª"], "rqe": null}, {"nome": "Taís", "unidade": "UNIDADE 1", "andar": "2º ANDAR", "salas": "SALA 23", "dias": ["2ª", "3ª", "4ª", "5ª", "6ª"], "rqe": null}, {"nome": "Karolina", "unidade": "UNIDADE 1", "andar": "2º ANDAR", "salas": "SALA 24", "dias": ["2ª", "3ª", "4ª", "5ª", "6ª"], "rqe": null}, {"nome": "Mariana", "unidade": "UNIDADE 1", "andar": "1º ANDAR", "salas": "SALA 17", "dias": ["2ª", "3ª", "4ª", "5ª", "6ª"], "rqe": null}]}, {"esp": "Fonoaudiologia", "profs": [{"nome": "Hugo", "unidade": "UNIDADE 2", "andar": "1º ANDAR", "salas": "SALA 13", "dias": ["2ª", "3ª", "4ª", "5ª", "6ª"], "rqe": null}, {"nome": "Aline", "unidade": "UNIDADE 2", "andar": "1º ANDAR", "salas": "SALA 14", "dias": ["2ª", "3ª", "4ª", "5ª", "6ª"], "rqe": null}, {"nome": "Lara", "unidade": "UNIDADE 2", "andar": "1º ANDAR", "salas": "SALA 15", "dias": ["2ª", "4ª", "6ª"], "rqe": null}]}, {"esp": "Terapia Ocupacional", "profs": [{"nome": "Eduardo", "unidade": "UNIDADE 2", "andar": "TÉRREO", "salas": "SALA 07", "dias": ["2ª", "3ª", "4ª", "5ª"], "rqe": null}]}, {"esp": "Psicomotricidade", "profs": [{"nome": "Mona", "unidade": "UNIDADE 2", "andar": "TÉRREO", "salas": "SALA 01", "dias": ["2ª", "3ª", "4ª", "6ª"], "rqe": null}]}, {"esp": "Psicopedagogia", "profs": [{"nome": "Ana Maria", "unidade": "UNIDADE 2", "andar": "1º ANDAR", "salas": "SALA 11", "dias": ["2ª", "3ª", "4ª", "5ª", "6ª"], "rqe": null}, {"nome": "Daiane", "unidade": "UNIDADE 2", "andar": "1º ANDAR", "salas": "SALA 12", "dias": ["2ª", "3ª", "4ª", "5ª", "6ª"], "rqe": null}]}, {"esp": "Musicoterapia", "profs": [{"nome": "Sandra", "unidade": "UNIDADE 2", "andar": "TÉRREO", "salas": "SALA 04", "dias": ["3ª"], "rqe": null}]}, {"esp": "Psicologia Adolescência/Infantil", "profs": [{"nome": "Mayumi", "unidade": "UNIDADE 2", "andar": "1º ANDAR", "salas": "SALA 16", "dias": ["2ª", "3ª", "4ª", "5ª", "6ª"], "rqe": null}]}, {"esp": "Terapia ABA", "profs": [{"nome": "Terapia ABA (8 salas)", "unidade": "UNIDADE 2", "andar": "1º ANDAR", "salas": "SALAS 17 a 24", "dias": ["2ª", "3ª", "4ª", "5ª", "6ª"], "rqe": null}]}];
+
+const ESP_INFO = {
+ 'Psiquiatria':{cor:'#1868B0',badge:'PSIQ'},
+ 'Psicologia':{cor:'#2b9d6e',badge:'PSI'},
+ 'Neuropsicologia':{cor:'#7c5cbf',badge:'NPS'},
+ 'Fonoaudiologia':{cor:'#e08a2b',badge:'FONO'},
+ 'Terapia Ocupacional':{cor:'#0f9d9d',badge:'TO'},
+ 'Psicomotricidade':{cor:'#d24b6a',badge:'PSM'},
+ 'Psicopedagogia':{cor:'#b4533e',badge:'PSP'},
+ 'Musicoterapia':{cor:'#d4a017',badge:'MUS'},
+ 'Psicologia Adolescência/Infantil':{cor:'#50C0D0',badge:'INF'},
+ 'Terapia ABA':{cor:'#5a6b7b',badge:'ABA'}
+};
+
 /* ====================== ESTADO/RENDER ====================== */
 let atual = {tipo:'cat', id:CATS[0].id};
 
@@ -400,6 +433,16 @@ function navSidebar(){
     b.onclick=()=>{atual={tipo:'flow',id:f.id};render();fechaMenuMobile();};
     nf.appendChild(b);
   });
+  const ne=document.getElementById('navEquipe'); ne.innerHTML='';
+  EQUIPE.forEach(g=>{
+    const info=ESP_INFO[g.esp]||{cor:'#5a6b7b',badge:'•'};
+    const b=document.createElement('button');
+    b.className='navitem'+(atual.tipo==='equipe'&&atual.id===g.esp?' ativo':'');
+    b.innerHTML='<span class="badge" style="background:'+info.cor+'">'+info.badge+'</span>'+g.esp+
+      '<span class="cont">'+g.profs.length+'</span>';
+    b.onclick=()=>{atual={tipo:'equipe',id:g.esp};render();fechaMenuMobile();};
+    ne.appendChild(b);
+  });
 }
 function fechaMenuMobile(){document.getElementById('side').classList.remove('aberta');}
 
@@ -424,7 +467,7 @@ function render(){
     });
     html+='</div>';
     c.innerHTML=html;
-  } else {
+  } else if(atual.tipo==='flow'){
     const f=FLOWS.find(x=>x.id===atual.id);
     document.getElementById('crumb').textContent=f.nome;
     let html='<div class="eyebrow">Fluxo de conversa</div><div class="h1">'+esc(f.nome)+'</div>'+
@@ -439,7 +482,63 @@ function render(){
     });
     html+='</div>';
     c.innerHTML=html;
+  } else {
+    c.innerHTML = renderEquipe();
   }
+}
+
+function renderEquipe(){
+  const g=EQUIPE.find(x=>x.esp===atual.id);
+  const info=ESP_INFO[g.esp]||{cor:'#5a6b7b',badge:'•'};
+  document.getElementById('crumb').textContent=g.esp;
+  let html='<div class="eyebrow">Equipe</div><div class="h1">'+esc(g.esp)+'</div>'+
+    '<div class="sub">'+g.profs.length+' profissional(is). Os campos em <span style="background:#fff8df;padding:1px 5px;border-radius:4px;color:#7a5d12">amarelo</span> são de preenchimento manual (registro, convênios, particular, bio).</div>';
+  html+='<div class="grid">';
+  g.profs.forEach((p,i)=>{
+    const dias=(p.dias||[]).map(d=>'<span class="diac">'+d+'</span>').join('');
+    let rqe='';
+    if(p.rqe===true) rqe='<span class="rqe sim">COM RQE</span>';
+    else if(p.rqe===false) rqe='<span class="rqe nao">SEM RQE</span>';
+    const busca=(p.nome+' '+g.esp+' '+(p.salas||'')).toLowerCase();
+    html+='<div class="balao" data-busca="'+esc(busca)+'"'+
+      ' data-nome="'+esc(p.nome)+'" data-esp="'+esc(g.esp)+'" data-uni="'+esc(p.unidade||'')+'"'+
+      ' data-andar="'+esc(p.andar||'')+'" data-salas="'+esc(p.salas||'')+'" data-dias="'+esc((p.dias||[]).join(', '))+'" data-rqe="'+p.rqe+'">'+
+      '<div class="bar" style="background:'+info.cor+'"></div>'+
+      '<div class="cab"><span class="tag" style="background:'+info.cor+'">'+info.badge+'</span><h3>'+esc(p.nome)+'</h3>'+rqe+'</div>'+
+      '<div class="prof-meta"><b>'+esc(p.unidade||'')+'</b> · '+esc(p.andar||'')+(p.salas?' · '+esc(p.salas):'')+'</div>'+
+      '<div class="prof-dias">'+(dias||'<span class="diac" style="background:#f1f4f8;color:#73808f">sem agenda fixa</span>')+'</div>'+
+      '<div class="prof-enr">'+
+        '<div class="enr-row"><span class="lbl">Registro</span><span class="chip amarelo" contenteditable spellcheck="false" data-field="reg">conselho/nº</span></div>'+
+        '<div class="enr-row"><span class="lbl">Convênios</span><span class="chip amarelo" contenteditable spellcheck="false" data-field="conv">redes</span></div>'+
+        '<div class="enr-row"><span class="lbl">Particular</span><span class="chip amarelo" contenteditable spellcheck="false" data-field="part">sim/não</span></div>'+
+        '<div class="enr-row"><span class="lbl">Bio</span><span class="chip amarelo" contenteditable spellcheck="false" data-field="bio">breve descrição</span></div>'+
+      '</div>'+
+      '<div class="acoes"><button onclick="gerarProf(this)">💬 Gerar apresentação</button></div>'+
+    '</div>';
+  });
+  html+='</div>';
+  return html;
+}
+
+function gerarProf(btn){
+  const c=btn.closest('.balao');
+  const nome=c.dataset.nome, esp=c.dataset.esp, uni=c.dataset.uni, andar=c.dataset.andar,
+        salas=c.dataset.salas, dias=c.dataset.dias, rqe=c.dataset.rqe;
+  const get=(f,ph)=>{const el=c.querySelector('[data-field='+f+']');const v=el?el.textContent.trim():'';
+    return (v && v!==ph)?v:'{'+ph+'}';};
+  let m='Para '+esp+', temos '+nome+'. 😊\n';
+  m+='Atendimento: '+uni+(andar?' – '+andar:'')+(salas?', '+salas:'')+'.\n';
+  if(dias) m+='Dias: '+dias+'.\n';
+  if(esp==='Psiquiatria'){
+    if(rqe==='true') m+='Possui título de especialista em Psiquiatria (RQE).\n';
+    else if(rqe==='false') m+='Atua na área como médico(a), sem título de especialista — a escolha é sempre sua.\n';
+  }
+  m+='Convênios: '+get('conv','convênios')+'. Quer que eu verifique os próximos horários?';
+  navigator.clipboard.writeText(m).then(()=>{
+    const o=btn.innerHTML;btn.classList.add('ok');btn.innerHTML='✅ Copiado!';
+    toast('Apresentação de '+nome+' copiada');
+    setTimeout(()=>{btn.classList.remove('ok');btn.innerHTML=o;},1700);
+  });
 }
 
 function copiar(id,btn,isFlux){
