@@ -70,6 +70,8 @@ button{font-family:inherit;cursor:pointer}
 .btn-dados{border:1px solid var(--linha);background:#fff;border-radius:10px;padding:8px 12px;
   font-size:13px;color:var(--azul);font-weight:600;display:flex;align-items:center;gap:6px}
 .btn-dados:hover{background:#f1f6fb}
+.btn-motivo{border:1px solid #ead08a;background:#fff8e6;color:#9a6a12}
+.btn-motivo:hover{background:#fdeec8}
 
 /* ---------- Conteúdo ---------- */
 .content{flex:1;overflow-y:auto;padding:26px 28px 80px}
@@ -138,12 +140,12 @@ button{font-family:inherit;cursor:pointer}
 .overlay{position:fixed;inset:0;background:rgba(15,42,77,.45);
   display:flex;align-items:center;justify-content:center;z-index:60;padding:20px}
 .overlay.escondido{display:none}
-.modal{background:#fff;border-radius:18px;width:440px;max-width:100%;box-shadow:0 24px 70px rgba(16,40,70,.3);overflow:hidden}
+.modal{background:#fff;border-radius:18px;width:440px;max-width:100%;box-shadow:0 24px 70px rgba(16,40,70,.3);overflow:hidden;display:flex;flex-direction:column;max-height:94vh}
 .modal .top{background:linear-gradient(135deg,var(--azul),var(--ciano));color:#fff;padding:22px 24px}
 .modal .top svg{width:40px;height:40px;margin-bottom:8px}
 .modal .top h2{margin:0;font-size:19px}
 .modal .top p{margin:4px 0 0;font-size:13px;opacity:.92}
-.modal .form{padding:20px 24px 8px}
+.modal .form{padding:20px 24px 8px;overflow:auto}
 .campo{margin-bottom:14px}
 .campo label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:5px;letter-spacing:.3px}
 .campo input,.campo select{width:100%;border:1px solid var(--linha);border-radius:10px;padding:11px 12px;
@@ -240,7 +242,7 @@ button{font-family:inherit;cursor:pointer}
     <div class="scroll">
       <div class="grp">Ferramentas</div>
       <button class="navitem" id="navWhats" onclick="abrirWhats()">
-        <svg class="flowicon" viewBox="0 0 24 24" fill="none" stroke="#dfeefb" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        <svg class="flowicon" viewBox="0 0 24 24" fill="none" stroke="#25D366" stroke-width="2.4"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
         Simulador WhatsApp
       </button>
       <div class="grp">Categorias de balões</div>
@@ -323,6 +325,10 @@ button{font-family:inherit;cursor:pointer}
         <div class="campo"><label>Data</label><input id="fData" placeholder="Ex.: 30/06"></div>
         <div class="campo"><label>Hora</label><input id="fHora" placeholder="Ex.: 14:30"></div>
       </div>
+      <div class="campo">
+        <label>Motivo de fechamento (opcional)</label>
+        <input id="fMotivo" placeholder="Ex.: Jogo do Brasil, segunda às 14h">
+      </div>
     </div>
     <div class="rodape">
       <button class="pular" onclick="fecharModal()">Agora não</button>
@@ -335,9 +341,10 @@ button{font-family:inherit;cursor:pointer}
 
 <script>
 /* ====================== CONTEXTO ====================== */
-const KEYS = ['atendente','paciente','profissional','especialidade','data','hora'];
-let CTX = {atendente:'',paciente:'',profissional:'',especialidade:'',data:'',hora:''};
-const TOKENMAP={'NOME DO ATENDENTE':'atendente','NOME DO PACIENTE':'paciente','NOME DO PACIENTE/RESPONSÁVEL':'paciente','PROFISSIONAL':'profissional','ESPECIALIDADE':'especialidade','DATA':'data','HORÁRIO':'hora'};
+const KEYS = ['atendente','paciente','profissional','especialidade','data','hora','motivo'];
+let CTX = {atendente:'',paciente:'',profissional:'',especialidade:'',data:'',hora:'',motivo:''};
+const TOKENMAP={'NOME DO ATENDENTE':'atendente','NOME DO PACIENTE':'paciente','NOME DO PACIENTE/RESPONSÁVEL':'paciente','PROFISSIONAL':'profissional','ESPECIALIDADE':'especialidade','DATA':'data','HORÁRIO':'hora','MOTIVO':'motivo'};
+const AVISO_BASE='📢 *Aviso importante — Equilibrium Med Center*\n\nEm virtude de *[MOTIVO]*, nossa clínica estará *fechada para atendimento ao público*.\n\nRetomaremos os atendimentos normalmente logo após. Qualquer dúvida, é só deixar sua mensagem que retornamos assim que possível. 💙';
 try{ const s=localStorage.getItem('equi_ctx'); if(s) CTX=Object.assign(CTX,JSON.parse(s)); }catch(e){}
 
 /* ====================== DADOS ====================== */
@@ -360,6 +367,7 @@ const ESP_INFO = {
  'Terapia ABA':{cor:'#5a6b7b',badge:'ABA'}
 };
 
+(function(){var adm=CATS.find(c=>c.id==='ADM');if(adm&&!adm.baloes.some(b=>b.code==='ADM-06')){adm.baloes.push({code:'ADM-06',t:'Aviso de fechamento (motivo)',x:AVISO_BASE,kw:'fechado fechamento aviso feriado recesso jogo motivo publico nao havera atendimento ponto facultativo emergencia'});}})();
 const CODE_INDEX={};
 CATS.forEach(c=>c.baloes.forEach((b,i)=>{CODE_INDEX[b.code.toUpperCase()]={cat:c.id,idx:i};}));
 function goToCode(code){
@@ -483,9 +491,9 @@ function renderEquipe(){
         '<div class="enr-row"><span class="lbl">Registro</span><span class="chip amarelo" contenteditable spellcheck="false" data-field="reg">conselho/nº</span></div>'+
         '<div class="enr-row"><span class="lbl">Convênios</span><span class="chip amarelo" contenteditable spellcheck="false" data-field="conv">redes</span></div>'+
         '<div class="enr-row"><span class="lbl">Particular</span><span class="chip amarelo" contenteditable spellcheck="false" data-field="part">sim/não</span></div>'+
-        '<div class="enr-row"><span class="lbl">Bio</span><span class="chip amarelo" contenteditable spellcheck="false" data-field="bio">breve descrição</span></div>'+
+        '<div class="enr-row"><span class="lbl">Bio</span><span class="chip amarelo" contenteditable spellcheck="false" data-field="bio">breve descrição</span></div>'+'<div class="enr-row"><span class="lbl">Link</span><span class="chip amarelo" contenteditable spellcheck="false" data-field="link">perfil / Instagram</span></div>'+
       '</div>'+
-      '<div class="acoes"><button onclick="gerarProf(this)">💬 Gerar apresentação</button></div>'+
+      '<div class="acoes"><button onclick="gerarProf(this)">💬 Breve apresentação</button></div>'+
     '</div>';
   });
   html+='</div>';
@@ -495,17 +503,23 @@ function renderEquipe(){
 function gerarProf(btn){
   const c=btn.closest('.balao');
   const nome=c.dataset.nome, esp=c.dataset.esp, uni=c.dataset.uni, andar=c.dataset.andar,
-        salas=c.dataset.salas, dias=c.dataset.dias, rqe=c.dataset.rqe;
-  const get=(f,ph)=>{const el=c.querySelector('[data-field='+f+']');const v=el?el.textContent.trim():'';
-    return (v && v!==ph)?v:'{'+ph+'}';};
-  let m='Para '+esp+', temos '+nome+'. 😊\n';
-  m+='Atendimento: '+uni+(andar?' – '+andar:'')+(salas?', '+salas:'')+'.\n';
-  if(dias) m+='Dias: '+dias+'.\n';
+        dias=c.dataset.dias, rqe=c.dataset.rqe;
+  const get=(f,ph)=>{const el=c.querySelector('[data-field='+f+']');const v=el?el.textContent.trim():'';return (v&&v!==ph)?v:'';};
+  const bio=get('bio','breve descrição'), conv=get('conv','redes'), link=get('link','perfil / Instagram');
+  let m='Quem vai te atender em '+esp+' é '+nome+'. 😊\n';
+  if(bio) m+=bio+'\n';
+  m+='Atende na '+uni+(andar?' ('+andar+')':'')+(dias?', '+dias:'')+'.\n';
   if(esp==='Psiquiatria'){
     if(rqe==='true') m+='Possui título de especialista em Psiquiatria (RQE).\n';
     else if(rqe==='false') m+='Atua na área como médico(a), sem título de especialista — a escolha é sempre sua.\n';
   }
-  m+='Convênios: '+get('conv','convênios')+'. Quer que eu verifique os próximos horários?';
+  if(conv) m+='Convênios: '+conv+'.\n';
+  if(!bio){
+    m+= link
+      ? 'Quer conhecer melhor o trabalho de '+nome+'? Acesse: '+link+'\n'
+      : 'Posso te enviar mais detalhes sobre o trabalho de '+nome+' — me avise que te direciono o link. 💙\n';
+  }
+  m+='Posso verificar os próximos horários disponíveis para você?';
   navigator.clipboard.writeText(m).then(()=>{
     const o=btn.innerHTML;btn.classList.add('ok');btn.innerHTML='✅ Copiado!';
     toast('Apresentação de '+nome+' copiada');
@@ -656,6 +670,7 @@ function abrirModal(){
   document.getElementById('fEspecialidade').value=CTX.especialidade;
   document.getElementById('fData').value=CTX.data;
   document.getElementById('fHora').value=CTX.hora;
+  document.getElementById('fMotivo').value=CTX.motivo||'';
   document.getElementById('overlay').classList.remove('escondido');
 }
 function fecharModal(){document.getElementById('overlay').classList.add('escondido');}
@@ -666,7 +681,8 @@ function salvarDados(){
     profissional:document.getElementById('fProfissional').value.trim(),
     especialidade:document.getElementById('fEspecialidade').value.trim(),
     data:document.getElementById('fData').value.trim(),
-    hora:document.getElementById('fHora').value.trim()
+    hora:document.getElementById('fHora').value.trim(),
+    motivo:document.getElementById('fMotivo').value.trim()
   };
   try{localStorage.setItem('equi_ctx',JSON.stringify(CTX));}catch(e){}
   atualizaUser();fecharModal();render();toast('Dados aplicados aos balões');
