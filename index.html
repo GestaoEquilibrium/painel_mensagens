@@ -202,7 +202,7 @@ input,textarea,select{font-family:inherit;font-size:14px;color:var(--texto)}
 <div id="login">
   <div class="login-box">
     <div class="mark">
-      <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="22" fill="#1868B0"/><path d="M24 12v24M14 20h20M16 28h16" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>
+      <img src="logo.png" alt="Equilibrium" style="height:60px;width:auto" onerror="this.outerHTML='&lt;svg viewBox=\'0 0 48 48\' fill=\'none\' style=\'width:48px;height:48px\'&gt;&lt;circle cx=\'24\' cy=\'24\' r=\'22\' fill=\'#1868B0\'/&gt;&lt;path d=\'M24 12v24M14 20h20M16 28h16\' stroke=\'#fff\' stroke-width=\'3\' stroke-linecap=\'round\'/&gt;&lt;/svg&gt;'">
     </div>
     <h1>Painel de Cards</h1>
     <div class="sub">Equilibrium Med Center · acesso interno da equipe</div>
@@ -217,7 +217,7 @@ input,textarea,select{font-family:inherit;font-size:14px;color:var(--texto)}
   <!-- sidebar -->
   <aside class="side" id="side">
     <div class="brand">
-      <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="22" fill="#fff" fill-opacity=".18"/><path d="M24 12v24M14 20h20M16 28h16" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>
+      <img src="logo.png" alt="" style="width:40px;height:40px;object-fit:contain;flex:none;background:rgba(255,255,255,.15);border-radius:9px;padding:4px" onerror="this.style.display='none'">
       <div><b>Equilibrium</b><span>PAINEL DE CARDS</span></div>
     </div>
     <div class="scroll" id="navWrap"></div>
@@ -266,8 +266,8 @@ input,textarea,select{font-family:inherit;font-size:14px;color:var(--texto)}
    CONFIG — cole aqui os dados do SEU projeto Supabase (deste sistema).
    Encontre em: Supabase → Project Settings → API
    ===================================================================== */
-const SUPABASE_URL      = 'https://bhrzxpudwstofqasbjnv.supabase.co/rest/v1/';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJocnp4cHVkd3N0b2ZxYXNiam52Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0MTA5NDUsImV4cCI6MjA5Nzk4Njk0NX0.3X3pu6MIFG4Oa17UdWAYubFXt-hPGW7c2bKY2HXO8Zg';
+const SUPABASE_URL      = 'https://COLE_SEU_PROJETO.supabase.co';
+const SUPABASE_ANON_KEY = 'COLE_SUA_CHAVE_ANON_AQUI';
 
 const configOK = !SUPABASE_URL.includes('COLE_') && !SUPABASE_ANON_KEY.includes('COLE_');
 const sb = configOK ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
