@@ -380,6 +380,26 @@ const ESP_INFO = {
 };
 
 (function(){var adm=CATS.find(c=>c.id==='ADM');if(adm&&!adm.baloes.some(b=>b.code==='ADM-06')){adm.baloes.push({code:'ADM-06',t:'Aviso de fechamento (motivo)',x:AVISO_BASE,kw:'fechado fechamento aviso feriado recesso jogo motivo publico nao havera atendimento ponto facultativo emergencia'});}})();
+(function(){
+  if(CATS.some(c=>c.id==='CON')) return;
+  var con={id:'CON',key:'concierge',cor:'#0E8388',nome:'Concierge (particular)',baloes:[
+    {code:'CON-01',t:'Boas-vindas concierge',kw:'concierge particular vip exclusivo premium boas vindas acolhimento personalizado atendimento',x:`Olá, [NOME DO PACIENTE]! 💙 Aqui é [NOME DO ATENDENTE], da Equilibrium Med Center. Será um prazer cuidar do seu atendimento de forma personalizada. Para começarmos, me conte como posso te ajudar — vou acompanhar você em cada etapa, com toda a atenção.`},
+    {code:'CON-02',t:'Como funciona o atendimento exclusivo',kw:'concierge exclusivo prioridade agenda flexibilidade contato direto particular vantagens beneficios premium',x:`Como paciente particular, você conta com um atendimento mais próximo e ágil: prioridade na agenda, flexibilidade de horários e um contato direto comigo para o que precisar. Pode falar comigo sempre que tiver qualquer dúvida. 😊`},
+    {code:'CON-03',t:'Confirmação personalizada',kw:'concierge confirmacao personalizada particular agendado premium',x:`[NOME DO PACIENTE], deixei tudo certo para você! ✅
+🩺 *Especialidade:* [ESPECIALIDADE]
+👩‍⚕️ *Profissional:* [PROFISSIONAL]
+📅 *Data:* [DATA] às 🕐 *[HORÁRIO]*
+📍 Av. Cesário Alvim, 2001 — Bairro Aparecida
+Vou te aguardar e, qualquer coisa, estou à disposição por aqui. 💙`},
+    {code:'CON-04',t:'Acompanhamento pós-consulta',kw:'concierge pos consulta acompanhamento follow up retorno cuidado particular como esta',x:`Oi, [NOME DO PACIENTE]! 😊 Passando para saber como você está depois do seu atendimento com [PROFISSIONAL]. Ficou alguma dúvida ou posso ajudar a organizar os próximos passos? Estou à disposição.`},
+    {code:'CON-05',t:'Antecipar próximos passos',kw:'concierge proximo passo agendar antecipar reservar particular proatividade continuidade',x:`[NOME DO PACIENTE], para você não se preocupar com a agenda, já posso deixar reservado o seu próximo horário com [PROFISSIONAL]. Quer que eu organize isso para você? 💙`},
+    {code:'CON-06',t:'Canal direto / disponibilidade',kw:'concierge canal direto disponibilidade contato prioridade particular falar comigo',x:`[NOME DO PACIENTE], qualquer necessidade — remarcar, adiantar ou tirar uma dúvida — pode falar diretamente comigo por aqui. Vou cuidar de tudo para você com prioridade. 😊`},
+    {code:'CON-07',t:'Cortesia e agradecimento',kw:'concierge agradecimento cortesia obrigado fidelizacao particular carinho',x:`[NOME DO PACIENTE], foi um prazer cuidar de você! 💙 Obrigado(a) pela confiança na Equilibrium Med Center. Estarei por aqui sempre que precisar.`},
+    {code:'CON-08',t:'Coordenar entre especialidades',kw:'concierge coordenacao especialidades multidisciplinar agenda integrada particular mesmo dia organizar',x:`[NOME DO PACIENTE], como seu cuidado envolve mais de uma especialidade, posso alinhar as agendas de [PROFISSIONAL] e dos demais profissionais para facilitar sua rotina — deixando tudo no mesmo dia sempre que possível. Quer que eu organize? 😊`}
+  ]};
+  var i=CATS.findIndex(c=>c.id==='REA');
+  if(i>=0) CATS.splice(i+1,0,con); else CATS.push(con);
+})();
 const CODE_INDEX={};
 CATS.forEach(c=>c.baloes.forEach((b,i)=>{CODE_INDEX[b.code.toUpperCase()]={cat:c.id,idx:i};}));
 function goToCode(code){
