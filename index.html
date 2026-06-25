@@ -72,6 +72,9 @@ button{font-family:inherit;cursor:pointer}
 .btn-dados:hover{background:#f1f6fb}
 .btn-motivo{border:1px solid #ead08a;background:#fff8e6;color:#9a6a12}
 .btn-motivo:hover{background:#fdeec8}
+.counter{display:flex;gap:8px;align-items:center;white-space:nowrap}
+.counter .c-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted);background:#f1f6fb;border:1px solid var(--linha);border-radius:20px;padding:4px 11px}
+.counter .c-item b{color:var(--azul);font-size:14px}
 
 /* ---------- Conteúdo ---------- */
 .content{flex:1;overflow-y:auto;padding:26px 28px 80px}
@@ -183,9 +186,9 @@ button{font-family:inherit;cursor:pointer}
 .wa-send{width:44px;height:44px;border-radius:50%;border:0;background:#008069;color:#fff;flex:none;display:flex;align-items:center;justify-content:center}
 .wa-send svg{width:20px;height:20px}
 .wa-sug{flex:1;min-width:300px;max-width:540px}
-.wa-sug h3{font-size:16px;margin:0 0 4px}
+.wa-sug h3{font-size:16px;margin:0 0 4px;color:#075e54}
 .wa-sug .hint{color:var(--muted);font-size:13px;margin-bottom:14px}
-.sugcard{background:#fff;border:1px solid var(--linha);border-radius:12px;box-shadow:var(--sombra);padding:12px 14px;margin-bottom:12px;border-left:4px solid var(--azul)}
+.sugcard{background:#fff;border:1px solid var(--linha);border-radius:12px;box-shadow:var(--sombra);padding:12px 14px;margin-bottom:12px;border-left:4px solid #008069}
 .sugcard .top{display:flex;align-items:center;gap:8px;margin-bottom:6px}
 .sugcard .tag{font-size:10px;font-weight:800;color:#fff;padding:2px 6px;border-radius:5px}
 .sugcard h4{font-size:13.5px;margin:0}
@@ -208,6 +211,10 @@ button{font-family:inherit;cursor:pointer}
 .rqe{font-size:10px;font-weight:800;letter-spacing:.4px;padding:3px 7px;border-radius:20px;margin-left:auto}
 .rqe.sim{background:#e8f7ee;color:#1d7a45}
 .rqe.nao{background:#fff3e6;color:#b5701b}
+.rqe{white-space:nowrap}
+.esp-sub-head{display:flex;align-items:flex-start;gap:12px;margin:8px 0 14px}
+.esp-sub-head h3{margin:0;font-size:16px}
+.esp-sub-head p{margin:2px 0 0;color:var(--muted);font-size:13px;max-width:660px}
 .prof-enr{padding:8px 14px 4px;display:grid;gap:6px}
 .enr-row{display:flex;align-items:baseline;gap:7px;font-size:12px}
 .enr-row .lbl{color:var(--muted);font-weight:700;min-width:74px;flex:none}
@@ -221,7 +228,7 @@ button{font-family:inherit;cursor:pointer}
   .app{grid-template-columns:1fr}
   .side{position:fixed;left:0;top:0;bottom:0;width:264px;z-index:50;transform:translateX(-100%);transition:transform .25s}
   .side.aberta{transform:translateX(0)}
-  .busca{display:none}
+  .busca,.counter{display:none}
   .menu-btn{display:flex!important}
 }
 .menu-btn{display:none;border:1px solid var(--linha);background:#fff;border-radius:9px;width:40px;height:40px;
@@ -265,6 +272,7 @@ button{font-family:inherit;cursor:pointer}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
         <input id="busca" placeholder="Buscar balão por palavra-chave…" oninput="buscar(this.value)">
       </div>
+      <span class="counter" id="counter"></span>
       <button class="btn-dados" onclick="abrirModal()">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
         Dados do atendimento
@@ -472,53 +480,77 @@ function renderEquipe(){
   const info=ESP_INFO[g.esp]||{cor:'#5a6b7b',badge:'•'};
   document.getElementById('crumb').textContent=g.esp;
   let html='<div class="eyebrow">Equipe</div><div class="h1">'+esc(g.esp)+'</div>'+
-    '<div class="sub">'+g.profs.length+' profissional(is). Os campos em <span style="background:#fff8df;padding:1px 5px;border-radius:4px;color:#7a5d12">amarelo</span> são de preenchimento manual (registro, convênios, particular, bio).</div>';
-  html+='<div class="grid">';
-  g.profs.forEach((p,i)=>{
-    const dias=(p.dias||[]).map(d=>'<span class="diac">'+d+'</span>').join('');
-    let rqe='';
-    if(p.rqe===true) rqe='<span class="rqe sim">COM RQE</span>';
-    else if(p.rqe===false) rqe='<span class="rqe nao">SEM RQE</span>';
-    const busca=(p.nome+' '+g.esp+' '+(p.salas||'')).toLowerCase();
-    html+='<div class="balao" data-busca="'+esc(busca)+'"'+
-      ' data-nome="'+esc(p.nome)+'" data-esp="'+esc(g.esp)+'" data-uni="'+esc(p.unidade||'')+'"'+
-      ' data-andar="'+esc(p.andar||'')+'" data-salas="'+esc(p.salas||'')+'" data-dias="'+esc((p.dias||[]).join(', '))+'" data-rqe="'+p.rqe+'">'+
-      '<div class="bar" style="background:'+info.cor+'"></div>'+
-      '<div class="cab"><span class="tag" style="background:'+info.cor+'">'+info.badge+'</span><h3>'+esc(p.nome)+'</h3>'+rqe+'</div>'+
-      '<div class="prof-meta"><b>'+esc(p.unidade||'')+'</b> · '+esc(p.andar||'')+(p.salas?' · '+esc(p.salas):'')+'</div>'+
-      '<div class="prof-dias">'+(dias||'<span class="diac" style="background:#f1f4f8;color:#73808f">sem agenda fixa</span>')+'</div>'+
-      '<div class="prof-enr">'+
-        '<div class="enr-row"><span class="lbl">Registro</span><span class="chip amarelo" contenteditable spellcheck="false" data-field="reg">conselho/nº</span></div>'+
-        '<div class="enr-row"><span class="lbl">Convênios</span><span class="chip amarelo" contenteditable spellcheck="false" data-field="conv">redes</span></div>'+
-        '<div class="enr-row"><span class="lbl">Particular</span><span class="chip amarelo" contenteditable spellcheck="false" data-field="part">sim/não</span></div>'+
-        '<div class="enr-row"><span class="lbl">Bio</span><span class="chip amarelo" contenteditable spellcheck="false" data-field="bio">breve descrição</span></div>'+'<div class="enr-row"><span class="lbl">Link</span><span class="chip amarelo" contenteditable spellcheck="false" data-field="link">perfil / Instagram</span></div>'+
-      '</div>'+
-      '<div class="acoes"><button onclick="gerarProf(this)">💬 Breve apresentação</button></div>'+
-    '</div>';
-  });
-  html+='</div>';
+    '<div class="sub">'+g.profs.length+' profissional(is). A <b>Bio</b> já vem com um texto padrão por especialidade — ajuste à vontade. Campos em <span style="background:#fff8df;padding:1px 5px;border-radius:4px;color:#7a5d12">amarelo</span> são editáveis.</div>';
+  if(g.esp==='Psiquiatria'){
+    const comRqe=g.profs.filter(p=>p.rqe===true), semRqe=g.profs.filter(p=>p.rqe!==true);
+    html+='<div class="esp-sub-head"><span class="rqe sim" style="margin:0">com RQE</span><div><h3>Médico Psiquiatra — com título de especialista (RQE)</h3><p>Médico com Registro de Qualificação de Especialista em Psiquiatria. A consulta é com um especialista em psiquiatria.</p></div></div>';
+    html+='<div class="grid">'+comRqe.map(p=>cardProf(p,g.esp,info)).join('')+'</div>';
+    html+='<div class="esp-sub-head" style="margin-top:28px"><span class="rqe nao" style="margin:0">sem RQE</span><div><h3>Médico que atende em Psiquiatria — sem título de especialista</h3><p>Médico clínico que atende casos de psiquiatria, sem o título de especialista (RQE). A escolha é sempre do paciente.</p></div></div>';
+    html+='<div class="grid">'+semRqe.map(p=>cardProf(p,g.esp,info)).join('')+'</div>';
+    return html;
+  }
+  html+='<div class="grid">'+g.profs.map(p=>cardProf(p,g.esp,info)).join('')+'</div>';
   return html;
+}
+const LINK_PADRAO='';
+function defaultBio(esp,rqe){
+  if(esp==='Psiquiatria') return rqe===true
+    ? 'Médico Psiquiatra, com título de especialista (RQE) em Psiquiatria, dedicado ao diagnóstico e tratamento de transtornos mentais.'
+    : 'Médico que atende em Psiquiatria, sem título de especialista (RQE), com acompanhamento da saúde mental e do bem-estar emocional.';
+  const map={
+    'Psicologia':'Psicólogo(a) com atuação em psicoterapia, acolhimento e cuidado da saúde emocional.',
+    'Neuropsicologia':'Neuropsicólogo(a) responsável por avaliações neuropsicológicas (TDAH, aprendizagem, desenvolvimento) e devolutiva com laudo.',
+    'Fonoaudiologia':'Fonoaudiólogo(a) com atuação em linguagem, fala, comunicação e funções orais.',
+    'Terapia Ocupacional':'Terapeuta ocupacional com foco em autonomia, desenvolvimento e integração sensorial.',
+    'Psicomotricidade':'Profissional de psicomotricidade, trabalhando corpo, movimento e desenvolvimento.',
+    'Psicopedagogia':'Psicopedagogo(a) com atuação em dificuldades de aprendizagem e desenvolvimento escolar.',
+    'Musicoterapia':'Musicoterapeuta, usando a música como recurso terapêutico para desenvolvimento e bem-estar.',
+    'Psicologia Adolescência/Infantil':'Psicólogo(a) com atuação no atendimento de crianças e adolescentes.',
+    'Terapia ABA':'Equipe de Terapia ABA (Análise do Comportamento Aplicada), com foco no desenvolvimento infantil, especialmente no TEA.'
+  };
+  return map[esp]||'Profissional da equipe Equilibrium Med Center.';
+}
+function cardProf(p,esp,info){
+  const dias=(p.dias||[]).map(d=>'<span class="diac">'+d+'</span>').join('');
+  let rqe='';
+  if(p.rqe===true) rqe='<span class="rqe sim">Psiquiatra · RQE</span>';
+  else if(p.rqe===false) rqe='<span class="rqe nao">Clínico · psiquiatria</span>';
+  const bio=defaultBio(esp,p.rqe);
+  const tags=(p.rqe===true?' psiquiatra rqe especialista medico':p.rqe===false?' clinico medico atende psiquiatria':'');
+  const busca=(p.nome+' '+esp+' '+(p.salas||'')+tags).toLowerCase();
+  return '<div class="balao" data-busca="'+esc(busca)+'"'+
+    ' data-nome="'+esc(p.nome)+'" data-esp="'+esc(esp)+'" data-uni="'+esc(p.unidade||'')+'"'+
+    ' data-andar="'+esc(p.andar||'')+'" data-salas="'+esc(p.salas||'')+'" data-dias="'+esc((p.dias||[]).join(', '))+'" data-rqe="'+p.rqe+'">'+
+    '<div class="bar" style="background:'+info.cor+'"></div>'+
+    '<div class="cab"><span class="tag" style="background:'+info.cor+'">'+info.badge+'</span><h3>'+esc(p.nome)+'</h3>'+rqe+'</div>'+
+    '<div class="prof-meta"><b>'+esc(p.unidade||'')+'</b> · '+esc(p.andar||'')+(p.salas?' · '+esc(p.salas):'')+'</div>'+
+    '<div class="prof-dias">'+(dias||'<span class="diac" style="background:#f1f4f8;color:#73808f">sem agenda fixa</span>')+'</div>'+
+    '<div class="prof-enr">'+
+      '<div class="enr-row"><span class="lbl">Registro</span><span class="chip amarelo" contenteditable spellcheck="false" data-field="reg">conselho/nº</span></div>'+
+      '<div class="enr-row"><span class="lbl">Convênios</span><span class="chip amarelo" contenteditable spellcheck="false" data-field="conv">redes</span></div>'+
+      '<div class="enr-row"><span class="lbl">Particular</span><span class="chip amarelo" contenteditable spellcheck="false" data-field="part">sim/não</span></div>'+
+      '<div class="enr-row"><span class="lbl">Bio</span><span class="chip amarelo" contenteditable spellcheck="false" data-field="bio">'+esc(bio)+'</span></div>'+
+      '<div class="enr-row"><span class="lbl">Link</span><span class="chip amarelo" contenteditable spellcheck="false" data-field="link">perfil / Instagram</span></div>'+
+    '</div>'+
+    '<div class="acoes"><button onclick="gerarProf(this)">💬 Breve apresentação</button></div>'+
+  '</div>';
 }
 
 function gerarProf(btn){
   const c=btn.closest('.balao');
-  const nome=c.dataset.nome, esp=c.dataset.esp, uni=c.dataset.uni, andar=c.dataset.andar,
-        dias=c.dataset.dias, rqe=c.dataset.rqe;
+  const nome=c.dataset.nome, esp=c.dataset.esp, uni=c.dataset.uni, andar=c.dataset.andar, dias=c.dataset.dias, rqe=c.dataset.rqe;
   const get=(f,ph)=>{const el=c.querySelector('[data-field='+f+']');const v=el?el.textContent.trim():'';return (v&&v!==ph)?v:'';};
-  const bio=get('bio','breve descrição'), conv=get('conv','redes'), link=get('link','perfil / Instagram');
+  const bio=get('bio','breve descrição'), conv=get('conv','redes'), link=get('link','perfil / Instagram')||LINK_PADRAO;
   let m='Quem vai te atender em '+esp+' é '+nome+'. 😊\n';
+  if(esp==='Psiquiatria'){
+    m+= (rqe==='true')
+      ? 'A consulta é com *Médico Psiquiatra*, com título de especialista (RQE). 🩺\n'
+      : 'A consulta é com *Médico clínico que atende em Psiquiatria* (sem o título de especialista/RQE). A escolha é sempre sua. 🩺\n';
+  }
   if(bio) m+=bio+'\n';
   m+='Atende na '+uni+(andar?' ('+andar+')':'')+(dias?', '+dias:'')+'.\n';
-  if(esp==='Psiquiatria'){
-    if(rqe==='true') m+='Possui título de especialista em Psiquiatria (RQE).\n';
-    else if(rqe==='false') m+='Atua na área como médico(a), sem título de especialista — a escolha é sempre sua.\n';
-  }
   if(conv) m+='Convênios: '+conv+'.\n';
-  if(!bio){
-    m+= link
-      ? 'Quer conhecer melhor o trabalho de '+nome+'? Acesse: '+link+'\n'
-      : 'Posso te enviar mais detalhes sobre o trabalho de '+nome+' — me avise que te direciono o link. 💙\n';
-  }
+  if(link) m+='Saiba mais sobre o trabalho de '+nome+': '+link+'\n';
   m+='Posso verificar os próximos horários disponíveis para você?';
   navigator.clipboard.writeText(m).then(()=>{
     const o=btn.innerHTML;btn.classList.add('ok');btn.innerHTML='✅ Copiado!';
@@ -609,7 +641,7 @@ function renderWhats(){
   document.getElementById('crumb').textContent='Simulador WhatsApp';
   const c=document.getElementById('content');
   c.innerHTML=
-   '<div class="eyebrow">Atendimento</div><div class="h1">Simulador de WhatsApp 💬</div>'+
+   '<div class="eyebrow" style="color:#008069">Atendimento</div><div class="h1" style="color:#075e54">Simulador de WhatsApp 💬</div>'+
    '<div class="sub">Cole a mensagem do paciente e o painel sugere a melhor resposta entre os '+CATS.reduce((s,c)=>s+c.baloes.length,0)+' balões. Toque em <b>Usar resposta</b> para enviar e copiar.</div>'+
    '<div class="wa-wrap">'+
      '<div class="wa-phone">'+
@@ -647,8 +679,8 @@ function waPintarSug(){
   sug.innerHTML=waLast.map((r,i)=>{
     const filled=fillPlain(r.b.x);
     const prev=esc(filled.slice(0,170))+(filled.length>170?'…':'');
-    return '<div class="sugcard" style="border-left-color:'+r.cat.cor+'">'+
-      '<div class="top"><span class="tag" style="background:'+r.cat.cor+'">'+r.b.code+'</span><h4>'+esc(r.b.t)+'</h4>'+(i===0?'<span class="best">melhor opção</span>':'')+'</div>'+
+    return '<div class="sugcard" style="border-left-color:#008069">'+
+      '<div class="top"><span class="tag" style="background:#008069">'+r.b.code+'</span><h4>'+esc(r.b.t)+'</h4>'+(i===0?'<span class="best">melhor opção</span>':'')+'</div>'+
       '<div class="prev">'+prev+'</div>'+
       '<button onclick="waUsar('+i+')">Usar resposta</button></div>';
   }).join('');
@@ -687,6 +719,14 @@ function salvarDados(){
   try{localStorage.setItem('equi_ctx',JSON.stringify(CTX));}catch(e){}
   atualizaUser();fecharModal();render();toast('Dados aplicados aos balões');
 }
+function atualizaContador(){
+  const totB=CATS.reduce((s,c)=>s+c.baloes.length,0);
+  const totP=EQUIPE.reduce((s,g)=>s+g.profs.length,0);
+  const el=document.getElementById('counter');
+  if(el) el.innerHTML='<span class="c-item">📋 <b>'+totB+'</b> balões</span>'+
+    '<span class="c-item">👥 <b>'+totP+'</b> profissionais</span>'+
+    '<span class="c-item">🔀 <b>'+FLOWS.length+'</b> fluxos</span>';
+}
 function atualizaUser(){
   document.getElementById('uNome').textContent=CTX.atendente||'Recepção';
   document.getElementById('uEsp').textContent=CTX.especialidade||'—';
@@ -701,6 +741,7 @@ function toast(m){const t=document.getElementById('toast');t.textContent=m;t.cla
 /* ====================== INIT ====================== */
 atualizaUser();
 render();
+atualizaContador();
 // Abre o onboarding na primeira vez (sem dados salvos)
 if(!CTX.atendente && !CTX.profissional){ abrirModal(); }
 else { document.getElementById('overlay').classList.add('escondido'); }
