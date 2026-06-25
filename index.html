@@ -82,6 +82,14 @@ button{font-family:inherit;cursor:pointer}
 .card-count{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:11px;padding:10px 13px;margin:2px 0 10px;color:#eaf3fb;line-height:1.15}
 .card-count b{font-size:22px;color:#fff;font-weight:800;margin-right:5px}
 .card-count span{display:block;font-size:10.5px;opacity:.78;letter-spacing:.3px;margin-top:3px}
+.voltar{background:transparent;border:0;color:var(--azul);font-size:13px;font-weight:600;cursor:pointer;padding:0;margin-bottom:12px}
+.voltar:hover{text-decoration:underline}
+.sec{font-size:17px;margin:28px 0 12px;font-weight:700}
+.esp-card{text-align:left;background:#fff;border:1px solid var(--linha);border-top:3px solid var(--azul);border-radius:14px;box-shadow:var(--sombra);padding:16px;cursor:pointer;display:flex;flex-direction:column;gap:7px;align-items:flex-start;transition:transform .15s}
+.esp-card:hover{transform:translateY(-2px)}
+.esp-card h3{margin:0;font-size:16px}
+.esp-card p{margin:0;color:var(--muted);font-size:12.5px;line-height:1.45;flex:1}
+.esp-card-cta{font-size:12px;font-weight:700;color:var(--azul)}
 
 /* ---------- Conteúdo ---------- */
 .content{flex:1;overflow-y:auto;padding:26px 28px 80px}
@@ -382,6 +390,19 @@ const ESP_INFO = {
  'Psicologia Adolescência/Infantil':{cor:'#50C0D0',badge:'INF'},
  'Terapia ABA':{cor:'#5a6b7b',badge:'ABA'}
 };
+const ESP_DESC={
+ 'Psiquiatria':'Consultas médicas em psiquiatria — com Médico Psiquiatra (RQE) ou médico clínico que atende em psiquiatria. A consulta é paga à vista.',
+ 'Psicologia':'Psicoterapia e acompanhamento da saúde emocional, conduzidos em sessões.',
+ 'Neuropsicologia':'Avaliação neuropsicológica em sessões (entrevista, testagem e laudo). Particular R$ 3.800 (até 3x) ou R$ 1.900 com o cartão.',
+ 'Fonoaudiologia':'Avaliação e terapia de linguagem, fala, comunicação e funções orais.',
+ 'Terapia Ocupacional':'Desenvolvimento de autonomia, habilidades e integração sensorial.',
+ 'Psicomotricidade':'Trabalho de corpo, movimento e desenvolvimento.',
+ 'Psicopedagogia':'Apoio a dificuldades de aprendizagem e desenvolvimento escolar.',
+ 'Musicoterapia':'A música como recurso terapêutico para desenvolvimento e bem-estar.',
+ 'Psicologia Adolescência/Infantil':'Atendimento psicológico de crianças e adolescentes.',
+ 'Terapia ABA':'Intervenção ABA (Análise do Comportamento Aplicada) para o desenvolvimento infantil, especialmente no TEA.'
+};
+const ESP_FLOW={'Psiquiatria':'psiquiatria','Neuropsicologia':'neuro'};
 
 (function(){var adm=CATS.find(c=>c.id==='ADM');if(adm&&!adm.baloes.some(b=>b.code==='ADM-06')){adm.baloes.push({code:'ADM-06',t:'Aviso de fechamento (motivo)',x:AVISO_BASE,kw:'fechado fechamento aviso feriado recesso jogo motivo publico nao havera atendimento ponto facultativo emergencia'});}})();
 (function(){
@@ -432,10 +453,12 @@ function navSidebar(){
   const nc=document.getElementById('navCats'); nc.innerHTML='';
   CATS.forEach(c=>{
     const b=document.createElement('button');
-    b.className='navitem'+(atual.tipo==='cat'&&atual.id===c.id?' ativo':'');
+    const isEsp=(c.id==='ESP');
+    const ativo=isEsp?(atual.tipo==='esp'||atual.tipo==='espdet'):(atual.tipo==='cat'&&atual.id===c.id);
+    b.className='navitem'+(ativo?' ativo':'');
     b.innerHTML='<span class="badge" style="background:'+c.cor+'">'+c.id+'</span>'+c.nome+
-      '<span class="cont">'+c.baloes.length+'</span>';
-    b.onclick=()=>{atual={tipo:'cat',id:c.id};render();fechaMenuMobile();};
+      '<span class="cont">'+(isEsp?EQUIPE.length:c.baloes.length)+'</span>';
+    b.onclick=()=>{ if(isEsp){abrirEsp();} else {atual={tipo:'cat',id:c.id};render();fechaMenuMobile();} };
     nc.appendChild(b);
   });
   const nf=document.getElementById('navFlows'); nf.innerHTML='';
@@ -485,40 +508,38 @@ function render(){
   } else if(atual.tipo==='flow'){
     const f=FLOWS.find(x=>x.id===atual.id);
     document.getElementById('crumb').textContent=f.title;
-    let html='<div class="eyebrow">Fluxo de conversa</div><div class="h1">'+esc(f.title)+'</div>'+
-      '<div class="sub">'+esc(f.desc||'')+'</div><div class="fluxo">';
-    f.steps.forEach((p,i)=>{
-      html+='<div class="passo"><div class="n" style="background:'+(f.color||'#1868B0')+'">'+(i+1)+'</div>'+
-        '<h4>'+esc(p.name)+(p.branch?' <span class="branch">ramificação</span>':'')+'</h4>';
-      if(p.note) html+='<div class="msg">'+esc(p.note)+'</div>';
-      if(p.codes && p.codes.length){html+='<div class="ramos">';p.codes.forEach(cd=>{html+='<button class="codechip" onclick="goToCode(\''+cd+'\')">'+cd+'</button>';});html+='</div>';}
-      html+='</div>';
-    });
-    html+='</div>';
-    c.innerHTML=html;
+    c.innerHTML='<div class="eyebrow">Fluxo de conversa</div><div class="h1">'+esc(f.title)+'</div>'+
+      '<div class="sub">'+esc(f.desc||'')+'</div>'+flowHTML(f);
   } else if(atual.tipo==='whats'){
     renderWhats();
+  } else if(atual.tipo==='esp'){
+    c.innerHTML=renderEspIndex();
+  } else if(atual.tipo==='espdet'){
+    c.innerHTML=renderEspDet(atual.id);
   } else {
     c.innerHTML = renderEquipe();
   }
 }
 
+function profsHTML(esp){
+  const g=EQUIPE.find(x=>x.esp===esp); if(!g) return '';
+  const info=ESP_INFO[esp]||{cor:'#5a6b7b',badge:'•'};
+  if(esp==='Psiquiatria'){
+    const comRqe=g.profs.filter(p=>p.rqe===true), semRqe=g.profs.filter(p=>p.rqe!==true);
+    let h='<div class="esp-sub-head"><span class="rqe sim" style="margin:0">com RQE</span><div><h3>Médico Psiquiatra — com título de especialista (RQE)</h3><p>Médico com Registro de Qualificação de Especialista em Psiquiatria.</p></div></div>';
+    h+='<div class="grid">'+comRqe.map(p=>cardProf(p,esp,info)).join('')+'</div>';
+    h+='<div class="esp-sub-head" style="margin-top:28px"><span class="rqe nao" style="margin:0">sem RQE</span><div><h3>Médico que atende em Psiquiatria — sem título de especialista</h3><p>Médico clínico que atende casos de psiquiatria, sem o título de especialista (RQE). A escolha é sempre do paciente.</p></div></div>';
+    h+='<div class="grid">'+semRqe.map(p=>cardProf(p,esp,info)).join('')+'</div>';
+    return h;
+  }
+  return '<div class="grid">'+g.profs.map(p=>cardProf(p,esp,info)).join('')+'</div>';
+}
 function renderEquipe(){
   const g=EQUIPE.find(x=>x.esp===atual.id);
-  const info=ESP_INFO[g.esp]||{cor:'#5a6b7b',badge:'•'};
   document.getElementById('crumb').textContent=g.esp;
   let html='<div class="eyebrow">Equipe</div><div class="h1">'+esc(g.esp)+'</div>'+
     '<div class="sub">'+g.profs.length+' profissional(is). A <b>Bio</b> já vem com um texto padrão por especialidade — ajuste à vontade. Campos em <span style="background:#fff8df;padding:1px 5px;border-radius:4px;color:#7a5d12">amarelo</span> são editáveis.</div>';
-  if(g.esp==='Psiquiatria'){
-    const comRqe=g.profs.filter(p=>p.rqe===true), semRqe=g.profs.filter(p=>p.rqe!==true);
-    html+='<div class="esp-sub-head"><span class="rqe sim" style="margin:0">com RQE</span><div><h3>Médico Psiquiatra — com título de especialista (RQE)</h3><p>Médico com Registro de Qualificação de Especialista em Psiquiatria. A consulta é com um especialista em psiquiatria.</p></div></div>';
-    html+='<div class="grid">'+comRqe.map(p=>cardProf(p,g.esp,info)).join('')+'</div>';
-    html+='<div class="esp-sub-head" style="margin-top:28px"><span class="rqe nao" style="margin:0">sem RQE</span><div><h3>Médico que atende em Psiquiatria — sem título de especialista</h3><p>Médico clínico que atende casos de psiquiatria, sem o título de especialista (RQE). A escolha é sempre do paciente.</p></div></div>';
-    html+='<div class="grid">'+semRqe.map(p=>cardProf(p,g.esp,info)).join('')+'</div>';
-    return html;
-  }
-  html+='<div class="grid">'+g.profs.map(p=>cardProf(p,g.esp,info)).join('')+'</div>';
-  return html;
+  return html+profsHTML(g.esp);
 }
 const LINK_PADRAO='';
 function defaultBio(esp,rqe){
@@ -587,6 +608,61 @@ function gerarProf(btn){
   });
 }
 
+function flowHTML(f){
+  let html='<div class="fluxo">';
+  f.steps.forEach((p,i)=>{
+    html+='<div class="passo"><div class="n" style="background:'+(f.color||'#1868B0')+'">'+(i+1)+'</div>'+
+      '<h4>'+esc(p.name)+(p.branch?' <span class="branch">ramificação</span>':'')+'</h4>';
+    if(p.note) html+='<div class="msg">'+esc(p.note)+'</div>';
+    if(p.codes && p.codes.length){html+='<div class="ramos">';p.codes.forEach(cd=>{html+='<button class="codechip" onclick="goToCode(\''+cd+'\')">'+cd+'</button>';});html+='</div>';}
+    html+='</div>';
+  });
+  return html+'</div>';
+}
+function baloCard(cat,b){
+  const i=cat.baloes.indexOf(b);
+  const img=b.img?'<img class="balao-img" src="'+b.img+'" alt="'+esc(b.t)+'">':'';
+  return '<div class="balao" id="card-'+cat.id+'-'+i+'" data-busca="'+esc((b.code+' '+b.t+' '+(b.kw||'')+' '+b.x).toLowerCase())+'">'+
+    '<div class="bar" style="background:'+cat.cor+'"></div>'+
+    '<div class="cab"><span class="tag" style="background:'+cat.cor+'">'+b.code+'</span><h3>'+esc(b.t)+'</h3></div>'+
+    '<div class="txt" id="txt-'+cat.id+'-'+i+'">'+preencher(b.x)+img+'</div>'+
+    '<div class="acoes"><button onclick="copiar(\''+cat.id+'-'+i+'\',this)">📋 Copiar</button></div>'+
+  '</div>';
+}
+function abrirEsp(){atual={tipo:'esp'};render();fechaMenuMobile();}
+function abrirEspDet(i){atual={tipo:'espdet',id:EQUIPE[i].esp};render();fechaMenuMobile();const ct=document.getElementById('content');if(ct)ct.scrollTop=0;}
+function renderEspIndex(){
+  document.getElementById('crumb').textContent='Especialidades';
+  let html='<div class="eyebrow" style="color:#6D4FA8">Especialidades</div><div class="h1">Atendimento por especialidade</div>'+
+    '<div class="sub">Escolha a especialidade para ver os profissionais, o passo a passo do atendimento e os balões úteis.</div><div class="grid">';
+  EQUIPE.forEach((g,i)=>{
+    const info=ESP_INFO[g.esp]||{cor:'#5a6b7b',badge:'•'};
+    html+='<button class="esp-card" style="border-top-color:'+info.cor+'" onclick="abrirEspDet('+i+')">'+
+      '<span class="badge" style="background:'+info.cor+'">'+info.badge+'</span>'+
+      '<h3>'+esc(g.esp)+'</h3><p>'+esc(ESP_DESC[g.esp]||'')+'</p>'+
+      '<span class="esp-card-cta">'+g.profs.length+' profissional(is) ›</span></button>';
+  });
+  html+='</div>';
+  const espCat=CATS.find(c=>c.id==='ESP');
+  if(espCat && espCat.baloes.length){
+    html+='<h2 class="sec">ℹ️ Informações gerais das especialidades</h2><div class="grid">'+espCat.baloes.map(b=>baloCard(espCat,b)).join('')+'</div>';
+  }
+  return html;
+}
+function renderEspDet(esp){
+  const info=ESP_INFO[esp]||{cor:'#5a6b7b',badge:'•'};
+  const g=EQUIPE.find(x=>x.esp===esp);
+  document.getElementById('crumb').textContent='Especialidades › '+esp;
+  let html='<button class="voltar" onclick="abrirEsp()">‹ Voltar para Especialidades</button>';
+  html+='<div class="eyebrow" style="color:'+info.cor+'">Atendimento por especialidade</div>';
+  html+='<div class="h1">'+esc(esp)+'</div><div class="sub">'+esc(ESP_DESC[esp]||'')+'</div>';
+  if(g) html+='<h2 class="sec">👥 Profissionais</h2>'+profsHTML(esp);
+  const f=FLOWS.find(x=>x.id===(ESP_FLOW[esp]||'geral'));
+  if(f) html+='<h2 class="sec">🔀 Como conduzir o atendimento</h2><div class="sub" style="margin-bottom:12px">'+esc(f.desc||'')+'</div>'+flowHTML(f);
+  const res=matchBaloes(esp+' '+(ESP_DESC[esp]||''));
+  if(res.length) html+='<h2 class="sec">💬 Balões úteis</h2><div class="grid">'+res.map(r=>baloCard(r.cat,r.b)).join('')+'</div>';
+  return html;
+}
 function copiar(id,btn,isFlux){
   const el=document.getElementById(isFlux?id:('txt-'+id));
   let txt=textoLimpo(el);
