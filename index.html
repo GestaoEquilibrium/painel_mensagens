@@ -90,6 +90,8 @@ button{font-family:inherit;cursor:pointer}
 .esp-card h3{margin:0;font-size:16px}
 .esp-card p{margin:0;color:var(--muted);font-size:12.5px;line-height:1.45;flex:1}
 .esp-card-cta{font-size:12px;font-weight:700;color:var(--azul)}
+.fatos{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 4px}
+.fato{font-size:12.5px;color:#33404f;background:#fff;border:1px solid var(--linha);border-left:3px solid var(--azul);border-radius:8px;padding:6px 11px;line-height:1.35}
 
 /* ---------- Conteúdo ---------- */
 .content{flex:1;overflow-y:auto;padding:26px 28px 80px}
@@ -403,6 +405,18 @@ const ESP_DESC={
  'Terapia ABA':'Intervenção ABA (Análise do Comportamento Aplicada) para o desenvolvimento infantil, especialmente no TEA.'
 };
 const ESP_FLOW={'Psiquiatria':'psiquiatria','Neuropsicologia':'neuro'};
+const ESP_FATOS={
+ 'Psiquiatria':['Consulta médica — pagamento à vista (não parcela)','Com RQE ou médico clínico que atende psiquiatria: o paciente escolhe','Retorno é consulta nova, após 30 dias, com guia própria'],
+ 'Psicologia':['Psicoterapia em sessões','Convênio ou particular'],
+ 'Neuropsicologia':['Avaliação em sessões: entrevista, testagem e laudo','Particular R$ 3.800 (até 3x) ou R$ 1.900 com o cartão','Convênio exige pedido médico com CID'],
+ 'Fonoaudiologia':['Avaliação e terapia em sessões','Convênio ou particular'],
+ 'Terapia Ocupacional':['Atendimento em sessões','Pacotes infantis podem ser parcelados'],
+ 'Psicomotricidade':['Atendimento em sessões','Pacotes infantis podem ser parcelados'],
+ 'Psicopedagogia':['Atendimento em sessões','Convênio ou particular'],
+ 'Musicoterapia':['Atendimento em sessões','Convênio ou particular'],
+ 'Psicologia Adolescência/Infantil':['Atendimento de crianças e adolescentes','Acompanhante responsável para menores'],
+ 'Terapia ABA':['Intervenção em pacote, salas dedicadas','Pacotes podem ser parcelados']
+};
 
 (function(){var adm=CATS.find(c=>c.id==='ADM');if(adm&&!adm.baloes.some(b=>b.code==='ADM-06')){adm.baloes.push({code:'ADM-06',t:'Aviso de fechamento (motivo)',x:AVISO_BASE,kw:'fechado fechamento aviso feriado recesso jogo motivo publico nao havera atendimento ponto facultativo emergencia'});}})();
 (function(){
@@ -656,11 +670,11 @@ function renderEspDet(esp){
   let html='<button class="voltar" onclick="abrirEsp()">‹ Voltar para Especialidades</button>';
   html+='<div class="eyebrow" style="color:'+info.cor+'">Atendimento por especialidade</div>';
   html+='<div class="h1">'+esc(esp)+'</div><div class="sub">'+esc(ESP_DESC[esp]||'')+'</div>';
+  const fatos=ESP_FATOS[esp]||['Atendimento em sessões','Convênio ou particular'];
+  html+='<div class="fatos">'+fatos.map(x=>'<span class="fato" style="border-left-color:'+info.cor+'">'+esc(x)+'</span>').join('')+'</div>';
   if(g) html+='<h2 class="sec">👥 Profissionais</h2>'+profsHTML(esp);
   const f=FLOWS.find(x=>x.id===(ESP_FLOW[esp]||'geral'));
-  if(f) html+='<h2 class="sec">🔀 Como conduzir o atendimento</h2><div class="sub" style="margin-bottom:12px">'+esc(f.desc||'')+'</div>'+flowHTML(f);
-  const res=matchBaloes(esp+' '+(ESP_DESC[esp]||''));
-  if(res.length) html+='<h2 class="sec">💬 Balões úteis</h2><div class="grid">'+res.map(r=>baloCard(r.cat,r.b)).join('')+'</div>';
+  if(f) html+='<h2 class="sec">🔀 Como conduzir o atendimento</h2><div class="sub" style="margin-bottom:12px">'+esc(f.desc||'')+' Toque num código (ex.: AGE-01) para abrir o balão.</div>'+flowHTML(f);
   return html;
 }
 function copiar(id,btn,isFlux){
