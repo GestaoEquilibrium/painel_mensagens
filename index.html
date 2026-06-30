@@ -503,7 +503,7 @@ function renderSimulador(){
       <button class="sim-reset" onclick="simReset()">Reiniciar</button>
     </div>
     <div class="sim-scope">
-      <span>Especialidade:</span>
+      <span>Busca em <b>todos os fluxos</b> &middot; filtrar (opcional):</span>
       <select id="simScope" onchange="simSetScope(this.value)"><option value="all">Todas as especialidades</option>${cats}</select>
     </div>
     <div class="sim-body" id="simBody"></div>
@@ -516,7 +516,7 @@ function renderSimulador(){
   $('simScope').value=SIM_SCOPE;
   simVazio(); simChips();
 }
-function simVazio(){ $('simBody').innerHTML='<div class="sim-empty">Mande uma mensagem como se fosse o paciente — eu identifico a intenção e sugiro a resposta certa do fluxo. 💬</div>'; }
+function simVazio(){ $('simBody').innerHTML='<div class="sim-empty">Mande uma mensagem como se fosse o paciente — eu identifico a intenção e sugiro a resposta certa, buscando em <b>todos os fluxos e categorias</b> do painel. 💬</div>'; }
 function simReset(){ simVazio(); const i=$('simIn'); if(i) i.value=''; }
 function simSetScope(v){ SIM_SCOPE=v; }
 function simChips(){ $('simChips').innerHTML=SIM_EX.map((t,i)=>`<button onclick="simEnviarEx(${i})">${esc(t)}</button>`).join(''); }
