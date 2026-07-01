@@ -259,6 +259,22 @@ input,textarea,select{font-family:inherit;font-size:14px;color:var(--texto)}
 .sim-chips button{font-size:12px;border:1px solid var(--linha-2);background:#fff;border-radius:14px;padding:5px 11px;color:var(--muted);cursor:pointer}
 .sim-chips button:hover{border-color:var(--ciano);color:var(--azul)}
 .sim-empty{margin:auto;text-align:center;color:#5a6b62;font-size:13.5px;max-width:300px;line-height:1.6}
+
+/* ===== Extensão WhatsApp ===== */
+.ext{max-width:680px;margin:0 auto}
+.ext-hero{display:flex;gap:14px;align-items:flex-start;background:linear-gradient(135deg,#eef5fb,#eafaf7);border:1px solid var(--linha);border-radius:16px;padding:18px}
+.ext-ic{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#1868B0,#1B86A6);color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;flex:none}
+.ext-hero h2{margin:0 0 4px;font-size:18px;color:var(--texto)}
+.ext-hero p{margin:0;font-size:13.5px;color:var(--muted);line-height:1.55}
+.ext-dl{display:block;text-align:center;margin:16px 0;background:linear-gradient(135deg,#1E8A5A,#25D366);color:#fff;text-decoration:none;font-weight:700;font-size:15px;padding:14px;border-radius:13px;box-shadow:0 6px 18px rgba(30,138,90,.25)}
+.ext-dl:hover{filter:brightness(1.05)}
+.ext-steps{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.ext-step{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid var(--linha);border-radius:12px;padding:12px 14px;font-size:13.5px;color:var(--texto);line-height:1.5}
+.ext-step>span{width:26px;height:26px;border-radius:50%;background:#1868B0;color:#fff;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;flex:none}
+.ext-note{margin-top:14px;font-size:12.5px;color:var(--muted);background:#f3f6f9;border-radius:10px;padding:11px 13px;line-height:1.55}
+.ext-admin{margin-top:12px;font-size:12.5px;color:#9a6b12;background:#fff4d6;border:1px dashed #e0b347;border-radius:10px;padding:11px 13px;line-height:1.55}
+.ext-admin code{background:#fff;border:1px solid #e0c98a;border-radius:5px;padding:1px 5px;font-size:12px}
+.ext-url{display:inline-block;margin-top:4px;font-size:12px;color:#1868B0;word-break:break-all}
 </style>
 </head>
 <body>
@@ -418,6 +434,7 @@ function montarNav(){
   h += navItem('apresentacoes','Apresentações','◉', APRES.length);
   h += `<div class="grp">Ferramentas</div>`;
   h += navItem('simulador','Simulador de fluxo','◎','');
+  h += navItem('extensao','Extensão WhatsApp','⌁','');
   if(ME.papel==='administrador'){
     h += `<div class="grp">Administração</div>`;
     h += navItem('usuarios','Usuários','◍', USUARIOS.length);
@@ -445,12 +462,13 @@ function cardsFiltrados(){
 }
 function tituloView(){
   if(view.tipo==='cat') return cat(view.id).nome;
-  return {todos:'Todos os cards',fav:'Favoritos',equipe:'Criados pela equipe',usados:'Mais usados',usuarios:'Usuários',apresentacoes:'Apresentações',simulador:'Simulador de fluxo'}[view.tipo];
+  return {todos:'Todos os cards',fav:'Favoritos',equipe:'Criados pela equipe',usados:'Mais usados',usuarios:'Usuários',apresentacoes:'Apresentações',simulador:'Simulador de fluxo',extensao:'Extensão WhatsApp'}[view.tipo];
 }
 function render(){
   if(view.tipo==='usuarios'){ if(ME.papel!=='administrador'){view={tipo:'todos'};} else { return renderUsuarios(); } }
   if(view.tipo==='apresentacoes'){ return renderApresentacoes(); }
   if(view.tipo==='simulador'){ return renderSimulador(); }
+  if(view.tipo==='extensao'){ return renderExtensao(); }
   $('crumb').textContent = tituloView();
   const lista=cardsFiltrados();
   $('avisoWrap').innerHTML = (AVISO && view.tipo==='todos') ? `
@@ -485,6 +503,34 @@ function cardHTML(c,isBest){
       ${podeEditar?`<button class="iconbtn" onclick="abrirEditor('${c.id}')" title="Editar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>`:''}
       <button class="iconbtn" onclick="duplicar('${c.id}')" title="Duplicar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
     </div></div>`;
+}
+
+/* ======================= EXTENSÃO WHATSAPP ======================= */
+function renderExtensao(){
+  $('crumb').textContent='Extensão WhatsApp';
+  $('avisoWrap').innerHTML='';
+  $('contagem').textContent='Instale o assistente que sugere mensagens dentro do WhatsApp Web';
+  const url = new URL('equilibrium-whatsapp.zip', location.href).href;
+  $('grid').innerHTML = `
+  <div class="ext" style="grid-column:1/-1">
+    <div class="ext-hero">
+      <div class="ext-ic">\u2301</div>
+      <div>
+        <h2>Assistente Equilibrium para o WhatsApp Web</h2>
+        <p>Um painel que aparece ao lado do WhatsApp Web e, quando o paciente escreve, já sugere as mensagens certas do painel. Você copia e envia — manual do começo ao fim.</p>
+      </div>
+    </div>
+    <a class="ext-dl" href="equilibrium-whatsapp.zip" download>\u2b07 Baixar a extensão (.zip)</a>
+    <div class="ext-steps">
+      <div class="ext-step"><span>1</span><div><b>Descompacte</b> o arquivo num lugar fixo do PC (ex.: C:\\Equilibrium\\extensao). Não apague depois — o navegador lê os arquivos desse local.</div></div>
+      <div class="ext-step"><span>2</span><div>Abra <b>chrome://extensions</b> (ou <b>edge://extensions</b> no Edge).</div></div>
+      <div class="ext-step"><span>3</span><div>Ative o <b>Modo do desenvolvedor</b> (canto superior direito).</div></div>
+      <div class="ext-step"><span>4</span><div>Clique em <b>Carregar sem compactação</b> e selecione a pasta <b>equilibrium-whatsapp</b>.</div></div>
+      <div class="ext-step"><span>5</span><div>Abra <b>web.whatsapp.com</b> — o painel aparece no canto direito. \u2705</div></div>
+    </div>
+    <div class="ext-note">Repita os passos 2 a 4 em cada computador da recepção. Para atualizar os cards na extensão depois de criar/editar, use o botão \u21bb dentro dela.</div>
+    ${ME.papel==='administrador' ? `<div class="ext-admin"><b>Só para administrador:</b> para o botão de download funcionar, suba o arquivo <code>equilibrium-whatsapp.zip</code> na raiz do repositório, junto do index.html. Link direto: <span class="ext-url">${esc(url)}</span></div>` : ''}
+  </div>`;
 }
 
 /* ======================= SIMULADOR DE FLUXO (WhatsApp) ======================= */
