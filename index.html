@@ -452,7 +452,7 @@ function irPara(tipo,id){ view={tipo,id}; if(innerWidth<=760)$('side').classList
 /* ======================= RENDER ======================= */
 function cardsFiltrados(){
   let lista=CARDS.slice();
-  if(view.tipo==='cat') lista=lista.filter(c=>c.cat===view.id);
+  if(view.tipo==='cat') lista=lista.filter(c=>c.cat===view.id).sort((a,b)=>(a.titulo||'').localeCompare(b.titulo||'',undefined,{numeric:true}));
   else if(view.tipo==='fav') lista=lista.filter(c=>FAVS.has(c.id));
   else if(view.tipo==='equipe') lista=lista.filter(c=>c.origem!=='oficial');
   else if(view.tipo==='usados') lista=lista.sort((a,b)=>b.usos-a.usos);
